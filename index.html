@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Samyutha Travels | Best Travels in Madurai</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Samyutha Travels is the best travels in Madurai offering taxi booking and tour services.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">Samyutha <span>Travels</span></div>
+ <nav>
+  <a href="index.html">Home</a>
+  <a href="#">Taxi</a>
+  <a href="#">Trips</a>
+  <a href="#">Tours</a>
+  <a href="login.html" class="btn">Login</a>
+</nav>
+
+</header>
+
+<section class="hero">
+  <h1>Plan Your Perfect Trip</h1>
+
+  <div class="search-box">
+    <input type="text" id="from" placeholder="From">
+    <input type="text" id="to" placeholder="To">
+    <input type="date" id="date">
+    <button class="btn" onclick="searchTaxi()">Search</button>
+  </div>
+</section>
+
+<section class="features">
+  <div class="card">🚕 Quick Taxi Booking</div>
+  <div class="card">🧭 Smart Trip Planning</div>
+  <div class="card">🌐 Multi Language</div>
+  <div class="card">💳 Secure Booking</div>
+</section>
+
+<footer>
+  <p>© 2026 Samyutha Travels | Madurai</p>
+</footer>
+
+<script>
+function searchTaxi() {
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+  const date = document.getElementById("date").value;
+
+  if (!from || !to || !date) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  window.location.href =
+    `taxi.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`;
+}
+</script>
+<button onclick="testBackend()">Test Backend</button>
+
+<script>
+function testBackend() {
+  fetch("http://127.0.0.1:5000/test")
+    .then(res => res.json())
+    .then(data => alert(data.message))
+    .catch(err => alert("Error connecting backend"));
+}
+</script>
+
+</body>
+</html>

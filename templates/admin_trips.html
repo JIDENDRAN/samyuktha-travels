@@ -1,0 +1,619 @@
+{% extends "base.html" %}
+
+{% block title %}Trips Management - Samyuktha Travels Admin{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --travel-green: #1a4d2e;
+  --travel-green-dark: #2d6a4f;
+  --travel-orange: #ff6b35;
+  --travel-orange-light: #f7931e;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --text-dark: #2d3748;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* ===== ADMIN HEADER ===== */
+.admin-header {
+  background: white;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.admin-brand h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--travel-green);
+  margin: 0;
+}
+
+.admin-brand h1 span {
+  color: var(--travel-orange);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.admin-nav .btn {
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-nav .btn-outline {
+  background: transparent;
+  color: var(--travel-green);
+  border: 2px solid var(--travel-green);
+}
+
+.admin-nav .btn-outline:hover {
+  background: var(--travel-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 77, 46, 0.3);
+}
+
+.admin-nav .btn-primary {
+  background: linear-gradient(135deg, var(--travel-orange), var(--travel-orange-light));
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.admin-nav .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* ===== MAIN CONTENT ===== */
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px 60px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--travel-green);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title i {
+  color: var(--travel-orange);
+  font-size: 1.8rem;
+}
+
+/* ===== PENDING TRIPS SECTION ===== */
+.pending-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+  margin-bottom: 35px;
+  border-left: 5px solid var(--travel-orange);
+}
+
+.pending-section h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--travel-green);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pending-section h3 i {
+  color: var(--travel-orange);
+}
+
+/* ===== ALL TRIPS SECTION ===== */
+.data-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+}
+
+.section-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-header-bar h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--travel-green);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-header-bar h3 i {
+  color: var(--travel-orange);
+}
+
+/* ===== TABLES ===== */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table thead {
+  background: linear-gradient(135deg, var(--travel-green), var(--travel-green-dark));
+  color: white;
+}
+
+.data-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+  background: #fff5f0;
+}
+
+.data-table td {
+  padding: 14px 16px;
+  color: var(--text-dark);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.completed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* ===== FORMS ===== */
+.assign-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.assign-form select {
+  padding: 8px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: white;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.assign-form select:focus {
+  outline: none;
+  border-color: var(--travel-green);
+}
+
+.btn-confirm {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, var(--travel-green), var(--travel-green-dark));
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.btn-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 77, 46, 0.4);
+}
+
+/* Complete trip form */
+.complete-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.complete-form input {
+  padding: 8px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  background: #f7fafc;
+}
+
+.complete-form input:focus {
+  outline: none;
+  border-color: var(--travel-orange);
+  background: white;
+}
+
+.complete-form input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn-complete {
+  grid-column: 1 / -1;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--travel-orange), var(--travel-orange-light));
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 5px;
+}
+
+.btn-complete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: var(--border-color);
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 968px) {
+  .complete-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header .container {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .admin-nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin-container {
+    padding: 0 15px 40px;
+  }
+
+  .pending-section,
+  .data-section {
+    padding: 20px 15px;
+  }
+
+  .data-table {
+    font-size: 0.8rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .assign-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .assign-form select,
+  .btn-confirm {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-brand h1 {
+    font-size: 1.4rem;
+  }
+
+  .admin-nav .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== ADMIN HEADER ===== -->
+<div class="admin-header">
+  <div class="container">
+    <div class="admin-brand">
+      <h1>
+        Trips
+        <span>Management</span>
+      </h1>
+    </div>
+    <nav class="admin-nav">
+      <a href="/admin" class="btn btn-outline">
+        <i class="fa-solid fa-chart-line"></i> Dashboard
+      </a>
+      <a href="/admin/drivers" class="btn btn-outline">
+        <i class="fa-solid fa-user-tie"></i> Drivers
+      </a>
+      <a href="/admin/logout" class="btn btn-primary">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="admin-container">
+  
+  <!-- Pending Trips Section -->
+  <div class="pending-section">
+    <h3>
+      <i class="fa-solid fa-clock"></i> Confirm Pending Trips
+    </h3>
+    
+    {% set has_pending = trips|selectattr('status', 'equalto', 'Pending')|list|length > 0 %}
+    
+    {% if has_pending %}
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Customer</th>        <!-- New column -->
+            <th>Phone</th>   
+            <th>Vehicle</th>
+            <th>Assign Driver & Confirm</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in trips %}
+            {% if t.status == 'Pending' %}
+            <tr>
+              <td><strong>#{{ t.id }}</strong></td>
+              <td>
+                <i class="fa-solid fa-location-dot" style="color: var(--travel-orange); margin-right: 5px;"></i>
+                {{ t.from_city }} → {{ t.to_city }}
+              </td>
+              <td>{{ t.date }}</td>
+              <td>{{ t.customer_name }}</td>  
+              <td>{{ t.customer_phone }}</td>  
+              <td>{{ t.vehicle_type }}</td>
+              <td>
+                <form method="POST" action="/admin/trips/confirm" class="assign-form">
+                  <input type="hidden" name="trip_id" value="{{ t.id }}">
+                  <select name="driver_id" required>
+                    <option value="">-- Select Driver --</option>
+                    {% for d in drivers %}
+                      <option value="{{ d.id }}">{{ d.name }} ({{ d.status }})</option>
+                    {% endfor %}
+                  </select>
+                  <button type="submit" class="btn-confirm">
+                    <i class="fa-solid fa-check"></i> Confirm
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-check-circle"></i>
+      <h3>No pending trips</h3>
+      <p>All trips have been confirmed</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- All Trips Section -->
+  <div class="data-section">
+    <div class="section-header-bar">
+      <h3>
+        <i class="fa-solid fa-list"></i> All Trips
+      </h3>
+    </div>
+    
+    {% if trips %}
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Customer</th>        <!-- New column -->
+            <th>Phone</th> 
+            <th>Vehicle</th>
+            <th>Driver</th>
+            <th>Status</th>
+            <th>Complete Trip</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in trips %}
+          <tr>
+            <td><strong>#{{ t.id }}</strong></td>
+            <td>
+              <i class="fa-solid fa-location-dot" style="color: var(--travel-orange); margin-right: 5px;"></i>
+              {{ t.from_city }} → {{ t.to_city }}
+            </td>
+            <td>{{ t.date }}</td>
+            <td>{{ t.customer_name }}</td>  
+            <td>{{ t.customer_phone }}</td> 
+            <td>{{ t.vehicle_type }}</td>
+            <td>{{ t.driver_name or '-' }}</td>
+            <td>
+              <span class="status-badge {{ t.status.lower() }}">{{ t.status }}</span>
+            </td>
+            <td>
+              {% if t.status == 'Active' %}
+                <form method="POST" action="/admin/trips/complete" class="complete-form">
+                  <input type="hidden" name="trip_id" value="{{ t.id }}">
+                  <input type="number" name="km_run" placeholder="KM Run" step="0.01" required>
+                  <input type="number" name="revenue" placeholder="Revenue ₹" step="0.01" required>
+                  <input type="number" name="fuel_cost" placeholder="Fuel Cost ₹" step="0.01" required>
+                  <input type="number" name="other_expense" placeholder="Other Expense ₹" step="0.01" required>
+                  <button type="submit" class="btn-complete">
+                    <i class="fa-solid fa-flag-checkered"></i> Complete Trip
+                  </button>
+                </form>
+              {% else %}
+                <span style="color: var(--text-muted);">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-inbox"></i>
+      <h3>No trips found</h3>
+      <p>Trip bookings will appear here</p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

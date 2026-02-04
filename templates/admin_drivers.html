@@ -1,0 +1,578 @@
+{% extends "base.html" %}
+
+{% block title %}Drivers Management - Samyuktha Travels Admin{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --travel-green: #1a4d2e;
+  --travel-green-dark: #2d6a4f;
+  --travel-orange: #ff6b35;
+  --travel-orange-light: #f7931e;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --text-dark: #2d3748;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* ===== ADMIN HEADER ===== */
+.admin-header {
+  background: white;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.admin-brand h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--travel-green);
+  margin: 0;
+}
+
+.admin-brand h1 span {
+  color: var(--travel-orange);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.admin-nav .btn {
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-nav .btn-outline {
+  background: transparent;
+  color: var(--travel-green);
+  border: 2px solid var(--travel-green);
+}
+
+.admin-nav .btn-outline:hover {
+  background: var(--travel-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 77, 46, 0.3);
+}
+
+.admin-nav .btn-primary {
+  background: linear-gradient(135deg, var(--travel-orange), var(--travel-orange-light));
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.admin-nav .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* ===== MAIN CONTENT ===== */
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px 60px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--travel-green);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title i {
+  color: var(--travel-orange);
+  font-size: 1.8rem;
+}
+
+/* ===== ADD DRIVER FORM ===== */
+.form-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 35px;
+}
+
+.form-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--travel-green);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-card h3 i {
+  color: var(--travel-orange);
+}
+
+.driver-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 20px;
+  align-items: end;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-field input {
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  background: #f7fafc;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: var(--travel-orange);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.btn-submit {
+  padding: 12px 35px;
+  background: linear-gradient(135deg, var(--travel-orange), var(--travel-orange-light));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* ===== DRIVERS TABLE ===== */
+.data-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+}
+
+.section-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-header-bar h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--travel-green);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-header-bar h3 i {
+  color: var(--travel-orange);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table thead {
+  background: linear-gradient(135deg, var(--travel-green), var(--travel-green-dark));
+  color: white;
+}
+
+.data-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+  background: #fff5f0;
+}
+
+.data-table td {
+  padding: 14px 16px;
+  color: var(--text-dark);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.available {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.on-trip {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.offline {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Status update form */
+.status-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.status-form select {
+  padding: 8px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: white;
+  cursor: pointer;
+}
+
+.status-form select:focus {
+  outline: none;
+  border-color: var(--travel-green);
+}
+
+.status-form .btn-save {
+  padding: 8px 18px;
+  background: transparent;
+  color: var(--travel-green);
+  border: 2px solid var(--travel-green);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-form .btn-save:hover {
+  background: var(--travel-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 77, 46, 0.3);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: var(--border-color);
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 968px) {
+  .driver-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header .container {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .admin-nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin-container {
+    padding: 0 15px 40px;
+  }
+
+  .form-card,
+  .data-section {
+    padding: 20px 15px;
+  }
+
+  .data-table {
+    font-size: 0.8rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .status-form {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .status-form select,
+  .status-form .btn-save {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-brand h1 {
+    font-size: 1.4rem;
+  }
+
+  .admin-nav .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== ADMIN HEADER ===== -->
+<div class="admin-header">
+  <div class="container">
+    <div class="admin-brand">
+      <h1>
+        Drivers
+        <span>Management</span>
+      </h1>
+    </div>
+    <nav class="admin-nav">
+      <a href="/admin" class="btn btn-outline">
+        <i class="fa-solid fa-chart-line"></i> Dashboard
+      </a>
+      <a href="/admin/trips" class="btn btn-outline">
+        <i class="fa-solid fa-route"></i> Trips
+      </a>
+      <a href="/admin/logout" class="btn btn-primary">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="admin-container">
+  
+  <!-- Add Driver Form -->
+  <div class="form-card">
+    <h3>
+      <i class="fa-solid fa-user-plus"></i> Add New Driver
+    </h3>
+    <form method="POST" class="driver-form">
+      <div class="form-field">
+        <label>Driver Name</label>
+        <input type="text" name="name" placeholder="Enter driver name" required>
+      </div>
+      
+      <div class="form-field">
+        <label>Phone Number</label>
+        <input type="tel" name="phone" placeholder="Enter phone number" pattern="[0-9]{10}" required>
+      </div>
+      
+      <button type="submit" class="btn-submit">
+        <i class="fa-solid fa-plus"></i> Add Driver
+      </button>
+    </form>
+  </div>
+
+  <!-- Drivers List -->
+  <div class="data-section">
+    <div class="section-header-bar">
+      <h3>
+        <i class="fa-solid fa-users"></i> Driver List
+      </h3>
+    </div>
+    
+    {% if drivers %}
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Update Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in drivers %}
+          <tr>
+            <td><strong>#{{ d.id }}</strong></td>
+            <td>
+              <i class="fa-solid fa-user-tie" style="color: var(--travel-orange); margin-right: 8px;"></i>
+              {{ d.name }}
+            </td>
+            <td>
+              <i class="fa-solid fa-phone" style="color: var(--travel-green); margin-right: 8px;"></i>
+              {{ d.phone }}
+            </td>
+            <td>
+              <span class="status-badge {{ d.status.lower().replace(' ', '-') }}">
+                {{ d.status }}
+              </span>
+            </td>
+            <td>
+              <form method="POST" action="/admin/drivers/status" class="status-form">
+                <input type="hidden" name="driver_id" value="{{ d.id }}">
+                <select name="status">
+                  <option {% if d.status=='Available' %}selected{% endif %}>Available</option>
+                  <option {% if d.status=='On Trip' %}selected{% endif %}>On Trip</option>
+                  <option {% if d.status=='Offline' %}selected{% endif %}>Offline</option>
+                </select>
+                <button type="submit" class="btn-save">
+                  <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-user-slash"></i>
+      <h3>No drivers added yet</h3>
+      <p>Add your first driver using the form above</p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

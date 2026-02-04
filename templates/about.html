@@ -1,0 +1,1354 @@
+{% extends "base.html" %}
+
+{% block title %}About Us | Samyuktha Travels{% endblock %}
+
+{% block extra_css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-blue: #0066cc;
+  --secondary-blue: #4a90e2;
+  --accent-orange: #ff9800;
+  --dark-text: #2c3e50;
+  --gray-text: #5a6c7d;
+  --light-gray: #f5f7fa;
+  --white: #ffffff;
+  --border-light: #e1e8ed;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fafbfc;
+  color: var(--dark-text);
+  line-height: 1.6;
+}
+
+/* ===== HERO SECTION ===== */
+/* ===== HERO SECTION ===== */
+.hero {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+/* Background image layer (ZOOM animation here) */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1600') center/cover no-repeat;
+
+  animation: heroZoom 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+/* Shimmer light sweep */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmer 4s infinite;
+  z-index: 1;
+}
+
+/* keep text above layers */
+.hero > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== Animations ===== */
+
+/* Smooth cinematic zoom */
+@keyframes heroZoom {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.12); }
+}
+
+/* shimmer sweep */
+@keyframes shimmer {
+  0%   { left: -100%; }
+  100% { left: 100%; }
+}
+
+
+.hero-content {
+  max-width: 800px;
+  padding: 0 24px;
+  animation: fadeInUp 1s ease;
+}
+
+.hero h1 {
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  animation: fadeSlideIn 0.8s ease forwards 0.2s;
+}
+
+.hero p {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 300;
+  opacity: 0;
+  line-height: 1.6;
+  animation: fadeSlideIn 0.8s ease forwards 0.5s;
+}
+.hero h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.hero p {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #fefefe;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+  line-height: 1.6;
+}
+
+
+.hero h1, .hero p {
+  text-shadow: 2px 2px 8px rgba(0,0,0,1.2);
+}
+/* ===== STATS BAR ===== */
+.stats-bar {
+  background: var(--white);
+  padding: 40px 0;
+  margin-top: -60px;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards 0.8s;
+}
+
+.stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  text-align: center;
+}
+
+.stat-item {
+  transition: transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.stat-item.animate {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.stat-item:nth-child(1) { animation-delay: 0.1s; }
+.stat-item:nth-child(2) { animation-delay: 0.2s; }
+.stat-item:nth-child(3) { animation-delay: 0.3s; }
+.stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+.stat-item:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  display: block;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover .stat-number {
+  transform: scale(1.1);
+  text-shadow: 0 0 20px rgba(0, 102, 204, 0.3);
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--gray-text);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== MAIN CONTENT ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 80px 0;
+}
+
+/* ===== ABOUT INTRO ===== */
+.about-intro {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 60px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 60px;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+}
+
+.about-intro:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.about-intro h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 20px;
+}
+
+.about-intro p {
+  font-size: 17px;
+  color: var(--gray-text);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: clamp(32px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 16px;
+}
+
+.section-description {
+  font-size: 18px;
+  color: var(--gray-text);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== TIMELINE ===== */
+.timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.timeline-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-left: 4px solid var(--primary-blue);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.timeline-card.animate {
+  animation: slideInFromLeft 0.8s ease forwards;
+}
+
+.timeline-card:nth-child(1) { animation-delay: 0.1s; }
+.timeline-card:nth-child(2) { animation-delay: 0.3s; }
+.timeline-card:nth-child(3) { animation-delay: 0.5s; }
+
+.timeline-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.05), rgba(74, 144, 226, 0.05));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.timeline-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 102, 204, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: all 0.6s ease;
+  transform: scale(0);
+}
+
+.timeline-card:hover::before {
+  opacity: 1;
+}
+
+.timeline-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.timeline-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 102, 204, 0.15);
+}
+
+.timeline-year {
+  display: inline-block;
+  background: var(--primary-blue);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.timeline-card:hover .timeline-year {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+}
+
+.timeline-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.timeline-card:hover .timeline-title {
+  transform: translateX(5px);
+}
+
+.timeline-text {
+  font-size: 15px;
+  color: var(--gray-text);
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== SERVICES GRID ===== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.9);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 102, 204, 0.05), transparent);
+  transition: all 0.5s ease;
+  transform: translate(-50%, -50%);
+}
+
+.service-card:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.service-card.animate {
+  animation: scaleIn 0.6s ease forwards;
+}
+
+.service-card:nth-child(1) { animation-delay: 0.1s; }
+.service-card:nth-child(2) { animation-delay: 0.2s; }
+.service-card:nth-child(3) { animation-delay: 0.3s; }
+.service-card:nth-child(4) { animation-delay: 0.4s; }
+
+.service-card:hover {
+  border-color: var(--primary-blue);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 102, 204, 0.15);
+}
+
+.service-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  color: white;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.service-card:hover .service-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+}
+
+.service-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.service-desc {
+  font-size: 14px;
+  color: var(--gray-text);
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== VALUES SECTION ===== */
+.values-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  padding: 80px 0;
+  margin-top: 80px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 40px;
+}
+
+.value-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(50px);
+  position: relative;
+  overflow: hidden;
+}
+
+.value-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 152, 0, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.value-card:hover::before {
+  left: 100%;
+}
+
+.value-card.animate {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.value-card:nth-child(1) { animation-delay: 0.2s; }
+.value-card:nth-child(2) { animation-delay: 0.4s; }
+.value-card:nth-child(3) { animation-delay: 0.6s; }
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.value-icon {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, var(--accent-orange), #ff6b35);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  font-size: 36px;
+  transition: all 0.3s ease;
+}
+
+.value-card:hover .value-icon {
+  transform: rotate(-10deg) scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+}
+
+.value-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.value-card:hover .value-title {
+  transform: translateX(5px);
+}
+
+.value-text {
+  font-size: 15px;
+  color: var(--gray-text);
+  line-height: 1.7;
+}
+
+/* ===== CTA SECTION ===== */
+.cta-section {
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  padding: 60px 0;
+  text-align: center;
+  margin-top: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+.cta-section h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-section p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-button {
+  display: inline-block;
+  background: var(--accent-orange);
+  color: white;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.5s ease;
+  transform: translate(-50%, -50%);
+}
+
+.cta-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.cta-button:hover {
+  background: #ff6b35;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
+}
+
+/* ===== WHATSAPP FLOAT ===== */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse 2s infinite;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-float svg {
+  width: 32px;
+  height: 32px;
+  fill: white;
+}
+
+/* ===== SCROLL REVEAL CLASSES ===== */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease;
+}
+
+.scroll-reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.8s ease;
+}
+
+.scroll-reveal-left.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.8s ease;
+}
+
+.scroll-reveal-right.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 10px rgba(37, 211, 102, 0.1);
+    transform: scale(1.05);
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 0.8s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero {
+    height: 400px;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .about-intro {
+    padding: 40px 28px;
+  }
+  
+  .section {
+    padding: 60px 0;
+  }
+  
+  .timeline-grid,
+  .services-grid,
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ================= FLOAT BUTTON BASE (shared) ================= */
+.float-btn {
+  position: fixed;
+  right: 24px;
+
+  width: 60px;
+  height: 60px;
+
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 24px;
+
+  text-decoration: none;     /* remove underline */
+  line-height: 1;
+
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  z-index: 1000;
+
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.float-btn i,
+.float-btn svg {
+  display: block;
+}
+
+
+.float-btn:hover {
+  transform: scale(1.12);
+}
+
+/* ================= WHATSAPP ================= */
+.whatsapp-float {
+  bottom: 24px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+/* ================= CALL ================= */
+.call-float {
+  bottom: 100px; /* sits above whatsapp */
+  background: linear-gradient(135deg, #0066cc, #4a90e2);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .float-btn {
+    width: 52px;
+    height: 52px;
+    right: 16px;
+    font-size: 20px;
+  }
+
+  .call-float {
+    bottom: 90px;
+  }
+
+  .whatsapp-float {
+    bottom: 16px;
+  }
+}
+.float-btn {
+  text-decoration: none !important;
+}
+
+.float-btn:hover,
+.float-btn:focus,
+.float-btn:active {
+  text-decoration: none !important;
+}
+/* ===== 3D Feature Cards ===== */
+
+.feature-card {
+  background: whitesmoke;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: all 0.35s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* 3D Lift + scale */
+.feature-card:hover {
+  transform: translateY(-12px) rotateX(4deg) rotateY(-4deg) scale(1.03);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+}
+
+/* Icon style */
+.feature-icon {
+  font-size: 32px;
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d6efd, #3ea6ff);
+  color: white;
+  transition: 0.35s ease;
+}
+
+/* Icon animation */
+.feature-card:hover .feature-icon {
+  transform: scale(1.15) rotate(8deg);
+}
+
+/* smooth entrance */
+.feature-card {
+  animation: floatUp .6s ease backwards;
+}
+
+@keyframes floatUp {
+  from { opacity:0; transform: translateY(40px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>About Samyuktha Travels</h1>
+    <p>Your trusted partner for safe, comfortable, and reliable travel experiences across Madurai and Tamil Nadu</p>
+  </div>
+</section>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<section class="py-5 bg-secondary-subtle
+ scroll-reveal">
+
+  <div class="container">
+
+    <div class="row align-items-center g-5">
+
+      <!-- LEFT SIDE : CONTENT -->
+  <div class="col-lg-6 scroll-reveal-left position-relative p-4 rounded-4"
+     style="background: linear-gradient(135deg, #f0f4f8, #e2e8f0); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+
+  <h2 class="fw-bold mb-4">Who We Are</h2>
+
+  <p class="text-dark mb-3">
+    <strong>Samyuktha Travels</strong> is one of the leading Cab Service in Madurai. 
+    We provide the best travel experience at affordable prices. We are the safest cab service 
+    in Madurai with the most experienced drivers and wide knowledge about places in and 
+    around Madurai.
+  </p>
+
+  <p class="text-dark mb-3">
+    We provide all kinds of trips such as Local Sightseeing, Car Rentals, Outstation, One-Way Trips, 
+    as well as pickup & drop services. We are well known for our customer-centric service, treating 
+    every customer like family. Have a satisfying travel experience with <strong>Samyuktha Travels</strong>.
+  </p>
+
+
+
+</div>
+
+
+
+
+      <!-- RIGHT SIDE : HIGHLIGHTS -->
+     <div class="col-lg-6 scroll-reveal-right">
+  <div class="row g-4 text-center">
+
+    <!-- Card 1 -->
+    <div class="col-6">
+      <div class="p-4 bg-white rounded-4 shadow-sm stat-item">
+        <i class="fa-solid fa-calendar-check fs-3 text-primary mb-2"></i>
+        <h4 class="fw-bold mb-0 counter" data-target="5">0+</h4>
+        <small class="text-muted">Years Experience</small>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-6">
+      <div class="p-4 bg-white rounded-4 shadow-sm stat-item">
+        <i class="fa-solid fa-users fs-3 text-success mb-2"></i>
+        <h4 class="fw-bold mb-0 counter" data-target="1000">0+</h4>
+        <small class="text-muted">Happy Clients</small>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-6">
+      <div class="p-4 bg-white rounded-4 shadow-sm stat-item">
+        <i class="fa-solid fa-car fs-3 text-info mb-2"></i>
+        <h4 class="fw-bold mb-0 counter" data-target="500">0+</h4>
+        <small class="text-muted">Destinations</small>
+      </div>
+    </div>
+
+    <!-- Card 4 (static) -->
+    <div class="col-6">
+      <div class="p-4 bg-white rounded-4 shadow-sm stat-item">
+        <i class="fa-solid fa-headset fs-3 text-danger mb-2"></i>
+        <h4 class="fw-bold mb-0">24/7</h4>
+        <small class="text-muted">Support</small>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const counters = document.querySelectorAll(".counter"); // only first 3
+
+  counters.forEach(counter => {
+    const updateCount = () => {
+      const target = +counter.getAttribute("data-target");
+      const currentText = counter.innerText.replace("+", "");
+      const count = +currentText;
+
+      const increment = target / 100;
+
+      if(count < target) {
+        counter.innerText = Math.ceil(count + increment) + "+";
+        setTimeout(updateCount, 25);
+      } else {
+        counter.innerText = target + "+"; // exact value at end
+      }
+    };
+
+    // Animate only when visible
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          updateCount();
+          observer.unobserve(counter);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(counter);
+  });
+});
+</script>
+
+
+
+
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- SERVICES -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<section class="py-5 bg-secondary-subtle scroll-reveal">
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <h2  name = services class="fw-bold mt-2">Our Services</h2>
+      <p class="text-muted">Comprehensive travel solutions for every journey</p>
+    </div>
+
+    <!-- Services -->
+    <div class="row g-4">
+
+      <!-- Service 1 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 text-center border rounded-4 bg-light service-card">
+          <i class="fa-solid fa-map-location-dot fs-2 text-primary mb-3"></i>
+          <h5 class="fw-semibold">Local Sightseeing</h5>
+          <p class="text-muted small mb-0">
+            Explore Madurai's attractions with expert local guidance.
+          </p>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 text-center border rounded-4 bg-light service-card">
+          <i class="fa-solid fa-route fs-2 text-success mb-3"></i>
+          <h5 class="fw-semibold">Outstation Trips</h5>
+          <p class="text-muted small mb-0">
+            Comfortable long-distance travel across Tamil Nadu.
+          </p>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 text-center border rounded-4 bg-light service-card">
+          <i class="fa-solid fa-plane-departure fs-2 text-info mb-3"></i>
+          <h5 class="fw-semibold">Airport Transfers</h5>
+          <p class="text-muted small mb-0">
+            Reliable pickup and drop services, always on time.
+          </p>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 text-center border rounded-4 bg-light service-card">
+          <i class="fa-solid fa-car fs-2 text-danger mb-3"></i>
+          <h5 class="fw-semibold">Car Rentals</h5>
+          <p class="text-muted small mb-0">
+            Flexible rental options for short and long durations.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+</div>
+
+<!-- VALUES SECTION -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<section class="py-3 py-md-5 bg-dark scroll-reveal">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="text-center mb-4 mb-md-5">
+      <h2 class="fw-bold text-white fs-4 fs-md-2">Why Choose Us</h2>
+      <p class="text-white-50 small">Values that drive our service excellence</p>
+    </div>
+
+    <div class="row g-3 g-md-4 justify-content-center">
+
+      <!-- Card 1 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="feature-card text-center p-3 p-md-4 h-100">
+          <div class="feature-icon mb-2 fs-5 fs-md-3">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h6 class="fw-semibold mb-2 text-black">Safety First</h6>
+          <p class="text-black-70 small mb-0">
+            Professionally trained drivers and well-maintained vehicles ensure safe travel.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="feature-card text-center p-3 p-md-4 h-100">
+          <div class="feature-icon mb-2 fs-5 fs-md-3">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <h6 class="fw-semibold mb-2 text-black">Professional Service</h6>
+                    <p class="text-black-70 small mb-0">
+            Punctual drivers with transparent pricing and reliable support.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="feature-card text-center p-3 p-md-4 h-100">
+          <div class="feature-icon mb-2 fs-5 fs-md-3">
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <h6 class="fw-semibold mb-2 text-black">Customer Satisfaction</h6>
+                <p class="text-black-70 small mb-0">
+            Comfortable trips with personalized care every time.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="py-5 text-center scroll-reveal" 
+         style="background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80') center/cover no-repeat; color: white; position: relative;">
+  
+  <!-- Dark overlay for readability -->
+  <div style="position:absolute; inset:0; background-color: rgba(0,0,0,0.5);"></div>
+  
+  <div class="container position-relative" style="z-index:1;">
+    <h2 class="fw-bold display-5 mb-3">Ready to Travel with Us?</h2>
+    <p class="mb-4 fs-5">Book your ride today and experience a safe, comfortable journey.</p>
+    
+    <a href="https://wa.me/918428676815" 
+       class="btn btn-warning btn-lg fw-semibold px-4 cta-button"
+       style="transition: transform 0.3s;"
+       onmouseover="this.style.transform='scale(1.05)';"
+       onmouseout="this.style.transform='scale(1)';">
+       Contact Us Now <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
+  </div>
+</section>
+
+
+
+<!-- WHATSAPP FLOAT -->
+<a href="tel:+918428676815" class="float-btn call-float" aria-label="Call">
+  <i class="fa-solid fa-phone"></i>
+</a>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/918428676815" target="_blank" class="float-btn whatsapp-float" aria-label="WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- SCRIPTS -->
+<script>
+// Enhanced Scroll Reveal Animation
+const observerOptions = {
+  threshold: 0.15,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const scrollObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      
+      // Trigger stat item animations
+      const statItems = entry.target.querySelectorAll('.stat-item');
+      statItems.forEach((item, index) => {
+        setTimeout(() => {
+          item.classList.add('animate');
+        }, index * 100);
+      });
+      
+      // Trigger service card animations
+      const serviceCards = entry.target.querySelectorAll('.service-card');
+      serviceCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('animate');
+        }, index * 100);
+      });
+      
+      // Trigger timeline card animations
+      const timelineCards = entry.target.querySelectorAll('.timeline-card');
+      timelineCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('animate');
+        }, index * 200);
+      });
+      
+      // Trigger value card animations
+      const valueCards = entry.target.querySelectorAll('.value-card');
+      valueCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('animate');
+        }, index * 150);
+      });
+    }
+  });
+}, observerOptions);
+
+// Observe all scroll reveal elements
+document.addEventListener('DOMContentLoaded', () => {
+  const scrollRevealElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right');
+  scrollRevealElements.forEach(el => scrollObserver.observe(el));
+});
+
+// Counter Animation
+const animateCounter = (el, target) => {
+  let current = 0;
+  const increment = target / 50;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      el.textContent = target.toLocaleString();
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.ceil(current).toLocaleString();
+    }
+  }, 40);
+};
+
+// Intersection Observer for counters
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.target.hasAttribute('data-count')) {
+      const target = parseInt(entry.target.getAttribute('data-count'));
+      animateCounter(entry.target, target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(stat => counterObserver.observe(stat));
+
+// Stat number counter animation
+document.querySelectorAll(".stat-number").forEach(counter => {
+  const target = +counter.dataset.count;
+  let count = 0;
+
+  const step = target / 80;
+
+  const update = () => {
+    count += step;
+    if (count < target) {
+      counter.innerText = Math.floor(count);
+      requestAnimationFrame(update);
+    } else {
+      counter.innerText = target + "+";
+    }
+  };
+
+  update();
+});
+
+// Smooth parallax effect on scroll
+let ticking = false;
+
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.hero');
+      
+      parallaxElements.forEach(element => {
+        const speed = 0.5;
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+      
+      ticking = false;
+    });
+    
+    ticking = true;
+  }
+});
+</script>
+
+{% endblock %}
