@@ -4,281 +4,304 @@
 
 {% block extra_css %}
 <style>
-:root {
-  --primary-blue: #0066cc;
-  --secondary-blue: #4a90e2;
-  --accent-orange: #ff9800;
-  --dark-text: #2c3e50;
-  --gray-text: #5a6c7d;
-  --light-gray: #f5f7fa;
-  --white: #ffffff;
-  --border-light: #e1e8ed;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #fafbfc;
-  color: var(--dark-text);
-  line-height: 1.6;
-}
-
-/* ===== HERO SECTION ===== */
-.hero {
-  position: relative;
-  height: 400px;
-  background:
-    linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)),
-    url("../static/images/tariff.png") center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  overflow: hidden;
-
-  /* Animate background zoom */
-  animation: zoomBackground 20s ease-in-out infinite alternate;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  animation: shimmer 3s infinite;
-}
-
-/* Zoom in and out background */
-@keyframes zoomBackground {
-  0% {
-    background-size: 100% auto;
+  :root {
+    --primary-blue: #0066cc;
+    --secondary-blue: #4a90e2;
+    --accent-orange: #ff9800;
+    --dark-text: #2c3e50;
+    --gray-text: #5a6c7d;
+    --light-gray: #f5f7fa;
+    --white: #ffffff;
+    --border-light: #e1e8ed;
   }
-  50% {
-    background-size: 110% auto;
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-  100% {
-    background-size: 100% auto;
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafbfc;
+    color: var(--dark-text);
+    line-height: 1.6;
   }
-}
 
-/* Shimmer sweep across */
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
+  /* ===== HERO SECTION ===== */
+  .hero {
+    position: relative;
+    height: 400px;
+    background:
+      linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)),
+      url("../static/images/tariff.png") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+
+    /* Animate background zoom */
+    animation: zoomBackground 20s ease-in-out infinite alternate;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+  }
+
+  /* Zoom in and out background */
+  @keyframes zoomBackground {
+    0% {
+      background-size: 100% auto;
+    }
+
+    50% {
+      background-size: 110% auto;
+    }
+
+    100% {
+      background-size: 100% auto;
+    }
+  }
+
+  /* Shimmer sweep across */
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
 
 
-.hero-content {
-  max-width: 800px;
-  padding: 0 24px;
-  animation: fadeInUp 1s ease;
-}
+  .hero-content {
+    max-width: 800px;
+    padding: 0 24px;
+    animation: fadeInUp 1s ease;
+  }
 
-.hero h1 {
-  font-size: clamp(36px, 5vw, 52px);
-  font-weight: 700;
-  margin-bottom: 16px;
-  letter-spacing: -0.5px;
-  opacity: 0;
-  animation: fadeSlideIn 0.8s ease forwards 0.2s;
-}
-
-.hero p {
-  font-size: clamp(16px, 2vw, 20px);
-  font-weight: 300;
-  opacity: 0;
-  line-height: 1.6;
-  animation: fadeSlideIn 0.8s ease forwards 0.5s;
-}
-.hero h1 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 3rem;
-  color: #ffffff;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-}
-
-.hero p {
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #fefefe;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
-  line-height: 1.6;
-}
-
-
-.hero h1, .hero p {
-  text-shadow: 2px 2px 8px rgba(0,0,0,1.2);
-}
-/* ===== ANIMATIONS ===== */
-@keyframes fadeInUp {
-  from {
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
     opacity: 0;
-    transform: translateY(30px);
+    animation: fadeSlideIn 0.8s ease forwards 0.2s;
   }
-  to {
+
+  .hero p {
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    opacity: 0;
+    line-height: 1.6;
+    animation: fadeSlideIn 0.8s ease forwards 0.5s;
+  }
+
+  .hero h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero p {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fefefe;
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+    line-height: 1.6;
+  }
+
+
+  .hero h1,
+  .hero p {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 1.2);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      transform: scale(1);
+    }
+
+    50% {
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 10px rgba(37, 211, 102, 0.1);
+      transform: scale(1.05);
+    }
+  }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+  }
+
+  .scroll-reveal.active {
     opacity: 1;
     transform: translateY(0);
   }
-}
 
-@keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 10px rgba(37, 211, 102, 0.1);
-    transform: scale(1.05);
-  }
-}
-
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(50px);
-  transition: all 0.8s ease;
-}
-
-.scroll-reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===== WHATSAPP FLOAT ===== */
-.whatsapp-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #25D366, #128C7E);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-  z-index: 1000;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: pulse 2s infinite;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
-}
-
-.whatsapp-float svg {
-  width: 32px;
-  height: 32px;
-  fill: white;
-}
-
-/* ================= FLOAT BUTTON BASE (shared) ================= */
-.float-btn {
-  position: fixed;
-  right: 24px;
-
-  width: 60px;
-  height: 60px;
-
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: white;
-  font-size: 24px;
-
-  text-decoration: none;     /* remove underline */
-  line-height: 1;
-
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-  z-index: 1000;
-
-  transition: all 0.3s ease;
-  animation: pulse 2s infinite;
-}
-
-.float-btn i,
-.float-btn svg {
-  display: block;
-}
-
-
-.float-btn:hover {
-  transform: scale(1.12);
-}
-
-/* ================= WHATSAPP ================= */
-.whatsapp-float {
-  bottom: 24px;
-  background: linear-gradient(135deg, #25D366, #128C7E);
-}
-
-/* ================= CALL ================= */
-.call-float {
-  bottom: 100px; /* sits above whatsapp */
-  background: linear-gradient(135deg, #0066cc, #4a90e2);
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-  .float-btn {
-    width: 52px;
-    height: 52px;
-    right: 16px;
-    font-size: 20px;
-  }
-
-  .call-float {
-    bottom: 90px;
-  }
-
+  /* ===== WHATSAPP FLOAT ===== */
   .whatsapp-float {
-    bottom: 16px;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pulse 2s infinite;
   }
-}
-.float-btn {
-  text-decoration: none !important;
-}
 
-.float-btn:hover,
-.float-btn:focus,
-.float-btn:active {
-  text-decoration: none !important;
-}
+  .whatsapp-float:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+  }
+
+  .whatsapp-float svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+  }
+
+  /* ================= FLOAT BUTTON BASE (shared) ================= */
+  .float-btn {
+    position: fixed;
+    right: 24px;
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 24px;
+
+    text-decoration: none;
+    /* remove underline */
+    line-height: 1;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+  }
+
+  .float-btn i,
+  .float-btn svg {
+    display: block;
+  }
+
+
+  .float-btn:hover {
+    transform: scale(1.12);
+  }
+
+  /* ================= WHATSAPP ================= */
+  .whatsapp-float {
+    bottom: 24px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+  }
+
+  /* ================= CALL ================= */
+  .call-float {
+    bottom: 100px;
+    /* sits above whatsapp */
+    background: linear-gradient(135deg, #0066cc, #4a90e2);
+  }
+
+  /* ================= MOBILE ================= */
+  @media (max-width: 768px) {
+    .float-btn {
+      width: 52px;
+      height: 52px;
+      right: 16px;
+      font-size: 20px;
+    }
+
+    .call-float {
+      bottom: 90px;
+    }
+
+    .whatsapp-float {
+      bottom: 16px;
+    }
+  }
+
+  .float-btn {
+    text-decoration: none !important;
+  }
+
+  .float-btn:hover,
+  .float-btn:focus,
+  .float-btn:active {
+    text-decoration: none !important;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- HERO SECTION -->
-<section class="hero" >
+<section class="hero">
   <div class="hero-content">
     <h1>Our Car Tariffs</h1>
     <p>Transparent pricing for comfortable and safe travel across Madurai</p>
@@ -293,21 +316,36 @@ body {
 <!-- PRICING CARDS -->
 <section class="py-5 bg-light scroll-reveal">
   <div class="container">
-    
+
     <!-- Section Header -->
     <div class="text-center mb-5" style="opacity: 0; animation: fadeInUp 0.8s ease forwards;">
       <h2 class="fw-bold mb-3" style="font-size: 42px; color: #2c3e50; letter-spacing: -1px;">Vehicle Rental Rates</h2>
-      <p style="font-size: 16px; color: #5a6c7d; max-width: 600px; margin: 0 auto;">Choose the perfect vehicle for your journey</p>
+      <p style="font-size: 16px; color: #5a6c7d; max-width: 600px; margin: 0 auto;">Choose the perfect vehicle for your
+        journey</p>
     </div>
 
     {% set cars = [
-        {'name':'Sedan 4+1','subtitle':'Day Rent ₹1600','desc':'Comfortable sedan for city & outstation travel','price':'₹1600/day','details':'Per km ₹11, Min 250 km','icon':'fa-car','color':'primary','features':['Driver ₹300/day','Extra: Toll, Parking, Hill charges, Other state permit']},
-        {'name':'SUV 6+1','subtitle':'Day Rent ₹2100','desc':'Spacious SUV for family and group trips','price':'₹2100/day','details':'Per km ₹13, Min 250 km','icon':'fa-car-side','color':'success','features':['Driver ₹400/day','Extra: Toll, Parking, Hill charges, Other state permit']},
-        {'name':'INNOVA 7+1','subtitle':'Day Rent ₹2300','desc':'Comfortable Innova for family travel','price':'₹2300/day','details':'Per km ₹13, Min 300 km','icon':'fa-van-shuttle','color':'info','features':['Driver ₹400/day','Extra: Toll, Parking, Hill charges, Other state permit']},
-        {'name':'INNOVA Crysta 7+1','subtitle':'Day Rent ₹2700','desc':'Premium Innova Crysta for luxury trips','price':'₹2700/day','details':'Per km ₹17, Min 300 km','icon':'fa-van-shuttle','color':'warning','features':['Driver ₹400/day','Extra: Toll, Parking, Hill charges, Other state permit']},
-        {'name':'Tempo Traveler 12+1 / 14+1','subtitle':'Day Rent ₹2700','desc':'Perfect for large groups and events','price':'₹2700/day','details':'Per km ₹17, Min 300 km','icon':'fa-bus','color':'danger','features':['Driver ₹500/day','Extra: Toll, Parking, Hill charges, Other state permit']},
-        {'name':'Tempo Traveler 18+1','subtitle':'Day Rent ₹4000','desc':'Biggest traveler for very large groups','price':'₹4000/day','details':'Per km ₹19, Min 300 km','icon':'fa-bus','color':'secondary','features':['Driver ₹500/day','Extra: Toll, Parking, Hill charges, Other state permit']},
-        {'name':'Urbania 12+1 / 14+1','subtitle':'Day Rent ₹7500','desc':'Luxury van for premium group travel','price':'₹7500/day','details':'Per km ₹27, Min 250 km','icon':'fa-bus','color':'dark','features':['Driver ₹500/day','Extra: Toll, Parking, Hill charges, Other state permit']}
+    {'name':'Sedan 4+1','seats':'4+1','ac':'Full
+    A/C','fuel':'Petrol/Diesel','price':'1600','per_km':'11','min_km':'250','driver':'300','img':'car1.png','color':'primary','popular':
+    false},
+    {'name':'SUV 6+1','seats':'6+1','ac':'Full
+    A/C','fuel':'Diesel','price':'2100','per_km':'13','min_km':'250','driver':'400','img':'car5.png','color':'success','popular':
+    true},
+    {'name':'INNOVA 7+1','seats':'7+1','ac':'Full
+    A/C','fuel':'Diesel','price':'2300','per_km':'13','min_km':'300','driver':'400','img':'car6.png','color':'info','popular':
+    false},
+    {'name':'INNOVA Crysta','seats':'7+1','ac':'Luxury
+    A/C','fuel':'Diesel','price':'2700','per_km':'17','min_km':'300','driver':'400','img':'car7.png','color':'warning','popular':
+    true},
+    {'name':'Tempo 12+1','seats':'12+1','ac':'Full
+    A/C','fuel':'Diesel','price':'2700','per_km':'17','min_km':'300','driver':'500','img':'car8.png','color':'danger','popular':
+    false},
+    {'name':'Tempo 18+1','seats':'18+1','ac':'Full
+    A/C','fuel':'Diesel','price':'4000','per_km':'19','min_km':'300','driver':'500','img':'car9.png','color':'secondary','popular':
+    false},
+    {'name':'Urbania Luxury','seats':'12-14','ac':'Climate
+    Control','fuel':'Diesel','price':'7500','per_km':'27','min_km':'250','driver':'500','img':'car10.png','color':'dark','popular':
+    true}
     ] %}
 
     <!-- First Row: 4 Cards -->
@@ -315,32 +353,44 @@ body {
       {% for car in cars[:4] %}
       <div class="col-md-6 col-lg-3">
         <div class="card h-100 border-0 pricing-card">
-          <div class="card-header bg-{{ car.color }} text-white text-center border-0 py-4">
-            <div class="icon-wrapper mb-3">
-              <i class="fa-solid {{ car.icon }} fs-1"></i>
-            </div>
-            <h5 class="fw-bold mb-1">{{ car.name }}</h5>
-            <small class="opacity-75">{{ car.subtitle }}</small>
+          <div class="card-header p-0 border-0 position-relative" style="height: 220px; overflow: hidden;">
+            {% if car.popular %}
+            <div class="popular-badge">Best Value</div>
+            {% endif %}
+            <img src="{{ url_for('static', filename='images/cars/' + car.img) }}" alt="{{ car.name }}"
+              class="w-100 h-100" style="object-fit: cover;">
           </div>
-          <div class="card-body p-4 bg-white">
-            <p class="text-muted small mb-3">{{ car.desc }}</p>
-            <div class="price-box bg-light rounded-3 p-3 mb-3 text-center">
-              <h3 class="text-{{ car.color }} fw-bold mb-1">{{ car.price }}</h3>
-              <small class="text-muted">{{ car.details }}</small>
+          <div class="card-body p-4 bg-white luxury-body">
+            <h4 class="luxury-title mb-1">{{ car.name }}</h4>
+            <div class="spec-badges mb-3">
+              <span class="spec-badge"><i class="fa-solid fa-chair me-1"></i>{{ car.seats }} Seats</span>
+              <span class="spec-badge"><i class="fa-solid fa-snowflake me-1"></i>{{ car.ac }}</span>
             </div>
-            <ul class="list-unstyled small mb-0">
-              {% for feature in car.features %}
-              <li class="mb-2">
-                <i class="fa-solid fa-check-circle text-{{ car.color }} me-2"></i>{{ feature }}
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="card-footer bg-white border-0 p-4 pt-0">
-            <a href="https://wa.me/918428676815?text=Hi%20I%20want%20to%20book%20{{ car.name | replace(' ', '%20') }}" 
-               target="_blank"
-               class="btn btn-{{ car.color }} w-100 fw-semibold">
-              Book Now <i class="fa-solid fa-arrow-right ms-2"></i>
+
+            <div class="luxury-price-tag mb-4">
+              <span class="currency">₹</span>
+              <span class="amount">{{ car.price }}</span>
+              <span class="period">/day</span>
+            </div>
+
+            <div class="luxury-details mb-4">
+              <div class="detail-row">
+                <span>Per KM Charge</span>
+                <span class="fw-bold">₹{{ car.per_km }}</span>
+              </div>
+              <div class="detail-row">
+                <span>Minimum distance</span>
+                <span class="fw-bold">{{ car.min_km }} KM</span>
+              </div>
+              <div class="detail-row">
+                <span>Driver Beta</span>
+                <span class="fw-bold">₹{{ car.driver }}</span>
+              </div>
+            </div>
+
+            <a href="https://wa.me/918428676815?text=Hi%20I%20want%20to%20book%20{{ car.name | replace(' ', '%20') }}"
+              target="_blank" class="luxury-btn btn-{{ car.color }}">
+              Book Your Ride <i class="fa-brands fa-whatsapp ms-2"></i>
             </a>
           </div>
         </div>
@@ -353,32 +403,44 @@ body {
       {% for car in cars[4:] %}
       <div class="col-md-6 col-lg-3">
         <div class="card h-100 border-0 pricing-card">
-          <div class="card-header bg-{{ car.color }} text-white text-center border-0 py-4">
-            <div class="icon-wrapper mb-3">
-              <i class="fa-solid {{ car.icon }} fs-1"></i>
-            </div>
-            <h5 class="fw-bold mb-1">{{ car.name }}</h5>
-            <small class="opacity-75">{{ car.subtitle }}</small>
+          <div class="card-header p-0 border-0 position-relative" style="height: 220px; overflow: hidden;">
+            {% if car.popular %}
+            <div class="popular-badge">Best Value</div>
+            {% endif %}
+            <img src="{{ url_for('static', filename='images/cars/' + car.img) }}" alt="{{ car.name }}"
+              class="w-100 h-100" style="object-fit: cover;">
           </div>
-          <div class="card-body p-4 bg-white">
-            <p class="text-muted small mb-3">{{ car.desc }}</p>
-            <div class="price-box bg-light rounded-3 p-3 mb-3 text-center">
-              <h3 class="text-{{ car.color }} fw-bold mb-1">{{ car.price }}</h3>
-              <small class="text-muted">{{ car.details }}</small>
+          <div class="card-body p-4 bg-white luxury-body">
+            <h4 class="luxury-title mb-1">{{ car.name }}</h4>
+            <div class="spec-badges mb-3">
+              <span class="spec-badge"><i class="fa-solid fa-chair me-1"></i>{{ car.seats }} Seats</span>
+              <span class="spec-badge"><i class="fa-solid fa-snowflake me-1"></i>{{ car.ac }}</span>
             </div>
-            <ul class="list-unstyled small mb-0">
-              {% for feature in car.features %}
-              <li class="mb-2">
-                <i class="fa-solid fa-check-circle text-{{ car.color }} me-2"></i>{{ feature }}
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="card-footer bg-white border-0 p-4 pt-0">
-            <a href="https://wa.me/918428676815?text=Hi%20I%20want%20to%20book%20{{ car.name | replace(' ', '%20') }}" 
-               target="_blank"
-               class="btn btn-{{ car.color }} w-100 fw-semibold">
-              Book Now <i class="fa-solid fa-arrow-right ms-2"></i>
+
+            <div class="luxury-price-tag mb-4">
+              <span class="currency">₹</span>
+              <span class="amount">{{ car.price }}</span>
+              <span class="period">/day</span>
+            </div>
+
+            <div class="luxury-details mb-4">
+              <div class="detail-row">
+                <span>Per KM Charge</span>
+                <span class="fw-bold">₹{{ car.per_km }}</span>
+              </div>
+              <div class="detail-row">
+                <span>Minimum distance</span>
+                <span class="fw-bold">{{ car.min_km }} KM</span>
+              </div>
+              <div class="detail-row">
+                <span>Driver Beta</span>
+                <span class="fw-bold">₹{{ car.driver }}</span>
+              </div>
+            </div>
+
+            <a href="https://wa.me/918428676815?text=Hi%20I%20want%20to%20book%20{{ car.name | replace(' ', '%20') }}"
+              target="_blank" class="luxury-btn btn-{{ car.color }}">
+              Book Your Ride <i class="fa-brands fa-whatsapp ms-2"></i>
             </a>
           </div>
         </div>
@@ -391,149 +453,184 @@ body {
 
 
 <style>
-/* Section fade in */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
 
-/* Clean Professional Pricing Cards */
-.pricing-card {
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-}
+  /* Section fade in */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
 
-/* Subtle lift on hover */
-.pricing-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-/* Card Header */
-.pricing-card .card-header {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
-}
-
-/* Gradient overlay on hover */
-.pricing-card .card-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.pricing-card:hover .card-header::before {
-  opacity: 1;
-}
-
-/* Icon Animation */
-.icon-wrapper {
-  transition: all 0.4s ease;
-  display: inline-block;
-}
-
-.pricing-card:hover .icon-wrapper {
-  transform: scale(1.15) rotateY(10deg);
-}
-
-/* Price Box Effect */
-.price-box {
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.pricing-card:hover .price-box {
-  border-color: rgba(0, 102, 204, 0.2);
-  transform: scale(1.03);
-}
-
-/* Feature List Animation */
-.pricing-card ul li {
-  opacity: 0.85;
-  transform: translateX(0);
-  transition: all 0.3s ease;
-}
-
-.pricing-card:hover ul li {
-  opacity: 1;
-  transform: translateX(5px);
-}
-
-.pricing-card:hover ul li:nth-child(1) { transition-delay: 0.05s; }
-.pricing-card:hover ul li:nth-child(2) { transition-delay: 0.1s; }
-.pricing-card:hover ul li:nth-child(3) { transition-delay: 0.15s; }
-.pricing-card:hover ul li:nth-child(4) { transition-delay: 0.2s; }
-
-/* Button Hover */
-.pricing-card .btn {
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.pricing-card .btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: translate(-50%, -50%);
-  transition: width 0.5s ease, height 0.5s ease;
-}
-
-.pricing-card:hover .btn::before {
-  width: 300px;
-  height: 300px;
-}
-
-.pricing-card .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Card entrance animation */
-.pricing-card {
-  animation: cardFadeIn 0.6s ease backwards;
-}
-
-.col-md-6:nth-child(1) .pricing-card { animation-delay: 0.1s; }
-.col-md-6:nth-child(2) .pricing-card { animation-delay: 0.2s; }
-.col-md-6:nth-child(3) .pricing-card { animation-delay: 0.3s; }
-.col-md-6:nth-child(4) .pricing-card { animation-delay: 0.4s; }
-.col-md-6:nth-child(5) .pricing-card { animation-delay: 0.5s; }
-.col-md-6:nth-child(6) .pricing-card { animation-delay: 0.6s; }
-.col-md-6:nth-child(7) .pricing-card { animation-delay: 0.7s; }
-
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+  /* Premium Pricing Cards */
+  .pricing-card {
+    border-radius: 24px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
   .pricing-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-15px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
   }
-}
+
+  .popular-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    z-index: 5;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+  }
+
+  .luxury-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    color: #1e293b;
+    font-size: 1.5rem;
+  }
+
+  .spec-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .spec-badge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .luxury-price-tag {
+    display: flex;
+    align-items: baseline;
+    color: #1e293b;
+  }
+
+  .luxury-price-tag .currency {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-right: 2px;
+  }
+
+  .luxury-price-tag .amount {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+
+  .luxury-price-tag .period {
+    color: #64748b;
+    margin-left: 4px;
+    font-weight: 500;
+  }
+
+  .luxury-details {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 4px 0;
+    color: #475569;
+  }
+
+  .detail-row:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  .luxury-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    color: #fff;
+  }
+
+  .luxury-btn.btn-primary {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  }
+
+  .luxury-btn.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+
+  .luxury-btn.btn-info {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+  }
+
+  .luxury-btn.btn-warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+  }
+
+  .luxury-btn.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+  }
+
+  .luxury-btn.btn-secondary {
+    background: linear-gradient(135deg, #64748b, #475569);
+  }
+
+  .luxury-btn.btn-dark {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+  }
+
+  .luxury-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    color: #fff;
+  }
+
+  .pricing-card .card-header img {
+    transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .pricing-card:hover .card-header img {
+    transform: scale(1.1) rotate(1deg);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .pricing-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .luxury-title {
+      font-size: 1.3rem;
+    }
+
+    .luxury-price-tag .amount {
+      font-size: 1.8rem;
+    }
+  }
 </style>
 
 
@@ -541,7 +638,7 @@ body {
 <section class="py-5 cta-gray-section">
   <div class="container">
     <div class="row align-items-center g-4">
-      
+
       <!-- Left Side: Content -->
       <div class="col-lg-8">
         <div class="d-flex align-items-center gap-3 mb-3">
@@ -553,7 +650,7 @@ body {
             <p class="text-muted mb-0">Book your ride today and enjoy a safe, comfortable journey across Madurai</p>
           </div>
         </div>
-        
+
         <!-- Features -->
         <div class="d-flex flex-wrap gap-4 mt-3">
           <div class="d-flex align-items-center gap-2">
@@ -574,13 +671,11 @@ body {
       <!-- Right Side: CTA Buttons -->
       <div class="col-lg-4 text-lg-end">
         <div class="d-grid gap-2">
-          <a href="https://wa.me/918428676815" 
-             class="btn btn-primary btn-lg fw-semibold cta-primary-btn">
-             <i class="fa-brands fa-whatsapp me-2"></i> Contact on WhatsApp
+          <a href="https://wa.me/918428676815" class="btn btn-primary btn-lg fw-semibold cta-primary-btn">
+            <i class="fa-brands fa-whatsapp me-2"></i> Contact on WhatsApp
           </a>
-          <a href="tel:+918428676815" 
-             class="btn btn-outline-primary btn-lg fw-semibold cta-outline-btn">
-             <i class="fa-solid fa-phone me-2"></i> Call +91 84286 76815
+          <a href="tel:+918428676815" class="btn btn-outline-primary btn-lg fw-semibold cta-outline-btn">
+            <i class="fa-solid fa-phone me-2"></i> Call +91 84286 76815
           </a>
         </div>
       </div>
@@ -590,120 +685,120 @@ body {
 </section>
 
 <style>
-/* Professional Gray CTA Section */
-.cta-gray-section {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-top: 1px solid #dee2e6;
-  border-bottom: 1px solid #dee2e6;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Subtle pattern overlay */
-.cta-gray-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
-  pointer-events: none;
-}
-
-.cta-gray-section .container {
-  position: relative;
-  z-index: 1;
-}
-
-/* Icon Box */
-.cta-icon-box {
-  width: 70px;
-  height: 70px;
-  background: white;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-
-.cta-gray-section:hover .cta-icon-box {
-  transform: scale(1.05) rotate(5deg);
-  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.2);
-}
-
-/* Primary Button */
-.cta-primary-btn {
-  background: linear-gradient(135deg, #0066cc, #4a90e2);
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-primary-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
-}
-
-.cta-primary-btn:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.cta-primary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 102, 204, 0.4);
-  background: linear-gradient(135deg, #0052a3, #3a7bc8);
-}
-
-/* Outline Button */
-.cta-outline-btn {
-  border: 2px solid #0066cc;
-  color: #0066cc;
-  transition: all 0.3s ease;
-}
-
-.cta-outline-btn:hover {
-  background: #0066cc;
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 102, 204, 0.3);
-}
-
-/* Feature Checks */
-.cta-gray-section .fa-circle-check {
-  font-size: 1.1rem;
-}
-
-/* Responsive */
-@media (max-width: 991px) {
-  .col-lg-4 {
-    text-align: center !important;
+  /* Professional Gray CTA Section */
+  .cta-gray-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    position: relative;
+    overflow: hidden;
   }
-  
+
+  /* Subtle pattern overlay */
+  .cta-gray-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.02) 10px, rgba(0, 0, 0, 0.02) 20px);
+    pointer-events: none;
+  }
+
+  .cta-gray-section .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Icon Box */
   .cta-icon-box {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
   }
-  
-  .cta-gray-section h3 {
-    font-size: 1.5rem;
+
+  .cta-gray-section:hover .cta-icon-box {
+    transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.2);
   }
-}
+
+  /* Primary Button */
+  .cta-primary-btn {
+    background: linear-gradient(135deg, #0066cc, #4a90e2);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-primary-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+
+  .cta-primary-btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .cta-primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 102, 204, 0.4);
+    background: linear-gradient(135deg, #0052a3, #3a7bc8);
+  }
+
+  /* Outline Button */
+  .cta-outline-btn {
+    border: 2px solid #0066cc;
+    color: #0066cc;
+    transition: all 0.3s ease;
+  }
+
+  .cta-outline-btn:hover {
+    background: #0066cc;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 102, 204, 0.3);
+  }
+
+  /* Feature Checks */
+  .cta-gray-section .fa-circle-check {
+    font-size: 1.1rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 991px) {
+    .col-lg-4 {
+      text-align: center !important;
+    }
+
+    .cta-icon-box {
+      width: 60px;
+      height: 60px;
+    }
+
+    .cta-gray-section h3 {
+      font-size: 1.5rem;
+    }
+  }
 </style>
 
 
@@ -720,47 +815,47 @@ body {
 
 <!-- SCRIPTS -->
 <script>
-// Scroll Reveal Animation
-const observerOptions = {
-  threshold: 0.15,
-  rootMargin: '0px 0px -50px 0px'
-};
+  // Scroll Reveal Animation
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  };
 
-const scrollObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-      scrollObserver.unobserve(entry.target); // Stop observing once active
-    }
-  });
-}, observerOptions);
-
-document.addEventListener('DOMContentLoaded', () => {
-  const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
-
-  // Observe each element
-  scrollRevealElements.forEach(el => scrollObserver.observe(el));
-
-  // Trigger for elements already in view on page load
-  scrollRevealElements.forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      el.classList.add('active');
-    }
-  });
-
-  // Card hover effect
-  document.querySelectorAll('.hover-lift').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      card.style.transform = 'translateY(-10px)';
-      card.style.boxShadow = '0 12px 30px rgba(0,0,0,0.15)';
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        scrollObserver.unobserve(entry.target); // Stop observing once active
+      }
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'translateY(0)';
-      card.style.boxShadow = '';
+  }, observerOptions);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+    // Observe each element
+    scrollRevealElements.forEach(el => scrollObserver.observe(el));
+
+    // Trigger for elements already in view on page load
+    scrollRevealElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add('active');
+      }
+    });
+
+    // Card hover effect
+    document.querySelectorAll('.hover-lift').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px)';
+        card.style.boxShadow = '0 12px 30px rgba(0,0,0,0.15)';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = '';
+      });
     });
   });
-});
 </script>
 
 
