@@ -3,585 +3,676 @@
 {% block title %}Tour Packages | Samyuktha Travels{% endblock %}
 
 {% block extra_css %}
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+  rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-/* ================= CSS VARIABLES (matching site-wide) ================= */
-:root {
-  --primary-blue: #0066cc;
-  --secondary-blue: #4a90e2;
-  --accent-orange: #ff9800;
-  --dark-text: #2c3e50;
-  --gray-text: #5a6c7d;
-  --light-gray: #f5f7fa;
-  --white: #ffffff;
-  --border-light: #e1e8ed;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #fafbfc;
-  color: var(--dark-text);
-  line-height: 1.6;
-}
-
-/* ===== HERO SECTION ===== */
-.hero {
-  position: relative;
-  height: 400px;
-  background:
-    linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)),
-    url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  overflow: hidden;
-  animation: zoomInOut 20s ease-in-out infinite alternate;
-}
-
-/* Shimmer sweep across hero */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  animation: shimmer 3s infinite;
-  z-index: 1;
-}
-
-/* Zoom in/out background animation */
-@keyframes zoomInOut {
-  0% {
-    background-size: 100% auto;
-  }
-  50% {
-    background-size: 110% auto;
-  }
-  100% {
-    background-size: 100% auto;
-  }
-}
-
-/* Optional shimmer animation */
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* Hero content styling */
-.hero-content {
-  position: relative; /* make content above shimmer */
-  z-index: 2;
-}
-
-
-
-  
-.hero-content {
-  max-width: 800px;
-  padding: 0 24px;
-  position: relative;
-  z-index: 2;
-  animation: fadeInUp 1s ease;
-}
-
-.hero h1 {
-  font-size: clamp(36px, 5vw, 52px);
-  font-weight: 700;
-  margin-bottom: 16px;
-  letter-spacing: -0.5px;
-  opacity: 0;
-  animation: fadeSlideIn 0.8s ease forwards 0.2s;
-}
-
-.hero p {
-  font-size: clamp(16px, 2vw, 20px);
-  font-weight: 700;
-  opacity: 0;
-  line-height: 1.6;
-  animation: fadeSlideIn 0.8s ease forwards 0.5s;
-}
-
-.hero h1 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 3rem;
-  color: #ffffff;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-}
-
-.hero p {
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #fefefe;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
-  line-height: 1.6;
-}
-
-
-.hero h1, .hero p {
-  text-shadow: 2px 2px 8px rgba(0,0,0,1.2);
-}
-/* ===== ANIMATIONS ===== */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shimmer {
-  0%   { left: -100%; }
-  100% { left: 100%; }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 4px 20px rgba(37,211,102,0.4), 0 0 0 10px rgba(37,211,102,0.1);
-    transform: scale(1.05);
-  }
-}
-
-@keyframes cardFadeIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== SCROLL REVEAL ===== */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.8s ease;
-}
-.scroll-reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===== INFO BANNER ===== */
-.info-banner {
-  background: rgba(255, 152, 0, 0.08);
-  border-top: 1px solid rgba(255, 152, 0, 0.15);
-  border-bottom: 1px solid rgba(255, 152, 0, 0.15);
-}
-
-/* ===== SECTION HEADER ===== */
-.section-tag {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
-}
-
-/* ===== PACKAGE CARDS ===== */
-.package-card {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: cardFadeIn 0.6s ease backwards;
-}
-
-.package-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Hover lift */
-.package-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-}
-
-/* ---- IMAGE AREA ---- */
-.package-img {
-  height: 200px;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
-}
-
-/* Subtle zoom on card hover */
-.package-card:hover .package-img {
-  height: 210px;
-}
-
-/* Dark gradient overlay at bottom of image for text readability */
-.package-img::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 55%;
-  background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
-  pointer-events: none;
-}
-
-/* Package type badge */
-.package-badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-  color: white;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  z-index: 1;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-/* ---- BODY ---- */
-.package-body {
-  padding: 22px 22px 24px;
-}
-
-.package-body h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--dark-text);
-  margin-bottom: 8px;
-  transition: all 0.3s ease;
-}
-
-.package-card:hover .package-body h3 {
-  transform: translateX(4px);
-  color: var(--primary-blue);
-}
-
-.package-body .destinations {
-  font-size: 13px;
-  color: var(--gray-text);
-  line-height: 1.7;
-  margin-bottom: 18px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-/* Destination tags */
-.dest-tag {
-  display: inline-block;
-  background: var(--light-gray);
-  color: var(--gray-text);
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 3px 10px;
-  border-radius: 50px;
-  border: 1px solid var(--border-light);
-  transition: all 0.3s ease;
-}
-
-.package-card:hover .dest-tag {
-  background: rgba(0,102,204,0.06);
-  border-color: rgba(0,102,204,0.2);
-  color: var(--primary-blue);
-}
-
-/* ---- WHATSAPP BUTTON ---- */
-.btn-whatsapp {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 11px 16px;
-  border-radius: 50px;
-  background: linear-gradient(135deg, #25D366, #128C7E);
-  color: #ffffff;
-  font-size: 13.5px;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 3px 12px rgba(37,211,102,0.3);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Ripple effect on button */
-.btn-whatsapp::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  transform: translate(-50%, -50%);
-  transition: width 0.5s ease, height 0.5s ease;
-}
-
-.btn-whatsapp:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.btn-whatsapp:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37,211,102,0.45);
-  background: linear-gradient(135deg, #1db85c, #0f7a6e);
-}
-
-.btn-whatsapp svg {
-  width: 16px;
-  height: 16px;
-  fill: white;
-  position: relative;
-  z-index: 1;
-}
-
-.btn-whatsapp span {
-  position: relative;
-  z-index: 1;
-}
-
-/* ===== CTA SECTION ===== */
-.cta-gray-section {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-top: 1px solid #dee2e6;
-  border-bottom: 1px solid #dee2e6;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-gray-section::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
-  pointer-events: none;
-}
-
-.cta-gray-section .container {
-  position: relative;
-  z-index: 1;
-}
-
-.cta-icon-box {
-  width: 70px;
-  height: 70px;
-  background: white;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-
-.cta-gray-section:hover .cta-icon-box {
-  transform: scale(1.05) rotate(5deg);
-  box-shadow: 0 6px 20px rgba(0,102,204,0.2);
-}
-
-.cta-primary-btn {
-  background: linear-gradient(135deg, #0066cc, #4a90e2);
-  border: none;
-  color: white;
-  box-shadow: 0 4px 15px rgba(0,102,204,0.3);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-primary-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 0; height: 0;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
-}
-
-.cta-primary-btn:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.cta-primary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,102,204,0.4);
-  background: linear-gradient(135deg, #0052a3, #3a7bc8);
-  color: white;
-}
-
-.cta-outline-btn {
-  border: 2px solid #0066cc;
-  color: #0066cc;
-  transition: all 0.3s ease;
-  background: transparent;
-}
-
-.cta-outline-btn:hover {
-  background: #0066cc;
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,102,204,0.3);
-}
-
-/* ===== WHATSAPP FLOAT ===== */
-.whatsapp-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #25D366, #128C7E);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-  z-index: 1000;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: pulse 2s infinite;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 8px 30px rgba(37,211,102,0.6);
-}
-
-.whatsapp-float svg {
-  width: 32px;
-  height: 32px;
-  fill: white;
-}
-
-/* ===== STAGGERED CARD ANIMATIONS ===== */
-.package-card { animation-delay: 0.05s; }
-.col-md-6:nth-child(1)  .package-card { animation-delay: 0.05s; }
-.col-md-6:nth-child(2)  .package-card { animation-delay: 0.10s; }
-.col-md-6:nth-child(3)  .package-card { animation-delay: 0.15s; }
-.col-md-6:nth-child(4)  .package-card { animation-delay: 0.20s; }
-.col-md-6:nth-child(5)  .package-card { animation-delay: 0.25s; }
-.col-md-6:nth-child(6)  .package-card { animation-delay: 0.30s; }
-.col-md-6:nth-child(7)  .package-card { animation-delay: 0.35s; }
-.col-md-6:nth-child(8)  .package-card { animation-delay: 0.40s; }
-.col-md-6:nth-child(9)  .package-card { animation-delay: 0.45s; }
-.col-md-6:nth-child(10) .package-card { animation-delay: 0.50s; }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .hero { height: 400px; }
-  .package-card:hover { transform: translateY(-8px); }
-  .cta-icon-box { width: 60px; height: 60px; }
-}
-/* ================= FLOAT BUTTON BASE (shared) ================= */
-.float-btn {
-  position: fixed;
-  right: 24px;
-
-  width: 60px;
-  height: 60px;
-
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: white;
-  font-size: 24px;
-
-  text-decoration: none;     /* remove underline */
-  line-height: 1;
-
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-  z-index: 1000;
-
-  transition: all 0.3s ease;
-  animation: pulse 2s infinite;
-}
-
-.float-btn i,
-.float-btn svg {
-  display: block;
-}
-
-
-.float-btn:hover {
-  transform: scale(1.12);
-}
-
-/* ================= WHATSAPP ================= */
-.whatsapp-float {
-  bottom: 24px;
-  background: linear-gradient(135deg, #25D366, #128C7E);
-}
-
-/* ================= CALL ================= */
-.call-float {
-  bottom: 100px; /* sits above whatsapp */
-  background: linear-gradient(135deg, #0066cc, #4a90e2);
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-  .float-btn {
-    width: 52px;
-    height: 52px;
-    right: 16px;
-    font-size: 20px;
+  /* ================= CSS VARIABLES (matching site-wide) ================= */
+  :root {
+    --primary-blue: #0066cc;
+    --secondary-blue: #4a90e2;
+    --accent-orange: #ff9800;
+    --dark-text: #2c3e50;
+    --gray-text: #5a6c7d;
+    --light-gray: #f5f7fa;
+    --white: #ffffff;
+    --border-light: #e1e8ed;
   }
 
-  .call-float {
-    bottom: 90px;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafbfc;
+    color: var(--dark-text);
+    line-height: 1.6;
+  }
+
+  /* ===== HERO SECTION ===== */
+  .hero {
+    position: relative;
+    height: 400px;
+    background:
+      linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)),
+      url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    animation: zoomInOut 20s ease-in-out infinite alternate;
+  }
+
+  /* Shimmer sweep across hero */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+    z-index: 1;
+  }
+
+  /* Zoom in/out background animation */
+  @keyframes zoomInOut {
+    0% {
+      background-size: 100% auto;
+    }
+
+    50% {
+      background-size: 110% auto;
+    }
+
+    100% {
+      background-size: 100% auto;
+    }
+  }
+
+  /* Optional shimmer animation */
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
+
+  /* Hero content styling */
+  .hero-content {
+    position: relative;
+    /* make content above shimmer */
+    z-index: 2;
+  }
+
+
+
+
+  .hero-content {
+    max-width: 800px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+    opacity: 0;
+    animation: fadeSlideIn 0.8s ease forwards 0.2s;
+  }
+
+  .hero p {
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 700;
+    opacity: 0;
+    line-height: 1.6;
+    animation: fadeSlideIn 0.8s ease forwards 0.5s;
+  }
+
+  .hero h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero p {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fefefe;
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+    line-height: 1.6;
+  }
+
+
+  .hero h1,
+  .hero p {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 1.2);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      transform: scale(1);
+    }
+
+    50% {
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 10px rgba(37, 211, 102, 0.1);
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes cardFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.8s ease;
+  }
+
+  .scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== INFO BANNER ===== */
+  .info-banner {
+    background: rgba(255, 152, 0, 0.08);
+    border-top: 1px solid rgba(255, 152, 0, 0.15);
+    border-bottom: 1px solid rgba(255, 152, 0, 0.15);
+  }
+
+  /* ===== SECTION HEADER ===== */
+  .section-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== PACKAGE CARDS ===== */
+  .package-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: cardFadeIn 0.6s ease backwards;
+  }
+
+  .package-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Hover lift */
+  .package-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* ---- IMAGE AREA ---- */
+  .package-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+
+  /* Subtle zoom on card hover */
+  .package-card:hover .package-img {
+    height: 210px;
+  }
+
+  /* Dark gradient overlay at bottom of image for text readability */
+  .package-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 55%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.45), transparent);
+    pointer-events: none;
+  }
+
+  /* Package type badge */
+  .package-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ---- BODY ---- */
+  .package-body {
+    padding: 22px 22px 24px;
+  }
+
+  .package-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .package-card:hover .package-body h3 {
+    transform: translateX(4px);
+    color: var(--primary-blue);
+  }
+
+  .package-body .destinations {
+    font-size: 13px;
+    color: var(--gray-text);
+    line-height: 1.7;
+    margin-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* Destination tags */
+  .dest-tag {
+    display: inline-block;
+    background: var(--light-gray);
+    color: var(--gray-text);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 50px;
+    border: 1px solid var(--border-light);
+    transition: all 0.3s ease;
+  }
+
+  .package-card:hover .dest-tag {
+    background: rgba(0, 102, 204, 0.06);
+    border-color: rgba(0, 102, 204, 0.2);
+    color: var(--primary-blue);
+  }
+
+  /* ---- WHATSAPP BUTTON ---- */
+  .btn-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 3px 12px rgba(37, 211, 102, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Ripple effect on button */
+  .btn-whatsapp::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+  }
+
+  .btn-whatsapp:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+    background: linear-gradient(135deg, #1db85c, #0f7a6e);
+  }
+
+  .btn-whatsapp svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-whatsapp span {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== CTA SECTION ===== */
+  .cta-gray-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-gray-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.02) 10px, rgba(0, 0, 0, 0.02) 20px);
+    pointer-events: none;
+  }
+
+  .cta-gray-section .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-icon-box {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+
+  .cta-gray-section:hover .cta-icon-box {
+    transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.2);
+  }
+
+  .cta-primary-btn {
+    background: linear-gradient(135deg, #0066cc, #4a90e2);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-primary-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+
+  .cta-primary-btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .cta-primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 102, 204, 0.4);
+    background: linear-gradient(135deg, #0052a3, #3a7bc8);
+    color: white;
+  }
+
+  .cta-outline-btn {
+    border: 2px solid #0066cc;
+    color: #0066cc;
+    transition: all 0.3s ease;
+    background: transparent;
+  }
+
+  .cta-outline-btn:hover {
+    background: #0066cc;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 102, 204, 0.3);
+  }
+
+  /* ===== WHATSAPP FLOAT ===== */
   .whatsapp-float {
-    bottom: 16px;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pulse 2s infinite;
   }
-}
-.float-btn {
-  text-decoration: none !important;
-}
 
-.float-btn:hover,
-.float-btn:focus,
-.float-btn:active {
-  text-decoration: none !important;
-}
+  .whatsapp-float:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+  }
+
+  .whatsapp-float svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+  }
+
+  /* ===== STAGGERED CARD ANIMATIONS ===== */
+  .package-card {
+    animation-delay: 0.05s;
+  }
+
+  .col-md-6:nth-child(1) .package-card {
+    animation-delay: 0.05s;
+  }
+
+  .col-md-6:nth-child(2) .package-card {
+    animation-delay: 0.10s;
+  }
+
+  .col-md-6:nth-child(3) .package-card {
+    animation-delay: 0.15s;
+  }
+
+  .col-md-6:nth-child(4) .package-card {
+    animation-delay: 0.20s;
+  }
+
+  .col-md-6:nth-child(5) .package-card {
+    animation-delay: 0.25s;
+  }
+
+  .col-md-6:nth-child(6) .package-card {
+    animation-delay: 0.30s;
+  }
+
+  .col-md-6:nth-child(7) .package-card {
+    animation-delay: 0.35s;
+  }
+
+  .col-md-6:nth-child(8) .package-card {
+    animation-delay: 0.40s;
+  }
+
+  .col-md-6:nth-child(9) .package-card {
+    animation-delay: 0.45s;
+  }
+
+  .col-md-6:nth-child(10) .package-card {
+    animation-delay: 0.50s;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .hero {
+      height: 400px;
+    }
+
+    .package-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .cta-icon-box {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  /* ================= FLOAT BUTTON BASE (shared) ================= */
+  .float-btn {
+    position: fixed;
+    right: 24px;
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 24px;
+
+    text-decoration: none;
+    /* remove underline */
+    line-height: 1;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+  }
+
+  .float-btn i,
+  .float-btn svg {
+    display: block;
+  }
+
+
+  .float-btn:hover {
+    transform: scale(1.12);
+  }
+
+  /* ================= WHATSAPP ================= */
+  .whatsapp-float {
+    bottom: 24px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+  }
+
+  /* ================= CALL ================= */
+  .call-float {
+    bottom: 100px;
+    /* sits above whatsapp */
+    background: linear-gradient(135deg, #0066cc, #4a90e2);
+  }
+
+  /* ================= MOBILE ================= */
+  @media (max-width: 768px) {
+    .float-btn {
+      width: 52px;
+      height: 52px;
+      right: 16px;
+      font-size: 20px;
+    }
+
+    .call-float {
+      bottom: 90px;
+    }
+
+    .whatsapp-float {
+      bottom: 16px;
+    }
+  }
+
+  .float-btn {
+    text-decoration: none !important;
+  }
+
+  .float-btn:hover,
+  .float-btn:focus,
+  .float-btn:active {
+    text-decoration: none !important;
+  }
 </style>
 {% endblock %}
 
@@ -610,29 +701,38 @@ body {
     <div class="row g-4">
 
       {% set packages = [
-        {'title': 'Family Tour Package',       'badge': 'Family',     'desc': 'Madurai, Chidambaram, Mahabalipuram, Rameshwaram, Thanjavur, Velankanni, Kanchipuram, Kanyakumari, Trichy'},
-        {'title': 'Wildlife Tour Package',     'badge': 'Adventure',  'desc': 'Mudumalai, Valparai, Anamalai Tiger Reserve, Masinagudi, Satyamangalam, Megamalai, Kalakkad'},
-        {'title': 'Student Tour Package',      'badge': 'Education',  'desc': 'Munnar, Kerala, Ooty, Kodaikanal, Agra, Cochin'},
-        {'title': 'Tamil Nadu Tour Package',   'badge': 'Heritage',   'desc': 'Kanyakumari, Rameswaram, Madurai, Kodaikanal, Ooty, Palani, Pollachi, Chennai'},
-        {'title': 'Kerala Tour Package',       'badge': 'Backwater',  'desc': 'Munnar, Kovalam, Kumarakom, Kochi, Alleppey, Thekkady, Vagamon, Kozhikode'},
-        {'title': 'Karnataka Tour Package',    'badge': 'Culture',    'desc': 'Mysore Palace, Bangalore, Abbey Falls, Coorg, Wonderla, Sree Virupaksha Temple'},
-        {'title': 'Honeymoon Tour Package',    'badge': 'Romantic',   'desc': 'Ooty, Kodaikanal, Munnar, Coonoor, Mahabalipuram, Pondicherry'},
-        {'title': 'Corporate Tour Package',    'badge': 'Corporate',  'desc': 'Chennai, Auroville, Hogenakkal, Yercaud, Ooty, Munnar'},
-        {'title': 'Temple Tour Package',       'badge': 'Spiritual',  'desc': 'Navagraha, Kanchipuram, Rameswaram, Thanjavur, Kumbakonam, Tiruvannamalai'},
-        {'title': 'Hill Station Tour Package', 'badge': 'Hill',       'desc': 'Ooty, Kodaikanal, Yelagiri, Yercaud, Kolli Hills, Kolukkumalai'}
+      {'title': 'Family Tour Package', 'badge': 'Family', 'desc': 'Madurai, Chidambaram, Mahabalipuram, Rameshwaram,
+      Thanjavur, Velankanni, Kanchipuram, Kanyakumari, Trichy'},
+      {'title': 'Wildlife Tour Package', 'badge': 'Adventure', 'desc': 'Mudumalai, Valparai, Anamalai Tiger Reserve,
+      Masinagudi, Satyamangalam, Megamalai, Kalakkad'},
+      {'title': 'Student Tour Package', 'badge': 'Education', 'desc': 'Munnar, Kerala, Ooty, Kodaikanal, Agra, Cochin'},
+      {'title': 'Tamil Nadu Tour Package', 'badge': 'Heritage', 'desc': 'Kanyakumari, Rameswaram, Madurai, Kodaikanal,
+      Ooty, Palani, Pollachi, Chennai'},
+      {'title': 'Kerala Tour Package', 'badge': 'Backwater', 'desc': 'Munnar, Kovalam, Kumarakom, Kochi, Alleppey,
+      Thekkady, Vagamon, Kozhikode'},
+      {'title': 'Karnataka Tour Package', 'badge': 'Culture', 'desc': 'Mysore Palace, Bangalore, Abbey Falls, Coorg,
+      Wonderla, Sree Virupaksha Temple'},
+      {'title': 'Honeymoon Tour Package', 'badge': 'Romantic', 'desc': 'Ooty, Kodaikanal, Munnar, Coonoor,
+      Mahabalipuram, Pondicherry'},
+      {'title': 'Corporate Tour Package', 'badge': 'Corporate', 'desc': 'Chennai, Auroville, Hogenakkal, Yercaud, Ooty,
+      Munnar'},
+      {'title': 'Temple Tour Package', 'badge': 'Spiritual', 'desc': 'Navagraha, Kanchipuram, Rameswaram, Thanjavur,
+      Kumbakonam, Tiruvannamalai'},
+      {'title': 'Hill Station Tour Package', 'badge': 'Hill', 'desc': 'Ooty, Kodaikanal, Yelagiri, Yercaud, Kolli Hills,
+      Kolukkumalai'}
       ] %}
 
       {% set images = [
-         '/static/images/tours/family.jpg',
-         '/static/images/tours/Wildlife.jpg',
-        '/static/images/tours/student.jpg',
-        '/static/images/tours/tn.jpg',
-        '/static/images/tours/kl.jpg',
-        '/static/images/tours/kn.jpg',
-        '/static/images/tours/honey.jpg', 
-        '/static/images/tours/corporate.jpg',
-        '/static/images/tours/temple.jpg',
-        '/static/images/tours/hill.jpg' 
+      '/static/images/tours/family.jpg',
+      '/static/images/tours/wildlife.jpg',
+      '/static/images/tours/student.jpg',
+      '/static/images/tours/tn.jpg',
+      '/static/images/tours/kl.jpg',
+      '/static/images/tours/kn.jpg',
+      '/static/images/tours/honey.jpg',
+      '/static/images/tours/Corporate.jpg',
+      '/static/images/tours/temple.jpg',
+      '/static/images/tours/hill.jpg'
 
       ] %}
 
@@ -652,18 +752,21 @@ body {
             <!-- Destination Tags -->
             <div class="destinations">
               {% for dest in pkg.desc.split(', ') %}
-                <span class="dest-tag">
-                  <i class="fa-solid fa-location-dot me-1" style="font-size:9px;"></i>{{ dest }}
-                </span>
+              <span class="dest-tag">
+                <i class="fa-solid fa-location-dot me-1" style="font-size:9px;"></i>{{ dest }}
+              </span>
               {% endfor %}
             </div>
 
             <!-- WhatsApp Button (pushed to bottom) -->
             <div class="mt-auto">
               <a class="btn-whatsapp"
-                 href="https://wa.me/918428676815?text=Hi%20I%20want%20to%20enquire%20about%20{{ pkg.title | replace(' ', '%20') }}"
-                 target="_blank">
-                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                href="https://wa.me/918428676815?text=Hi%20I%20want%20to%20enquire%20about%20{{ pkg.title | replace(' ', '%20') }}"
+                target="_blank">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                </svg>
                 <span>Enquire on WhatsApp</span>
               </a>
             </div>
@@ -714,12 +817,10 @@ body {
       <!-- Right: Buttons -->
       <div class="col-lg-4 text-lg-end">
         <div class="d-grid gap-2">
-          <a href="https://wa.me/918428676815"
-             class="btn btn-primary btn-lg fw-semibold cta-primary-btn">
+          <a href="https://wa.me/918428676815" class="btn btn-primary btn-lg fw-semibold cta-primary-btn">
             <i class="fa-brands fa-whatsapp me-2"></i> Contact on WhatsApp
           </a>
-          <a href="tel:+918428676815"
-             class="btn btn-outline-primary btn-lg fw-semibold cta-outline-btn">
+          <a href="tel:+918428676815" class="btn btn-outline-primary btn-lg fw-semibold cta-outline-btn">
             <i class="fa-solid fa-phone me-2"></i> Call +91 84286 76815
           </a>
         </div>
@@ -740,52 +841,52 @@ body {
 
 <!-- SCRIPTS -->
 <script>
-// Scroll Reveal
-const observerOptions = {
-  threshold: 0.15,
-  rootMargin: '0px 0px -50px 0px'
-};
+  // Scroll Reveal
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  };
 
-const scrollObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-    }
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, observerOptions);
+
+  // Card reveal on scroll
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scroll reveal sections
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+      scrollObserver.observe(el);
+
+      // **Force animation if element is already in viewport**
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.85) {
+        el.classList.add('active');
+      }
+    });
+
+    // Package cards
+    document.querySelectorAll('.package-card').forEach(card => {
+      cardObserver.observe(card);
+
+      // Force visible if already in view
+      const rect = card.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.88) {
+        card.classList.add('visible');
+      }
+    });
   });
-}, observerOptions);
-
-// Card reveal on scroll
-const cardObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.12 });
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Scroll reveal sections
-  document.querySelectorAll('.scroll-reveal').forEach(el => {
-    scrollObserver.observe(el);
-
-    // **Force animation if element is already in viewport**
-    const rect = el.getBoundingClientRect();
-    if (rect.top <= window.innerHeight * 0.85) {
-      el.classList.add('active');
-    }
-  });
-
-  // Package cards
-  document.querySelectorAll('.package-card').forEach(card => {
-    cardObserver.observe(card);
-
-    // Force visible if already in view
-    const rect = card.getBoundingClientRect();
-    if (rect.top <= window.innerHeight * 0.88) {
-      card.classList.add('visible');
-    }
-  });
-});
 </script>
 
 
