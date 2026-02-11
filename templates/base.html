@@ -6,6 +6,78 @@
   <title>{% block title %}Samyuktha Travels{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="911Ale-MXYcQ846t2oubWGGE0k-vat2PmZrzNiWAgyQ" />
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="{% block meta_description %}Your trusted travel partner in Madurai for safe, comfortable, and reliable taxi services across Tamil Nadu since 2009. Book local trips, outstation cabs, and airport transfers 24/7.{% endblock %}">
+  <meta name="keywords"
+    content="{% block meta_keywords %}Madurai travels, best travels in Madurai, taxi service Madurai, cab booking Madurai, car rental Madurai, Madurai to Rameshwaram taxi, Madurai to Kodaikanal travels, tempo traveller in Madurai, Madurai airport taxi, innova car rental Madurai, etios car rental Madurai, Madurai tour packages, South India tour packages from Madurai, cheap travels Madurai, 24 hours taxi Madurai, outstation taxi Madurai, one way drop taxi Madurai, safe travels Madurai, wedding car rental Madurai, corporate car rental Madurai, Samyuktha Travels{% endblock %}">
+  <meta name="author" content="Samyuktha Travels">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
+  <meta property="og:image"
+    content="{% block og_image %}{{ url_for('static', filename='images/logo.jpeg', _external=True) }}{% endblock %}">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ request.url }}">
+  <meta property="twitter:title" content="{% block twitter_title %}{{ self.og_title() }}{% endblock %}">
+  <meta property="twitter:description"
+    content="{% block twitter_description %}{{ self.og_description() }}{% endblock %}">
+  <meta property="twitter:image" content="{% block twitter_image %}{{ self.og_image() }}{% endblock %}">
+
+  <!-- JSON-LD Schema for Local Business -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Samyuktha Travels",
+    "image": "{{ url_for('static', filename='images/logo.jpeg', _external=True) }}",
+    "description": "Trusted travel partner in Madurai for safe, comfortable, and reliable taxi services, outstation trips, and tour packages.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "No:996, Mela Anuppanadi",
+      "addressLocality": "Madurai",
+      "addressRegion": "TN",
+      "postalCode": "625009",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "9.9252", 
+      "longitude": "78.1198"
+    },
+    "url": "{{ request.url_root }}",
+    "telephone": "+918428676815",
+    "priceRange": "₹₹",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      }
+    ],
+    "areaServed": [
+      "Madurai",
+      "Tamil Nadu",
+      "Rameshwaram",
+      "Kodaikanal"
+    ]
+  }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@400;500&display=swap"
     rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
