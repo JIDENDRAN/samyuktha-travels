@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from flask_cors import CORS
 import sqlite3
 from datetime import datetime
@@ -69,6 +69,35 @@ def init_db():
 
 
     init_db()
+
+# ---------------- SEO & UTILS ----------------
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    pages = []
+    ten_days_ago = datetime.now().date().isoformat()
+    # Add static pages
+    for rule in app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments) == 0:
+            if not rule.rule.startswith("/admin") and not rule.rule.startswith("/api") and rule.endpoint != 'static':
+                pages.append([url_for(rule.endpoint, _external=True), ten_days_ago])
+
+    sitemap_xml = render_template('sitemap.xml', pages=pages)
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+    return response
+
+@app.route('/robots.txt')
+def robots():
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /api/",
+        f"Sitemap: {request.url_root}sitemap.xml"
+    ]
+    response = make_response("\n".join(lines))
+    response.headers["Content-Type"] = "text/plain"
+    return response
 
 # ---------------- FRONT PAGES ----------------
 
