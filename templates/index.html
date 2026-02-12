@@ -212,7 +212,7 @@
     animation: slideUp 1s ease-out;
   }
 
-  .hero-content-wrapper>* {
+  .hero-content-wrapper>*:not(.hero-badge, .hero-buttons) {
     display: block !important;
     width: 100% !important;
     margin-left: auto !important;
@@ -486,13 +486,6 @@
       font-size: 13px;
     }
 
-    .hero-badge {
-      width: 40px;
-      height: 40px;
-      font-size: 8px;
-      top: -15px;
-      right: 10px;
-    }
   }
 
   /* ================= ABOUT SECTION ================= */
@@ -1562,7 +1555,6 @@
       width: 100%;
     }
 
-    .hero-badge,
     .sun-decoration,
     .floating-element {
       display: none;
@@ -1617,6 +1609,16 @@
     .hero-buttons .btn-ai {
       font-size: 0.8rem;
       padding: 6px 0;
+    }
+
+    .hero-badge {
+      display: flex !important;
+      width: 65px;
+      height: 65px;
+      font-size: 9px;
+      top: -30px;
+      right: 15px;
+      z-index: 20;
     }
   }
 
