@@ -70,6 +70,21 @@ def init_db():
 
     init_db()
 
+# ================ PERFORMANCE: CACHING HEADERS ================
+@app.after_request
+def add_cache_headers(response):
+    """Add caching headers for static files to improve performance"""
+    if request.path.startswith('/static/'):
+        # Cache static files for 1 year
+        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+    elif request.path in ['/sitemap.xml', '/robots.txt']:
+        # Cache SEO files for 1 day
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+    else:
+        # Don't cache dynamic pages
+        response.headers['Cache-Control'] = 'no-cache, must-revalidate'
+    return response
+
 # ---------------- SEO & UTILS ----------------
 
 @app.route('/sitemap.xml', methods=['GET'])
