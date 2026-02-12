@@ -199,7 +199,10 @@
   .hero-content-wrapper {
     position: relative;
     z-index: 10;
+    display: block !important;
+    width: 100%;
     max-width: 820px;
+    margin: 0 auto;
     padding: 55px 50px;
     text-align: center;
     background: rgba(255, 255, 255, 0.95);
@@ -207,6 +210,13 @@
     border-radius: 20px;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.5);
     animation: slideUp 1s ease-out;
+  }
+
+  .hero-content-wrapper>* {
+    display: block !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   @keyframes slideUp {
@@ -382,10 +392,15 @@
     gap: 10px;
   }
 
-  .btn-quick {
-    background: linear-gradient(135deg, var(--travel-orange), var(--travel-orange-light));
-    color: white;
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3), inset 0 -2px 10px rgba(0, 0, 0, 0.1);
+  .hero-buttons .btn.btn-quick {
+    background: white !important;
+    color: var(--travel-orange) !important;
+    border: 3px solid var(--travel-orange) !important;
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.15);
+  }
+
+  .hero-buttons .btn.btn-quick i {
+    color: var(--travel-orange) !important;
   }
 
   .btn-quick::before {
@@ -400,9 +415,15 @@
   }
 
 
-  .btn-quick:hover {
-    background-color: rgb(253, 253, 253) !important;
-    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+  .hero-buttons .btn.btn-quick:hover {
+    background: var(--travel-orange) !important;
+    color: white !important;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+  }
+
+  .hero-buttons .btn.btn-quick:hover i {
+    color: white !important;
   }
 
   .btn-ai {

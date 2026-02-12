@@ -271,10 +271,13 @@ a {
 
 .hero-content {
   position: relative;
-  display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: 22px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  max-width: 800px;
+  width: 100%;
   padding: 34px 0;
+  text-align: center !important;
 }
 
 .hero h1 {
