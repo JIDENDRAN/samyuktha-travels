@@ -3,9 +3,11 @@
 {% block title %}About Us | Samyuktha Travels{% endblock %}
 
 {% block extra_css %}
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+<!-- Preload Hero Image -->
+<link rel="preload" href="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1000&q=60&auto=format"
+  as="image" fetchpriority="high">
 
+<style>
   :root {
     --primary-blue: #0066cc;
     --secondary-blue: #4a90e2;
@@ -50,7 +52,7 @@
     inset: 0;
     background:
       linear-gradient(rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
-      url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1600') center/cover no-repeat;
+      url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1000&q=60&auto=format') center/cover no-repeat;
 
     animation: heroZoom 12s ease-in-out infinite alternate;
     z-index: 0;
