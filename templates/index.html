@@ -2044,14 +2044,14 @@
     nextSlide.style.transform = "translateX(100%)";
     nextSlide.style.backgroundImage = `url('${images[nextIndex]}')`;
 
-    void nextSlide.offsetWidth;
-
     requestAnimationFrame(() => {
-      activeSlide.style.transition = "transform 2s ease-in-out";
-      nextSlide.style.transition = "transform 2s ease-in-out";
+      requestAnimationFrame(() => {
+        activeSlide.style.transition = "transform 2s ease-in-out";
+        nextSlide.style.transition = "transform 2s ease-in-out";
 
-      activeSlide.style.transform = "translateX(-100%)";
-      nextSlide.style.transform = "translateX(0)";
+        activeSlide.style.transform = "translateX(-100%)";
+        nextSlide.style.transform = "translateX(0)";
+      });
     });
 
     setTimeout(() => {
@@ -2067,7 +2067,8 @@
     }, 1200);
   }
 
-  setInterval(slideImages, 4000);
+  // Start slider after 8 seconds (well past LCP measurement)
+  setInterval(slideImages, 8000);
 
   // Counter animation
   // Counter animation
