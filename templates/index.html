@@ -1826,8 +1826,8 @@
           <h3><i class="fa-solid fa-car"></i>Book Your Ride</h3>
           <form method="POST" action="{{ url_for('taxi') }}">
             <div class="mb-3">
-              <label class="form-label">Vehicle Type</label>
-              <select class="form-select" name="car_type" required>
+              <label class="form-label" for="car_type">Vehicle Type</label>
+              <select id="car_type" class="form-select" name="car_type" required>
                 <option value="">Select Vehicle</option>
                 <option value="Mini">Mini</option>
                 <option value="Sedan">Sedan</option>

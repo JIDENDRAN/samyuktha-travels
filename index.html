@@ -25,13 +25,17 @@
 
   </header>
 
-  <section class="hero">
+  <main>
+    <section class="hero">
     <h1>Plan Your Perfect Trip</h1>
 
     <div class="search-box">
-      <input type="text" id="from" placeholder="From">
-      <input type="text" id="to" placeholder="To">
-      <input type="date" id="date">
+      <label for="from" class="visually-hidden" style="display:none;">From</label>
+      <input type="text" id="from" placeholder="From" aria-label="From Location">
+      <label for="to" class="visually-hidden" style="display:none;">To</label>
+      <input type="text" id="to" placeholder="To" aria-label="To Location">
+      <label for="date" class="visually-hidden" style="display:none;">Date</label>
+      <input type="date" id="date" aria-label="Travel Date">
       <button class="btn" onclick="searchTaxi()">Search</button>
     </div>
   </section>
@@ -42,6 +46,7 @@
     <div class="card">🌐 Multi Language</div>
     <div class="card">💳 Secure Booking</div>
   </section>
+  </main>
 
   <footer>
     <p>© 2026 Samyutha Travels | Madurai</p>

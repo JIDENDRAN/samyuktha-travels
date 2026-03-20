@@ -518,7 +518,7 @@ body {
               <td>
                 <form method="POST" action="/admin/trips/confirm" class="assign-form">
                   <input type="hidden" name="trip_id" value="{{ t.id }}">
-                  <select name="driver_id" required>
+                  <select name="driver_id" aria-label="Assign Driver" required>
                     <option value="">-- Select Driver --</option>
                     {% for d in drivers %}
                       <option value="{{ d.id }}">{{ d.name }} ({{ d.status }})</option>

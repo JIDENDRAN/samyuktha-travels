@@ -549,7 +549,7 @@ body {
             <td>
               <form method="POST" action="/admin/drivers/status" class="status-form">
                 <input type="hidden" name="driver_id" value="{{ d.id }}">
-                <select name="status">
+                <select name="status" aria-label="Update Status">
                   <option {% if d.status=='Available' %}selected{% endif %}>Available</option>
                   <option {% if d.status=='On Trip' %}selected{% endif %}>On Trip</option>
                   <option {% if d.status=='Offline' %}selected{% endif %}>Offline</option>

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -12,24 +13,28 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
   <style>
-    :root{
+    :root {
       --brand: #0d9488;
       --muted: #6b7280;
       --card-radius: 12px;
-      --shadow: 0 12px 32px rgba(15,23,42,0.06);
+      --shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
     }
 
-    html,body{height:100%}
-    body{
-      margin:0;
-      min-height:100%;
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      color:#0f172a;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:2rem;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }
 
     /* Non-interactive decorative background */
@@ -39,32 +44,70 @@
       z-index: -1;
       pointer-events: none;
       background:
-        radial-gradient(600px 300px at 8% 10%, rgba(13,148,136,0.06), transparent 12%),
-        radial-gradient(500px 250px at 92% 85%, rgba(6,182,212,0.04), transparent 12%);
+        radial-gradient(600px 300px at 8% 10%, rgba(13, 148, 136, 0.06), transparent 12%),
+        radial-gradient(500px 250px at 92% 85%, rgba(6, 182, 212, 0.04), transparent 12%);
     }
 
-    .panel-card{
-      width:100%;
-      max-width:520px;
-      border-radius:20px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
-      background:rgba(255,255,255,0.95);
-      border:1px solid rgba(255,255,255,0.5);
+    .panel-card {
+      width: 100%;
+      max-width: 520px;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    .brand-row{ display:flex; gap:.75rem; align-items:center; }
-    .brand-logo{ width:44px; height:44px; object-fit:cover; border-radius:8px; }
-    .brand-title{ font-weight:700; }
-    .brand-sub{ color:var(--muted); font-size:.875rem; }
+    .brand-row {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+    }
 
-    .muted{ color:var(--muted); }
-    .form-label{ font-weight:600; font-size:.95rem; }
-    .help-error{ color:#b91c1c; font-weight:700; margin-top:.4rem; }
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
 
-    .btn-primary { background: var(--brand); border-color: var(--brand); }
-    .footer-note{ font-size:.85rem; color:var(--muted); margin-top:.75rem; text-align:center; }
+    .brand-title {
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: .875rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: .95rem;
+    }
+
+    .help-error {
+      color: #b91c1c;
+      font-weight: 700;
+      margin-top: .4rem;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .footer-note {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: .75rem;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
   <div class="bg-decor" aria-hidden="true"></div>
 
@@ -72,7 +115,7 @@
     <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-start mb-3">
         <div class="brand-row">
-          <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Samyuktha logo" class="brand-logo">
+          <img src="{{ url_for('static', filename='images/logo.jpeg') }}" width="44" height="44" decoding="async" alt="Samyuktha logo" class="brand-logo">
           <div>
             <div class="brand-title">Samyuktha</div>
             <div class="brand-sub">Tours &amp; Travels — Admin</div>
@@ -83,13 +126,13 @@
         </div>
       </div>
 
-      <h3 class="h5 mb-1">Admin Login</h3>
-      <p class="muted mb-3">Default credentials: <strong>admin / admin123</strong></p>
+      <h1 class="h5 mb-1">Admin Login</h1>
+      <!-- <p class="muted mb-3">Default credentials: <strong>admin / admin123</strong></p> -->
 
       {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class="help-error" role="alert">{{ messages[0][1] }}</div>
-        {% endif %}
+      {% if messages %}
+      <div class="help-error" role="alert">{{ messages[0][1] }}</div>
+      {% endif %}
       {% endwith %}
 
       <form method="POST" class="mt-3" novalidate>
@@ -100,7 +143,8 @@
 
         <div class="mb-3">
           <label class="form-label" for="password">Password</label>
-          <input id="password" name="password" type="password" required class="form-control" autocomplete="current-password" />
+          <input id="password" name="password" type="password" required class="form-control"
+            autocomplete="current-password" />
         </div>
 
         <div class="d-grid gap-2">
@@ -125,4 +169,5 @@
     })();
   </script>
 </body>
+
 </html>
