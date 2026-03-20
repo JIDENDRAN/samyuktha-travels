@@ -930,14 +930,6 @@
     // Observe each element
     scrollRevealElements.forEach(el => scrollObserver.observe(el));
 
-    // Trigger for elements already in view on page load
-    scrollRevealElements.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        el.classList.add('active');
-      }
-    });
-
     // Card hover effect
     document.querySelectorAll('.hover-lift').forEach(card => {
       card.addEventListener('mouseenter', () => {

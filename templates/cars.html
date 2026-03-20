@@ -1181,13 +1181,13 @@
 
     // ---- Touch/Swipe support for mobile ----
     let isDown = false;
-    let startX;
+    let startPageX;
     let scrollLeftStart;
 
     carousel.addEventListener('mousedown', (e) => {
       isDown = true;
       carousel.style.cursor = 'grabbing';
-      startX = e.pageX - carousel.offsetLeft;
+      startPageX = e.pageX;
       scrollLeftStart = carousel.scrollLeft;
     });
 
@@ -1204,8 +1204,7 @@
     carousel.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
-      const x = e.pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 1.5;
+      const walk = (e.pageX - startPageX) * 1.5;
       carousel.scrollLeft = scrollLeftStart - walk;
     });
   });

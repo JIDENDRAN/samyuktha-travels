@@ -894,23 +894,11 @@
     // Scroll reveal sections
     document.querySelectorAll('.scroll-reveal').forEach(el => {
       scrollObserver.observe(el);
-
-      // **Force animation if element is already in viewport**
-      const rect = el.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.85) {
-        el.classList.add('active');
-      }
     });
 
     // Package cards
     document.querySelectorAll('.package-card').forEach(card => {
       cardObserver.observe(card);
-
-      // Force visible if already in view
-      const rect = card.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.88) {
-        card.classList.add('visible');
-      }
     });
   });
 </script>

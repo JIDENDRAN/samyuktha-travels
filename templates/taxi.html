@@ -993,12 +993,6 @@
 
     sections.forEach(section => {
       scrollObserver.observe(section);
-
-      /* 🔥 START immediately if already visible */
-      const rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
-        activateSection(section);
-      }
     });
   });
 
