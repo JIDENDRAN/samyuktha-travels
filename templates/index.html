@@ -437,6 +437,92 @@
     box-shadow: 0 15px 40px rgba(45, 106, 79, 0.4);
   }
 
+  .btn-whatsapp {
+    background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
+    color: white !important;
+    border: none;
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 15px 35px;
+    border-radius: 50px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-whatsapp::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-25deg);
+    transition: all 0.7s ease;
+  }
+
+  .btn-whatsapp:hover::after {
+    left: 120%;
+  }
+
+  .btn-whatsapp:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(37, 211, 102, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-call {
+    background: linear-gradient(135deg, #0052cc 0%, #4a90e2 100%);
+    color: white !important;
+    border: none;
+    box-shadow: 0 10px 20px rgba(0, 82, 204, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 15px 35px;
+    border-radius: 50px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-call::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-25deg);
+    transition: all 0.7s ease;
+  }
+
+  .btn-call:hover::after {
+    left: 120%;
+  }
+
+  .btn-call:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 82, 204, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+  }
+
   /* ================= MOBILE HERO ADJUSTMENT ================= */
   @media (max-width: 480px) {
     .hero-content-wrapper {
@@ -476,7 +562,9 @@
     }
 
     .btn-quick,
-    .btn-ai {
+    .btn-ai,
+    .btn-whatsapp,
+    .btn-call {
       width: 100%;
       /* full width buttons */
       padding: 10px 0;
@@ -1606,7 +1694,9 @@
     }
 
     .hero-buttons .btn,
-    .hero-buttons .btn-ai {
+    .hero-buttons .btn-ai,
+    .hero-buttons .btn-whatsapp,
+    .hero-buttons .btn-call {
       font-size: 0.8rem;
       padding: 6px 0;
     }
@@ -1710,8 +1800,12 @@
   <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format"
     alt="Travel Destinations" style="display:none;" fetchpriority="high" loading="eager" decoding="async">
 
-  <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format');"></div>
-  <div class="hero-slide next" style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1100&q=50&auto=format');"></div>
+  <div class="hero-slide active"
+    style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format');">
+  </div>
+  <div class="hero-slide next"
+    style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1100&q=50&auto=format');">
+  </div>
 
   <div class="sun-decoration"></div>
 
@@ -1744,6 +1838,12 @@
       <button id="tripPlannerBtn" class="btn-ai">
         <i class="fa-solid fa-robot"></i>AI Trip Planner
       </button>
+      <a href="https://wa.me/918428676815" class="btn btn-whatsapp" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i>WhatsApp
+      </a>
+      <a href="tel:+918428676815" class="btn btn-call">
+        <i class="fa-solid fa-phone"></i>Call Now
+      </a>
     </div>
   </div>
 </section>
