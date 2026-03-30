@@ -438,10 +438,9 @@
   }
 
   .btn-whatsapp {
-    background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
-    color: white !important;
-    border: none;
-    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    background: white;
+    color: #25D366 !important;
+    border: 3px solid #25D366;
     font-family: 'Montserrat', sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -455,36 +454,24 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.15);
   }
 
-  .btn-whatsapp::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transform: skewX(-25deg);
-    transition: all 0.7s ease;
-  }
-
-  .btn-whatsapp:hover::after {
-    left: 120%;
+  .btn-whatsapp i {
+    font-size: 1.2rem;
   }
 
   .btn-whatsapp:hover {
+    background: #25D366;
+    color: white !important;
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 30px rgba(37, 211, 102, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
   }
 
   .btn-call {
-    background: linear-gradient(135deg, #0052cc 0%, #4a90e2 100%);
-    color: white !important;
-    border: none;
-    box-shadow: 0 10px 20px rgba(0, 82, 204, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    background: white;
+    color: #0066cc !important;
+    border: 3px solid #0066cc;
     font-family: 'Montserrat', sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -498,29 +485,18 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 102, 204, 0.15);
   }
 
-  .btn-call::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transform: skewX(-25deg);
-    transition: all 0.7s ease;
-  }
-
-  .btn-call:hover::after {
-    left: 120%;
+  .btn-call i {
+    font-size: 1.1rem;
   }
 
   .btn-call:hover {
+    background: #0066cc;
+    color: white !important;
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 30px rgba(0, 82, 204, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px rgba(0, 102, 204, 0.4);
   }
 
   /* ================= MOBILE HERO ADJUSTMENT ================= */
