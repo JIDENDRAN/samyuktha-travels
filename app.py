@@ -67,8 +67,7 @@ def init_db():
     conn.commit()
     conn.close()
 
-
-    init_db()
+init_db()
 
 # ================ PERFORMANCE: CACHING HEADERS ================
 @app.after_request
@@ -552,8 +551,15 @@ def book_taxi():
     conn.commit()
     conn.close()
 
-    flash("Booking request sent. Admin will confirm.", "success")
-    return redirect(url_for("taxi"))
+    return redirect(url_for(
+        "booking",
+        from_city=from_city,
+        to_city=to_city,
+        date=date,
+        customer_name=customer_name,
+        customer_phone=customer_phone,
+        car_type=vehicle_type
+    ))
 
 
 from flask import jsonify

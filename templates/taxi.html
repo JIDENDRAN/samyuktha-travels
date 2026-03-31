@@ -741,7 +741,7 @@
 
 
 <!-- BOOKING FORM SECTION -->
-<section class="py-5 bg-light scroll-reveal">
+<section id="booking-form-section" class="py-5 bg-light scroll-reveal">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-10 col-xl-9">
@@ -1040,6 +1040,16 @@
       this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
     });
   }
+
+  // Auto-scroll to booking section on page load
+  window.addEventListener('load', function() {
+    const bookingSection = document.getElementById('booking-form-section');
+    if (bookingSection) {
+      setTimeout(() => {
+        bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 500); // Small delay to ensure styles are loaded
+    }
+  });
 </script>
 
 {% endblock %}
