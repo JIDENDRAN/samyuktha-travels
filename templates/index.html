@@ -510,56 +510,79 @@
     }
 
     .about-trendy {
-      order: 1;
+      order: 1 !important;
+      /* Top Priority */
       padding-top: 20px !important;
       padding-bottom: 20px !important;
     }
 
     .hero-section {
-      order: 2;
-      min-height: 400px !important;
-      /* Slightly smaller on mobile when pushed down */
+      order: 2 !important;
+      /* Secondary Priority */
+      min-height: 380px !important;
     }
 
     .stats-strip {
-      order: 3;
+      order: 3 !important;
     }
 
     .why-modern {
-      order: 4;
+      order: 4 !important;
     }
 
     .destinations-section {
-      order: 5;
+      order: 5 !important;
     }
 
     .testimonials-modern {
-      order: 6;
+      order: 6 !important;
     }
 
-    /* Show booking form clearly at the top */
+    /* Hide redundant text on mobile to focus on tools */
+    .about-left {
+      display: none !important;
+    }
+
     .about-box {
       display: flex !important;
-      flex-direction: column-reverse !important;
-      /* Form first, text second */
-      gap: 20px !important;
+      flex-direction: column !important;
+      gap: 0 !important;
     }
 
-    .about-left h2 {
-      font-size: 1.8rem !important;
-      text-align: center;
+    .mobile-contact-bar {
+      display: flex !important;
+      gap: 10px;
+      margin-top: 15px;
+      width: 100%;
     }
 
-    .about-left p {
-      text-align: center;
-      font-size: 0.9rem !important;
+    .mobile-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
     }
 
-    .booking-form-card {
-      margin-top: 0 !important;
-      padding: 20px !important;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    .m-wa {
+      background: #25D366;
+      color: white;
     }
+
+    .m-call {
+      background: var(--travel-orange);
+      color: white;
+    }
+  }
+
+  .mobile-contact-bar {
+    display: none;
   }
 
   @media (max-width: 480px) {
@@ -588,6 +611,36 @@
       padding: 10px 0;
       font-size: 12px;
     }
+  }
+
+  /* ================= BOOKING BRANDING ================= */
+  .booking-branding {
+    margin-bottom: 20px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(0, 102, 204, 0.1));
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 107, 0, 0.2);
+  }
+
+  .booking-branding h4 {
+    color: var(--travel-orange);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .booking-branding span {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
   }
 
   /* ================= ABOUT SECTION ================= */
@@ -1942,6 +1995,11 @@
         </div>
 
         <div class="about-right">
+          <div class="booking-branding">
+            <h4>Samyuktha Travels</h4>
+            <span>Madurai's Premier Cab Service</span>
+          </div>
+
           <div class="booking-form-card">
             <h3><i class="fa-solid fa-car"></i>Book Your Ride</h3>
             <form method="POST" action="{{ url_for('taxi') }}">
@@ -1988,6 +2046,16 @@
                 <i class="fa-solid fa-calendar-check"></i>Book Now
               </button>
             </form>
+          </div>
+
+          <!-- MOBILE QUICK ACTIONS -->
+          <div class="mobile-contact-bar">
+            <a href="https://wa.me/918300302815" class="mobile-btn m-wa" target="_blank">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="tel:+918300302815" class="mobile-btn m-call">
+              <i class="fa-solid fa-phone"></i> Call Driver
+            </a>
           </div>
         </div>
       </div>
