@@ -1,8 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from flask_cors import CORS
 import sqlite3
+import requests
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+
+# ================= WHATSAPP API CONFIGURATION (Meta Official) =================
+# 1. Get your Access Token and Phone Number ID from Meta Developers Portal
+WHATSAPP_TOKEN = 'your_access_token_here' 
+PHONE_NUMBER_ID = 'your_phone_number_id_here'
+WHATSAPP_ENABLED = True
+OWNER_PHONE = '+918300302815' 
+# ==============================================================
 
 app = Flask(__name__)
 CORS(app) 
@@ -14,6 +23,38 @@ def db():
     conn = sqlite3.connect(DB,timeout=10)
     conn.row_factory = sqlite3.Row
     return conn
+
+def send_whatsapp_message(phone, message_body):
+    """Sends an automated WhatsApp message via Meta Cloud API"""
+    if not WHATSAPP_ENABLED or WHATSAPP_TOKEN == 'your_access_token_here':
+        print(f"WhatsApp API not configured. Not sending to {phone}")
+        return None
+    
+    # Clean phone number (must be digits only for Meta)
+    clean_phone = ''.join(filter(str.isdigit, phone))
+    
+    url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
+    
+    headers = {
+        "Authorization": f"Bearer {WHATSAPP_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    # Meta Cloud API requires using Templates for un-initiated messages to customers,
+    # but for simple text-based alerts, we use the "text" type (works with verified test numbers).
+    payload = {
+        "messaging_product": "whatsapp",
+        "to": clean_phone,
+        "type": "text",
+        "text": { "body": message_body }
+    }
+    
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        return response.json()
+    except Exception as e:
+        print(f"Error sending WhatsApp: {e}")
+        return None
 
 def init_db():
     conn = db()
@@ -177,6 +218,18 @@ def taxi():
 
         conn.commit()
         conn.close()
+
+        # --- Notification: OWNER (Immediate Alert on New Booking) ---
+        owner_alert = (
+            f"🔔 *New Booking Requested!*\n\n"
+            f"👤 Customer: {name}\n"
+            f"📱 Phone: {phone}\n"
+            f"📍 Route: {from_city} ➡ {to_city}\n"
+            f"📅 Date: {date}\n"
+            f"🚕 Vehicle: {car_type}\n\n"
+            f"Please check the admin panel to confirm."
+        )
+        send_whatsapp_message(OWNER_PHONE, owner_alert)
 
         return redirect(url_for(
             "booking",
@@ -394,64 +447,39 @@ def admin_confirm_trip():
     conn = db()
     cur = conn.cursor()
 
-    # Update trip status to Active and assign driver
+    # 1. Update trip status to Active and assign driver
     cur.execute("""
         UPDATE trips
         SET status='Active', driver_id=?
         WHERE id=?
     """, (driver_id, trip_id))
 
-    # Update driver status to On Trip
+    # 2. Update driver status to On Trip
     cur.execute("UPDATE drivers SET status='On Trip' WHERE id=?", (driver_id,))
-
     conn.commit()
-    conn.close()
 
-    flash(f"Trip #{trip_id} confirmed and driver assigned!", "success")
-    return redirect(url_for("admin_trips"))
-
-    if not admin_required():
-        return redirect(url_for("admin_login"))
-
-    trip_id = request.form.get("confirm_trip_id")
-    driver_id = request.form.get("driver_id")
-
-    conn = db()
-    cur = conn.cursor()
-
+    # 3. Fetch details for automated WhatsApp notification
     cur.execute("""
-        UPDATE trips
-        SET status='Active', driver_id=?
-        WHERE id=?
-    """, (driver_id, trip_id))
-
-    cur.execute("UPDATE drivers SET status='On Trip' WHERE id=?", (driver_id,))
-
-    conn.commit()
+        SELECT t.*, d.name AS driver_name, d.phone AS driver_phone
+        FROM trips t
+        LEFT JOIN drivers d ON t.driver_id = d.id
+        WHERE t.id=?
+    """, (trip_id,))
+    trip = cur.fetchone()
     conn.close()
 
-    return redirect(url_for("admin_trips"))
+    if trip:
+        # --- Notification: OWNER Only ---
+        owner_msg = (
+            f"✅ *Trip Confirmed & Assigned!*\n\n"
+            f"Trip ID: #{trip['id']}\n"
+            f"Customer: {trip['customer_name']} ({trip['customer_phone']})\n"
+            f"Route: {trip['from_city']} ➡ {trip['to_city']} on {trip['date']}\n"
+            f"Driver Assigned: {trip['driver_name']} ({trip['driver_phone']})\n"
+        )
+        send_whatsapp_message(OWNER_PHONE, owner_msg)
 
-    if not admin_required():
-        return redirect(url_for("admin_login"))
-
-    trip_id = request.form.get("trip_id")
-    driver_id = request.form.get("driver_id")
-
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        UPDATE trips
-        SET status='Active', driver_id=?
-        WHERE id=?
-    """, (driver_id, trip_id))
-
-    if driver_id:
-        cur.execute("UPDATE drivers SET status='On Trip' WHERE id=?", (driver_id,))
-
-    conn.commit()
-    conn.close()
+    flash(f"Trip #{trip_id} confirmed. Notification sent to owner.", "success")
     return redirect(url_for("admin_trips"))
 
 @app.route("/admin/trips/complete", methods=["POST"])
@@ -550,6 +578,18 @@ def book_taxi():
 
     conn.commit()
     conn.close()
+
+    # --- Notification: OWNER (Immediate Alert on New Booking) ---
+    owner_alert = (
+        f"🔔 *New Booking Requested!*\n\n"
+        f"👤 Customer: {customer_name}\n"
+        f"📱 Phone: {customer_phone}\n"
+        f"📍 Route: {from_city} ➡ {to_city}\n"
+        f"📅 Date: {date}\n"
+        f"🚕 Vehicle: {vehicle_type}\n\n"
+        f"Please check the admin panel."
+    )
+    send_whatsapp_message(OWNER_PHONE, owner_alert)
 
     return redirect(url_for(
         "booking",

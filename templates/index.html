@@ -502,42 +502,82 @@
     box-shadow: 0 15px 40px rgba(0, 102, 204, 0.4);
   }
 
-  /* ================= MOBILE HERO ADJUSTMENT ================= */
+  /* ================= MOBILE LAYOUT REORDER ================= */
+  @media (max-width: 768px) {
+    .home-layout {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-trendy {
+      order: 1;
+      padding-top: 20px !important;
+      padding-bottom: 20px !important;
+    }
+
+    .hero-section {
+      order: 2;
+      min-height: 400px !important;
+      /* Slightly smaller on mobile when pushed down */
+    }
+
+    .stats-strip {
+      order: 3;
+    }
+
+    .why-modern {
+      order: 4;
+    }
+
+    .destinations-section {
+      order: 5;
+    }
+
+    .testimonials-modern {
+      order: 6;
+    }
+
+    /* Show booking form clearly at the top */
+    .about-box {
+      display: flex !important;
+      flex-direction: column-reverse !important;
+      /* Form first, text second */
+      gap: 20px !important;
+    }
+
+    .about-left h2 {
+      font-size: 1.8rem !important;
+      text-align: center;
+    }
+
+    .about-left p {
+      text-align: center;
+      font-size: 0.9rem !important;
+    }
+
+    .booking-form-card {
+      margin-top: 0 !important;
+      padding: 20px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+  }
+
   @media (max-width: 480px) {
     .hero-content-wrapper {
       width: calc(100% - 30px);
-      /* full width minus gaps */
-      max-width: 75%;
-      /* keep some margin from sides */
-      padding: 12px;
-      /* inner spacing */
+      max-width: 90%;
+      padding: 15px;
       margin: 0 auto;
-      /* center horizontally */
       border-radius: 15px;
-    }
-
-    .hero-pretitle {
-      font-size: 1rem;
     }
 
     .hero-title {
       font-size: 1.6rem;
-      line-height: 1.2;
-    }
-
-    .hero-title .highlight {
-      font-size: 1.2rem;
-    }
-
-    .hero-subtext {
-      font-size: 0.85rem;
-      line-height: 1.4;
-      max-width: 100%;
     }
 
     .hero-buttons {
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn-quick,
@@ -545,11 +585,9 @@
     .btn-whatsapp,
     .btn-call {
       width: 100%;
-      /* full width buttons */
       padding: 10px 0;
-      font-size: 13px;
+      font-size: 12px;
     }
-
   }
 
   /* ================= ABOUT SECTION ================= */
@@ -1773,314 +1811,316 @@
 
 {% block content %}
 
-<!-- ===== HERO SECTION ===== -->
-<section class="hero-section">
-  <!-- LCP Discovery Image (Hidden for preload scanner) -->
-  <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format"
-    alt="Travel Destinations" style="display:none;" fetchpriority="high" loading="eager" decoding="async">
+<div class="home-layout">
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero-section">
+    <!-- LCP Discovery Image (Hidden for preload scanner) -->
+    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format"
+      alt="Travel Destinations" style="display:none;" fetchpriority="high" loading="eager" decoding="async">
 
-  <div class="hero-slide active"
-    style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format');">
-  </div>
-  <div class="hero-slide next"
-    style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1100&q=50&auto=format');">
-  </div>
-
-  <div class="sun-decoration"></div>
-
-  <div class="floating-element">🗺️</div>
-  <div class="floating-element">✈️</div>
-  <div class="floating-element">🧳</div>
-  <div class="floating-element">🚗</div>
-
-  <div class="hero-overlay"></div>
-
-  <div class="hero-content-wrapper">
-    <div class="hero-badge">TRUSTED<br>SERVICE</div>
-
-    <div class="hero-pretitle">Your Journey Begins Here</div>
-    <div class="hero-location">Madurai</div>
-    <h1 class="hero-title">
-      Samyuktha
-      <span class="highlight">Tours & Travels</span>
-    </h1>
-
-    <p class="hero-subtext">
-      One of the leading Cab Services in Madurai. We provide the best travel experience
-      at an affordable price with the safest rides and most experienced drivers.
-    </p>
-
-    <div class="hero-buttons">
-      <a href="/taxi" class="btn btn-quick">
-        <i class="fa-solid fa-bolt"></i>Quick Booking
-      </a>
-      <button id="tripPlannerBtn" class="btn-ai">
-        <i class="fa-solid fa-robot"></i>AI Trip Planner
-      </button>
-      <a href="https://wa.me/918300302815" class="btn btn-whatsapp" target="_blank" rel="noopener">
-        <i class="fa-brands fa-whatsapp"></i>WhatsApp: +91 83003 02815
-      </a>
-      <a href="tel:+918300302815" class="btn btn-call">
-        <i class="fa-solid fa-phone"></i>Call Now: +91 83003 02815
-      </a>
+    <div class="hero-slide active"
+      style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1100&q=50&auto=format');">
     </div>
-  </div>
-</section>
-
-<!-- ===== AI TRIP PLANNER MODAL ===== -->
-<div id="tripModal" class="trip-modal">
-  <div class="trip-card-enhanced">
-    <h3>✨ Plan Your Tamil Nadu Journey</h3>
-
-    <div class="form-group-enhanced">
-      <label for="startingPlace"><i class="fa-solid fa-map-marker-alt"></i> Starting Place</label>
-      <select id="startingPlace">
-        <option value="">Select Starting City</option>
-        <option value="Madurai">Madurai</option>
-        <option value="Chennai">Chennai</option>
-        <option value="Coimbatore">Coimbatore</option>
-        <option value="Trichy">Trichy</option>
-        <option value="Salem">Salem</option>
-        <option value="Tirunelveli">Tirunelveli</option>
-        <option value="Thanjavur">Thanjavur</option>
-        <option value="Kanyakumari">Kanyakumari</option>
-      </select>
+    <div class="hero-slide next"
+      style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1100&q=50&auto=format');">
     </div>
 
-    <div class="form-group-enhanced">
-      <label for="days"><i class="fa-solid fa-calendar-days"></i> Number of Days</label>
-      <input id="days" type="number" placeholder="Enter days (1-15)" min="1" max="15">
+    <div class="sun-decoration"></div>
+
+    <div class="floating-element">🗺️</div>
+    <div class="floating-element">✈️</div>
+    <div class="floating-element">🧳</div>
+    <div class="floating-element">🚗</div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content-wrapper">
+      <div class="hero-badge">TRUSTED<br>SERVICE</div>
+
+      <div class="hero-pretitle">Your Journey Begins Here</div>
+      <div class="hero-location">Madurai</div>
+      <h1 class="hero-title">
+        Samyuktha
+        <span class="highlight">Tours & Travels</span>
+      </h1>
+
+      <p class="hero-subtext">
+        One of the leading Cab Services in Madurai. We provide the best travel experience
+        at an affordable price with the safest rides and most experienced drivers.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="/taxi" class="btn btn-quick">
+          <i class="fa-solid fa-bolt"></i>Quick Booking
+        </a>
+        <button id="tripPlannerBtn" class="btn-ai">
+          <i class="fa-solid fa-robot"></i>AI Trip Planner
+        </button>
+        <a href="https://wa.me/918300302815" class="btn btn-whatsapp" target="_blank" rel="noopener">
+          <i class="fa-brands fa-whatsapp"></i>WhatsApp: +91 83003 02815
+        </a>
+        <a href="tel:+918300302815" class="btn btn-call">
+          <i class="fa-solid fa-phone"></i>Call Now: +91 83003 02815
+        </a>
+      </div>
     </div>
+  </section>
 
-    <div class="form-group-enhanced">
-      <label for="persons"><i class="fa-solid fa-users"></i> Number of Persons</label>
-      <input id="persons" type="number" placeholder="Enter number of travelers" min="1" max="20">
-    </div>
+  <!-- ===== AI TRIP PLANNER MODAL ===== -->
+  <div id="tripModal" class="trip-modal">
+    <div class="trip-card-enhanced">
+      <h3>✨ Plan Your Tamil Nadu Journey</h3>
 
-    <div class="form-group-enhanced">
-      <label for="tripType"><i class="fa-solid fa-compass"></i> Trip Preference</label>
-      <select id="tripType">
-        <option value="cultural">Cultural & Heritage</option>
-        <option value="nature">Hill Stations & Nature</option>
-        <option value="beach">Beaches & Coastal</option>
-        <option value="mixed">Mixed Experience</option>
-      </select>
-    </div>
-
-    <button class="generate-btn-enhanced" id="generatePlan">
-      <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Generate AI Trip Plans
-    </button>
-
-    <div class="loader-enhanced" id="loader">
-      <div class="spinner-enhanced"></div>
-      <p>AI is crafting your perfect itinerary...</p>
-    </div>
-
-    <div class="error-message-enhanced" id="errorMessage"></div>
-
-    <div id="result" class="results-enhanced"></div>
-
-    <button class="close-btn-enhanced" id="closeBtn">
-      <i class="fa-solid fa-xmark me-2"></i>Close
-    </button>
-  </div>
-</div>
-
-<!-- ===== ABOUT SECTION WITH BOOKING ===== -->
-<section class="about-trendy">
-  <div class="container">
-    <div class="about-box">
-      <div class="about-left">
-        <h2>Travel smarter.<br>Travel safer.</h2>
-        <p>
-          Samyuktha Travels is a trusted cab service in Madurai offering safe,
-          affordable and comfortable rides with professional drivers.
-        </p>
-        <p>
-          Whether it's local sightseeing, airport transfers or outstation trips,
-          we make every journey smooth and stress-free.
-        </p>
+      <div class="form-group-enhanced">
+        <label for="startingPlace"><i class="fa-solid fa-map-marker-alt"></i> Starting Place</label>
+        <select id="startingPlace">
+          <option value="">Select Starting City</option>
+          <option value="Madurai">Madurai</option>
+          <option value="Chennai">Chennai</option>
+          <option value="Coimbatore">Coimbatore</option>
+          <option value="Trichy">Trichy</option>
+          <option value="Salem">Salem</option>
+          <option value="Tirunelveli">Tirunelveli</option>
+          <option value="Thanjavur">Thanjavur</option>
+          <option value="Kanyakumari">Kanyakumari</option>
+        </select>
       </div>
 
-      <div class="about-right">
-        <div class="booking-form-card">
-          <h3><i class="fa-solid fa-car"></i>Book Your Ride</h3>
-          <form method="POST" action="{{ url_for('taxi') }}">
-            <div class="mb-3">
-              <label class="form-label" for="car_type">Vehicle Type</label>
-              <select id="car_type" class="form-select" name="car_type" required>
-                <option value="">Select Vehicle</option>
-                <option value="Mini">Mini</option>
-                <option value="Sedan">Sedan</option>
-                <option value="Innova">Innova</option>
-                <option value="Tempo Traveller">Tempo Traveller</option>
-              </select>
-            </div>
+      <div class="form-group-enhanced">
+        <label for="days"><i class="fa-solid fa-calendar-days"></i> Number of Days</label>
+        <input id="days" type="number" placeholder="Enter days (1-15)" min="1" max="15">
+      </div>
 
-            <div class="mb-3">
-              <label class="form-label">Pick Up Location</label>
-              <input type="text" class="form-control" name="from" placeholder="Enter pickup location" required>
-            </div>
+      <div class="form-group-enhanced">
+        <label for="persons"><i class="fa-solid fa-users"></i> Number of Persons</label>
+        <input id="persons" type="number" placeholder="Enter number of travelers" min="1" max="20">
+      </div>
 
-            <div class="mb-3">
-              <label class="form-label">Drop Location</label>
-              <input type="text" class="form-control" name="to" placeholder="Enter drop location" required>
-            </div>
+      <div class="form-group-enhanced">
+        <label for="tripType"><i class="fa-solid fa-compass"></i> Trip Preference</label>
+        <select id="tripType">
+          <option value="cultural">Cultural & Heritage</option>
+          <option value="nature">Hill Stations & Nature</option>
+          <option value="beach">Beaches & Coastal</option>
+          <option value="mixed">Mixed Experience</option>
+        </select>
+      </div>
 
-            <div class=" mb-3">
+      <button class="generate-btn-enhanced" id="generatePlan">
+        <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Generate AI Trip Plans
+      </button>
 
-              <label class="form-label">Travel Date</label>
-              <input type="date" class="form-control" name="date" required>
+      <div class="loader-enhanced" id="loader">
+        <div class="spinner-enhanced"></div>
+        <p>AI is crafting your perfect itinerary...</p>
+      </div>
 
-            </div>
+      <div class="error-message-enhanced" id="errorMessage"></div>
 
-            <div class="mb-3">
-              <label class="form-label">Name</label>
-              <input type="text" class="form-control" name="customer_name" placeholder="Enter your name" required>
-            </div>
+      <div id="result" class="results-enhanced"></div>
 
-            <div class="mb-3">
-              <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" name="customer_phone" placeholder="Enter your phone number"
-                pattern="[0-9]{10}" required>
-            </div>
+      <button class="close-btn-enhanced" id="closeBtn">
+        <i class="fa-solid fa-xmark me-2"></i>Close
+      </button>
+    </div>
+  </div>
 
-            <button type="submit" class="btn-book-now">
-              <i class="fa-solid fa-calendar-check"></i>Book Now
-            </button>
-          </form>
+  <!-- ===== ABOUT SECTION WITH BOOKING ===== -->
+  <section class="about-trendy">
+    <div class="container">
+      <div class="about-box">
+        <div class="about-left">
+          <h2>Travel smarter.<br>Travel safer.</h2>
+          <p>
+            Samyuktha Travels is a trusted cab service in Madurai offering safe,
+            affordable and comfortable rides with professional drivers.
+          </p>
+          <p>
+            Whether it's local sightseeing, airport transfers or outstation trips,
+            we make every journey smooth and stress-free.
+          </p>
+        </div>
+
+        <div class="about-right">
+          <div class="booking-form-card">
+            <h3><i class="fa-solid fa-car"></i>Book Your Ride</h3>
+            <form method="POST" action="{{ url_for('taxi') }}">
+              <div class="mb-3">
+                <label class="form-label" for="car_type">Vehicle Type</label>
+                <select id="car_type" class="form-select" name="car_type" required>
+                  <option value="">Select Vehicle</option>
+                  <option value="Mini">Mini</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="Innova">Innova</option>
+                  <option value="Tempo Traveller">Tempo Traveller</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Pick Up Location</label>
+                <input type="text" class="form-control" name="from" placeholder="Enter pickup location" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Drop Location</label>
+                <input type="text" class="form-control" name="to" placeholder="Enter drop location" required>
+              </div>
+
+              <div class=" mb-3">
+
+                <label class="form-label">Travel Date</label>
+                <input type="date" class="form-control" name="date" required>
+
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" name="customer_name" placeholder="Enter your name" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" name="customer_phone" placeholder="Enter your phone number"
+                  pattern="[0-9]{10}" required>
+              </div>
+
+              <button type="submit" class="btn-book-now">
+                <i class="fa-solid fa-calendar-check"></i>Book Now
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== STATS SECTION ===== -->
-<section class="stats-strip">
-  <div class="container">
-    <div class="stats-row">
-      <div class="stat-item">
-        <h2 data-count="5" data-suffix="+">0</h2>
-        <p>Years Experience</p>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-item">
-        <h2 data-count="5000" data-suffix="+">0</h2>
-        <p>Happy Clients</p>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-item">
-        <h2 data-count="50" data-suffix="+">0</h2>
-        <p>Destinations Covered</p>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-item">
-        <h2>10L+</h2>
-        <p>Kilometers Travelled</p>
+  <!-- ===== STATS SECTION ===== -->
+  <section class="stats-strip">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item">
+          <h2 data-count="5" data-suffix="+">0</h2>
+          <p>Years Experience</p>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-item">
+          <h2 data-count="5000" data-suffix="+">0</h2>
+          <p>Happy Clients</p>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-item">
+          <h2 data-count="50" data-suffix="+">0</h2>
+          <p>Destinations Covered</p>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-item">
+          <h2>10L+</h2>
+          <p>Kilometers Travelled</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== WHY CHOOSE US ===== -->
-<section class="why-modern">
-  <div class="container">
-    <div class="why-header text-center">
-      <span class="tag">Why Choose Us</span>
-      <h2>Travel With Confidence</h2>
-      <p>Safe driving, friendly service and complete customer satisfaction.</p>
-    </div>
-    <div class="why-grid">
-      <div class="why-card">
-        <i class="fa-solid fa-gift"></i>
-        <h4>Exclusive Packages</h4>
-        <p>Seasonal and budget-friendly travel packages for every journey.</p>
+  <!-- ===== WHY CHOOSE US ===== -->
+  <section class="why-modern">
+    <div class="container">
+      <div class="why-header text-center">
+        <span class="tag">Why Choose Us</span>
+        <h2>Travel With Confidence</h2>
+        <p>Safe driving, friendly service and complete customer satisfaction.</p>
       </div>
-      <div class="why-card">
-        <i class="fa-solid fa-map-location-dot"></i>
-        <h4>Top Destinations</h4>
-        <p>Explore the best places in and around Madurai with comfort.</p>
-      </div>
-      <div class="why-card">
-        <i class="fa-solid fa-headset"></i>
-        <h4>24/7 Support</h4>
-        <p>Always available to assist you anytime during your trip.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== DESTINATIONS ===== -->
-<section class="destinations-section bg-secondary-subtle">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Our Top Destinations</h2>
-      <p class="section-subtitle">We cover all major cities and tourist destinations across Tamil Nadu</p>
-    </div>
-
-    <table class="destinations-table">
-      {% set destinations = [
-      'Ariyalur', 'Madurai', 'Ooty', 'Bangalore',
-      'Chengalpattu', 'Nagapattinam', 'Thiruvallur', 'Tirupati',
-      'Chennai', 'Namakkal', 'Thiruvarur', 'Pondicherry',
-      'Coimbatore', 'Perambalur', 'Thoothukkudi', 'Ranipet',
-      'Cuddalore', 'Pudukkottai', 'Trichy', 'Tenkasi',
-      'Dharmapuri', 'Ramanathapuram', 'Tirunelveli', 'Thoothukudi',
-      'Dindigul', 'Salem', 'Tiruppur', 'Tirupathur',
-      'Kanchipuram', 'Sivaganga', 'Tiruvannamalai', 'Tiruvallur',
-      'Kanyakumari', 'Thanjavur', 'Vellore', 'Tiruvarur',
-      'Karur', 'Theni', 'Viluppuram', 'Erode',
-      'Krishnagiri', 'Nilgiris', 'Virudhunagar', 'Kallakurichi'
-      ] %}
-
-      {% for i in range(0, destinations|length, 3) %}
-      <tr>
-        <td>{{ destinations[i] }}</td>
-        <td>{{ destinations[i+1] if i+1 < destinations|length else '' }}</td>
-        <td>{{ destinations[i+2] if i+2 < destinations|length else '' }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-</section>
-
-<!-- ===== TESTIMONIALS ===== -->
-<section class="testimonials-modern">
-  <div class="container">
-    <div class="t-header">
-      <span class="t-tag">Testimonials</span>
-      <h2>What Our Customers Say</h2>
-      <p>Real experiences from happy travellers</p>
-    </div>
-
-    <div class="t-grid">
-      <div class="t-card">
-        <i class="fa-solid fa-quote-left quote"></i>
-        <p>Nice conversation skill. Very helpful, car was in very good condition. Knows very good places and shopping
-          ideas.</p>
-        <h4>Harshita Dadheech</h4>
-      </div>
-
-      <div class="t-card">
-        <i class="fa-solid fa-quote-left quote"></i>
-        <p>He is a very good & caring person. Whenever we need a cab, we call him without second thought.</p>
-        <h4>Mersal Hari</h4>
-      </div>
-
-      <div class="t-card">
-        <i class="fa-solid fa-quote-left quote"></i>
-        <p>Highly recommended. Amazing driver Kaleeswaran. Best travels with affordable price in Madurai.</p>
-        <h4>Deepika Aravindaraj</h4>
-      </div>
-
-      <div class="t-card">
-        <i class="fa-solid fa-quote-left quote"></i>
-        <p>Best travels in Madurai. Good vehicle and excellent service. All drivers are very professional.</p>
-        <h4>Sathis Kumar</h4>
+      <div class="why-grid">
+        <div class="why-card">
+          <i class="fa-solid fa-gift"></i>
+          <h4>Exclusive Packages</h4>
+          <p>Seasonal and budget-friendly travel packages for every journey.</p>
+        </div>
+        <div class="why-card">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <h4>Top Destinations</h4>
+          <p>Explore the best places in and around Madurai with comfort.</p>
+        </div>
+        <div class="why-card">
+          <i class="fa-solid fa-headset"></i>
+          <h4>24/7 Support</h4>
+          <p>Always available to assist you anytime during your trip.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ===== DESTINATIONS ===== -->
+  <section class="destinations-section bg-secondary-subtle">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Top Destinations</h2>
+        <p class="section-subtitle">We cover all major cities and tourist destinations across Tamil Nadu</p>
+      </div>
+
+      <table class="destinations-table">
+        {% set destinations = [
+        'Ariyalur', 'Madurai', 'Ooty', 'Bangalore',
+        'Chengalpattu', 'Nagapattinam', 'Thiruvallur', 'Tirupati',
+        'Chennai', 'Namakkal', 'Thiruvarur', 'Pondicherry',
+        'Coimbatore', 'Perambalur', 'Thoothukkudi', 'Ranipet',
+        'Cuddalore', 'Pudukkottai', 'Trichy', 'Tenkasi',
+        'Dharmapuri', 'Ramanathapuram', 'Tirunelveli', 'Thoothukudi',
+        'Dindigul', 'Salem', 'Tiruppur', 'Tirupathur',
+        'Kanchipuram', 'Sivaganga', 'Tiruvannamalai', 'Tiruvallur',
+        'Kanyakumari', 'Thanjavur', 'Vellore', 'Tiruvarur',
+        'Karur', 'Theni', 'Viluppuram', 'Erode',
+        'Krishnagiri', 'Nilgiris', 'Virudhunagar', 'Kallakurichi'
+        ] %}
+
+        {% for i in range(0, destinations|length, 3) %}
+        <tr>
+          <td>{{ destinations[i] }}</td>
+          <td>{{ destinations[i+1] if i+1 < destinations|length else '' }}</td>
+          <td>{{ destinations[i+2] if i+2 < destinations|length else '' }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials-modern">
+    <div class="container">
+      <div class="t-header">
+        <span class="t-tag">Testimonials</span>
+        <h2>What Our Customers Say</h2>
+        <p>Real experiences from happy travellers</p>
+      </div>
+
+      <div class="t-grid">
+        <div class="t-card">
+          <i class="fa-solid fa-quote-left quote"></i>
+          <p>Nice conversation skill. Very helpful, car was in very good condition. Knows very good places and shopping
+            ideas.</p>
+          <h4>Harshita Dadheech</h4>
+        </div>
+
+        <div class="t-card">
+          <i class="fa-solid fa-quote-left quote"></i>
+          <p>He is a very good & caring person. Whenever we need a cab, we call him without second thought.</p>
+          <h4>Mersal Hari</h4>
+        </div>
+
+        <div class="t-card">
+          <i class="fa-solid fa-quote-left quote"></i>
+          <p>Highly recommended. Amazing driver Kaleeswaran. Best travels with affordable price in Madurai.</p>
+          <h4>Deepika Aravindaraj</h4>
+        </div>
+
+        <div class="t-card">
+          <i class="fa-solid fa-quote-left quote"></i>
+          <p>Best travels in Madurai. Good vehicle and excellent service. All drivers are very professional.</p>
+          <h4>Sathis Kumar</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
 <a href="tel:+918300302815" class="float-btn call-float" aria-label="Call">
   <i class="fa-solid fa-phone"></i>
@@ -2150,7 +2190,6 @@
   setInterval(slideImages, 8000);
 
   // Counter animation
-  // Counter animation
   document.addEventListener('DOMContentLoaded', () => {
     const animateCounter = (el, target) => {
       let start = null;
@@ -2189,7 +2228,7 @@
     dateInputs.forEach(input => input.min = today);
 
     // Phone validation
-    const phoneInput = document.querySelector('input[name="phone"]');
+    const phoneInput = document.querySelector('input[name="customer_phone"]');
     if (phoneInput) {
       phoneInput.addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
