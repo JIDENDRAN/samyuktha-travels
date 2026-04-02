@@ -9,6 +9,8 @@ const bodyParser = require("body-parser");
 const { execSync } = require("child_process");
 const path = require("path");
 
+console.log("\n[1] --- SERVER STARTING ---");
+
 // ================= ERROR LOGGING =================
 process.on("unhandledRejection", (reason, p) => {
   console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
@@ -19,24 +21,28 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: { origin: "*" },
+const io = socketIO(server, { cors: { origin: "*" } });
+
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => {
+  console.log(`[2] --- HTTP SERVER LIVE ON PORT ${PORT} ---`);
 });
 
 // ================= RENDER CHROMIUM SETUP =================
+console.log("[3] --- DETECTING CHROME BINARY ---");
 let executablePath = null;
 try {
-  // Fix: split by space and take the last part (the path)
   const output = execSync("npx puppeteer browsers install chrome --path .cache/puppeteer --print-path").toString().trim();
   const parts = output.split(" ");
-  const rawPath = parts[parts.length - 1]; // Use the last part
-  executablePath = path.resolve(process.cwd(), rawPath); // Make it absolute
-  console.log(`📍 Real Chrome path: ${executablePath}`);
+  const rawPath = parts[parts.length - 1];
+  executablePath = path.resolve(process.cwd(), rawPath);
+  console.log(`[4] --- CHROME FOUND AT: ${executablePath} ---`);
 } catch (err) {
-  console.log("⚠️ Could not auto-detect Chrome, will use default.");
+  console.log("[!] --- AUTO-DETECTION FAILED, USING DEFAULT BROWSER ---");
 }
 
 // ================= WHATSAPP BOT SETUP =================
+console.log("[5] --- INITIALIZING WHATSAPP CLIENT ---");
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
@@ -47,24 +53,33 @@ const client = new Client({
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--disable-gpu",
-      "--no-zygote"
+      "--no-zygote",
+      "--single-process"
     ],
   }
 });
 
-console.log("🚀 Initializing WhatsApp Engine...");
-
 client.on("qr", (qr) => {
-  console.log("\n⚠️ ACTION REQUIRED: SCAN THE QR CODE BELOW!");
+  console.log("\n⚠️ [QR ACTION] SCAN THE CODE BELOW:");
+  console.log("Raw QR Link (Use with online generator if needed):", qr);
   qrcode.generate(qr, { small: true });
 });
 
 client.on("ready", () => {
-  console.log("\n✅ WhatsApp Engine is READY! 🚀\n");
+  console.log("\n✅ [READY] WHATSAPP ENGINE IS ONLINE! 🚀\n");
 });
 
+client.on("loading_screen", (percent, message) => {
+  console.log(`⏳ [LOADING] ${percent}% - ${message}`);
+});
+
+client.on("auth_failure", (msg) => {
+  console.error("❌ [AUTH ERROR]:", msg);
+});
+
+// Restart on crash
 client.on("disconnected", (reason) => {
-  console.log("Client was logged out", reason);
+  console.log("(!) Client was logged out", reason);
   client.initialize();
 });
 
@@ -86,7 +101,7 @@ app.post("/api/send-whatsapp", async (req, res) => {
 });
 
 client.initialize().catch(err => {
-  console.error("❌ FAILED TO INITIALIZE WHATSAPP:", err);
+  console.error("❌ [STARTUP ERROR]:", err);
 });
 
 // ================= SOCKET.IO =================
@@ -103,9 +118,4 @@ io.on("connection", (socket) => {
       console.error("Error updating trip status:", err.message);
     }
   });
-});
-
-const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => {
-  console.log(`🚀 Realtime server running on port ${PORT}`);
 });
