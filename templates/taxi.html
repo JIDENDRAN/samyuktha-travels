@@ -635,16 +635,37 @@
       padding: 30px 20px;
     }
 
-    .btn-submit,
-    .btn-reset {
-      padding: 12px 30px;
-      font-size: 15px;
-    }
-
     .feature-icon {
       width: 60px;
       height: 60px;
       font-size: 28px;
+    }
+
+    /* Booking Form 2-Column Mobile Optimization */
+    .booking-card .form-label {
+      font-size: 0.75rem !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 5px !important;
+    }
+
+    .booking-card .form-control,
+    .booking-card .form-select {
+      padding: 8px 10px !important;
+      font-size: 0.85rem !important;
+    }
+
+    .booking-card .input-icon-wrapper .form-control {
+      padding-left: 10px !important;
+    }
+
+    .booking-card {
+      padding: 20px 15px !important;
+    }
+
+    .booking-card h2 {
+      font-size: 1.5rem !important;
     }
   }
 
@@ -758,75 +779,69 @@
             <div class="row g-4">
 
               <!-- Pickup Location -->
-              <div class="col-md-6">
+              <div class="col-6">
                 <label for="from" class="form-label">
-                  <i class="fa-solid fa-location-dot me-2 text-primary"></i>Pickup Location
+                  <i class="fa-solid fa-location-dot me-2 text-primary"></i>Pickup
                 </label>
                 <div class="input-icon-wrapper">
-                  <input id="from" name="from" type="text" class="form-control" placeholder="Enter pickup address"
-                    required>
-                  <i class="fa-solid fa-map-marker-alt"></i>
+                  <input id="from" name="from" type="text" class="form-control" placeholder="Pickup address" required>
                 </div>
               </div>
 
               <!-- Drop Location -->
-              <div class="col-md-6">
+              <div class="col-6">
                 <label for="to" class="form-label">
-                  <i class="fa-solid fa-location-crosshairs me-2 text-primary"></i>Drop Location
+                  <i class="fa-solid fa-location-crosshairs me-2 text-primary"></i>Drop
                 </label>
                 <div class="input-icon-wrapper">
-                  <input id="to" name="to" type="text" class="form-control" placeholder="Enter drop address" required>
-                  <i class="fa-solid fa-map-pin"></i>
+                  <input id="to" name="to" type="text" class="form-control" placeholder="Drop address" required>
                 </div>
               </div>
 
               <!-- Travel Date -->
-              <div class="col-md-6">
+              <div class="col-6">
                 <label for="date" class="form-label">
-                  <i class="fa-solid fa-calendar-days me-2 text-primary"></i>Travel Date
+                  <i class="fa-solid fa-calendar-days me-2 text-primary"></i>Date
                 </label>
                 <div class="input-icon-wrapper">
                   <input id="date" name="date" type="date" class="form-control" required>
-                  <i class="fa-solid fa-calendar"></i>
                 </div>
               </div>
 
               <!-- Car Type -->
-              <div class="col-md-6">
+              <div class="col-6">
                 <label for="car_type" class="form-label">
-                  <i class="fa-solid fa-car me-2 text-primary"></i>Select Car Type
+                  <i class="fa-solid fa-car me-2 text-primary"></i>Car Type
                 </label>
                 <select id="car_type" name="car_type" class="form-select" required>
-                  <option value="">Choose your vehicle</option>
-                  <option value="Mini Car">Mini Car (₹1,500/day)</option>
-                  <option value="Sedan">Sedan (₹1,600/day)</option>
-                  <option value="Innova">Innova (₹2,200/day)</option>
-                  <option value="SUV">SUV (Premium)</option>
-                  <option value="Tempo Traveller">Tempo Traveller (₹2,700/day)</option>
+                  <option value="">Vehicle</option>
+                  <option value="Mini Car">Mini</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="Innova">Innova</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Tempo Traveller">Tempo</option>
                 </select>
               </div>
 
               <!-- Customer Name -->
-              <div class="col-md-6">
+              <div class="col-6">
                 <label for="customer_name" class="form-label">
-                  <i class="fa-solid fa-user me-2 text-primary"></i>Your Full Name
+                  <i class="fa-solid fa-user me-2 text-primary"></i>Name
                 </label>
                 <div class="input-icon-wrapper">
                   <input id="customer_name" name="customer_name" type="text" class="form-control"
-                    placeholder="Enter your name" required>
-                  <i class="fa-solid fa-user"></i>
+                    placeholder="Your name" required>
                 </div>
               </div>
 
               <!-- Customer Phone -->
-              <div class="col-md-6">
+              <div class="col-6">
                 <label for="customer_phone" class="form-label">
-                  <i class="fa-solid fa-phone me-2 text-primary"></i>Mobile Number
+                  <i class="fa-solid fa-phone me-2 text-primary"></i>Phone
                 </label>
                 <div class="input-icon-wrapper">
                   <input id="customer_phone" name="customer_phone" type="tel" class="form-control"
-                    placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
-                  <i class="fa-solid fa-phone"></i>
+                    placeholder="10-digit mobile" pattern="[0-9]{10}" maxlength="10" required>
                 </div>
               </div>
 
@@ -1042,7 +1057,7 @@
   }
 
   // Auto-scroll to booking section on page load
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
     const bookingSection = document.getElementById('booking-form-section');
     if (bookingSection) {
       setTimeout(() => {

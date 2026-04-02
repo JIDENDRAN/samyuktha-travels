@@ -623,6 +623,25 @@
       font-size: 11px;
       /* Reduced from 12px */
     }
+
+    /* Booking Form 2-Column Mobile Optimization */
+    .booking-form-card .form-label {
+      font-size: 0.7rem !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .booking-form-card .form-control,
+    .booking-form-card .form-select {
+      padding: 8px 10px !important;
+      font-size: 0.85rem !important;
+    }
+
+    .booking-form-card h3 {
+      font-size: 1.2rem !important;
+      margin-bottom: 15px !important;
+    }
   }
 
   /* ================= BOOKING BRANDING ================= */
@@ -2028,48 +2047,50 @@
           <div class="booking-form-card" style="margin-top: 12px;">
             <h3><i class="fa-solid fa-car"></i>Book Your Ride</h3>
             <form method="POST" action="{{ url_for('taxi') }}">
-              <div class="mb-3">
-                <label class="form-label" for="car_type">Vehicle Type</label>
-                <select id="car_type" class="form-select" name="car_type" required>
-                  <option value="">Select Vehicle</option>
-                  <option value="Mini">Mini</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="Innova">Innova</option>
-                  <option value="Tempo Traveller">Tempo Traveller</option>
-                </select>
+              <div class="row g-2">
+                <div class="col-md-12 col-6 mb-3">
+                  <label class="form-label" for="car_type">Vehicle Type</label>
+                  <select id="car_type" class="form-select" name="car_type" required>
+                    <option value="">Select Vehicle</option>
+                    <option value="Mini">Mini</option>
+                    <option value="Sedan">Sedan</option>
+                    <option value="Innova">Innova</option>
+                    <option value="Tempo Traveller">Tempo Traveller</option>
+                  </select>
+                </div>
+
+                <div class="col-md-12 col-6 mb-3">
+                  <label class="form-label">Pick Up Location</label>
+                  <input type="text" class="form-control" name="from" placeholder="Enter pickup location" required>
+                </div>
+
+                <div class="col-md-12 col-6 mb-3">
+                  <label class="form-label">Drop Location</label>
+                  <input type="text" class="form-control" name="to" placeholder="Enter drop location" required>
+                </div>
+
+                <div class="col-md-12 col-6 mb-3">
+                  <label class="form-label">Travel Date</label>
+                  <input type="date" class="form-control" name="date" required>
+                </div>
+
+                <div class="col-md-12 col-6 mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" name="customer_name" placeholder="Enter your name" required>
+                </div>
+
+                <div class="col-md-12 col-6 mb-3">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" name="customer_phone" placeholder="Enter your phone number"
+                    pattern="[0-9]{10}" required>
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn-book-now">
+                    <i class="fa-solid fa-calendar-check"></i>Book Now
+                  </button>
+                </div>
               </div>
-
-              <div class="mb-3">
-                <label class="form-label">Pick Up Location</label>
-                <input type="text" class="form-control" name="from" placeholder="Enter pickup location" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Drop Location</label>
-                <input type="text" class="form-control" name="to" placeholder="Enter drop location" required>
-              </div>
-
-              <div class=" mb-3">
-
-                <label class="form-label">Travel Date</label>
-                <input type="date" class="form-control" name="date" required>
-
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control" name="customer_name" placeholder="Enter your name" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" name="customer_phone" placeholder="Enter your phone number"
-                  pattern="[0-9]{10}" required>
-              </div>
-
-              <button type="submit" class="btn-book-now">
-                <i class="fa-solid fa-calendar-check"></i>Book Now
-              </button>
             </form>
           </div>
         </div>
