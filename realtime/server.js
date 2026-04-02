@@ -30,16 +30,32 @@ const client = new Client({
   }
 });
 
+console.log("🚀 Starting WhatsApp Engine initialization...");
+
 // QR Code for First Time Login
 client.on("qr", (qr) => {
-  console.log("\n==================================================");
+  console.log("\n⚠️ ACTION REQUIRED: NEW QR CODE DETECTED!");
+  console.log("==================================================");
   console.log("SCAN THIS QR CODE WITH WHATSAPP TO CONNECT YOUR BOT:");
+  console.log(qr); // Adding raw QR string for alternate debugging
   qrcode.generate(qr, { small: true });
   console.log("==================================================\n");
 });
 
 client.on("ready", () => {
-  console.log("\n✅ WhatsApp Engine is READY! 🚀\n");
+  console.log("\n✅ SUCCESS: WhatsApp Engine is READY! 🚀\n");
+});
+
+client.on("loading_screen", (percent, message) => {
+  console.log(`⏳ Loading WhatsApp: ${percent}% - ${message}`);
+});
+
+client.on("authenticated", () => {
+  console.log("✅ Authenticated successfully!");
+});
+
+client.on("auth_failure", (msg) => {
+  console.error("❌ Authentication failure:", msg);
 });
 
 // Restart on crash
