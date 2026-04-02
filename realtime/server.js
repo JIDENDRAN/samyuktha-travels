@@ -6,6 +6,13 @@ const axios = require("axios");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const bodyParser = require("body-parser");
+const { execSync } = require("child_process");
+const path = require("path");
+
+// ================= ERROR LOGGING =================
+process.on("unhandledRejection", (reason, p) => {
+  console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
+});
 
 const app = express();
 app.use(cors());
@@ -16,97 +23,71 @@ const io = socketIO(server, {
   cors: { origin: "*" },
 });
 
-// ================= FREE WHATSAPP BOT SETUP =================
+// ================= RENDER CHROMIUM SETUP =================
+let executablePath = null;
+try {
+  // Try to find the chrome installed by puppeteer
+  executablePath = execSync("npx puppeteer browsers install chrome --path .cache/puppeteer --print-path").toString().trim();
+  console.log(`📍 Chrome binary found at: ${executablePath}`);
+} catch (err) {
+  console.log("⚠️ Could not auto-detect Chrome, will use default.");
+}
+
+// ================= WHATSAPP BOT SETUP =================
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null, // Allow overriding if needed
+    executablePath: executablePath,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--disable-gpu",
-      "--no-zygote",
-      "--single-process", // Helps with memory on some servers
-      "--unhandled-rejections=strict",
+      "--no-zygote"
     ],
   }
 });
 
-// For Render: Auto-detect the Puppeteer-installed Chrome path if not set
-if (!process.env.PUPPETEER_EXECUTABLE_PATH) {
-  try {
-    const { execSync } = require("child_process");
-    const path = execSync("npx puppeteer browsers install chrome --path .cache/puppeteer --print-path").toString().trim();
-    client.options.puppeteer.executablePath = path;
-    console.log(`📍 Found Chrome at: ${path}`);
-  } catch (err) {
-    console.log("⚠️ Could not auto-detect Chrome path, using default.");
-  }
-}
+console.log("🚀 Initializing WhatsApp Engine...");
 
-console.log("🚀 Starting WhatsApp Engine initialization...");
-
-// QR Code for First Time Login
 client.on("qr", (qr) => {
-  console.log("\n⚠️ ACTION REQUIRED: NEW QR CODE DETECTED!");
-  console.log("==================================================");
-  console.log("SCAN THIS QR CODE WITH WHATSAPP TO CONNECT YOUR BOT:");
-  console.log(qr); // Adding raw QR string for alternate debugging
+  console.log("\n⚠️ ACTION REQUIRED: SCAN THE QR CODE BELOW!");
   qrcode.generate(qr, { small: true });
-  console.log("==================================================\n");
 });
 
 client.on("ready", () => {
-  console.log("\n✅ SUCCESS: WhatsApp Engine is READY! 🚀\n");
+  console.log("\n✅ WhatsApp Engine is READY! 🚀\n");
 });
 
-client.on("loading_screen", (percent, message) => {
-  console.log(`⏳ Loading WhatsApp: ${percent}% - ${message}`);
-});
-
-client.on("authenticated", () => {
-  console.log("✅ Authenticated successfully!");
-});
-
-client.on("auth_failure", (msg) => {
-  console.error("❌ Authentication failure:", msg);
-});
-
-// Restart on crash
 client.on("disconnected", (reason) => {
   console.log("Client was logged out", reason);
   client.initialize();
 });
 
-// API for Python Flask App to send automatically
+// API for Python Flask App
 app.post("/api/send-whatsapp", async (req, res) => {
   const { phone, message } = req.body;
-  
-  if (!phone || !message) {
-    return res.status(400).json({ error: "Missing phone or message" });
-  }
+  if (!phone || !message) return res.status(400).json({ error: "Missing data" });
 
   try {
-    const cleanPhone = phone.replace("+", "").replace("-", "").replace(" ", "");
+    const cleanPhone = phone.replace(/\D/g, "");
     const formattedPhone = cleanPhone.includes("@c.us") ? cleanPhone : `${cleanPhone}@c.us`;
-    
     await client.sendMessage(formattedPhone, message);
     console.log(`✅ Message sent to ${formattedPhone}`);
     res.json({ success: true });
   } catch (err) {
-    console.error("❌ Error sending message:", err);
-    res.status(500).json({ error: "Failed to send message", details: err.message });
+    console.error("❌ Send Error:", err);
+    res.status(500).json({ error: "Failed to send", details: err.message });
   }
 });
 
-client.initialize();
+client.initialize().catch(err => {
+  console.error("❌ FAILED TO INITIALIZE WHATSAPP:", err);
+});
 
-// ================= SOCKET.IO (Existing Logic) =================
+// ================= SOCKET.IO =================
 io.on("connection", (socket) => {
-  console.log("Connected:", socket.id);
-
   socket.on("driver_location", (data) => {
     io.emit("location_update", data);
   });
@@ -114,22 +95,14 @@ io.on("connection", (socket) => {
   socket.on("trip_status", async (data) => {
     try {
       const flaskUrl = process.env.FLASK_API_URL || "http://localhost:5000";
-      await axios.post(`${flaskUrl}/api/trip/${data.trip_id}/status`, {
-        status: data.status,
-      });
+      await axios.post(`${flaskUrl}/api/trip/${data.trip_id}/status`, { status: data.status });
     } catch (err) {
       console.error("Error updating trip status:", err.message);
     }
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Disconnected:", socket.id);
   });
 });
 
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
-  console.log(`\n-----------------------------------------`);
   console.log(`🚀 Realtime server running on port ${PORT}`);
-  console.log(`-----------------------------------------\n`);
 });
