@@ -37,11 +37,12 @@ def send_whatsapp_message(phone, message_body):
         "message": message_body
     }
     try:
-        # Calls your Node.js bot running on port 4000
-        response = requests.post(url, json=payload, timeout=15)
+        # Calls your Node.js bot running on port 4000 (or on Render)
+        response = requests.post(url, json=payload, timeout=20)
+        print(f"WhatsApp Attempt: URL={url}, Status={response.status_code}")
         return response.json()
     except Exception as e:
-        print(f"Error sending local WhatsApp: {e}")
+        print(f"CRITICAL: Error sending WhatsApp to {url}: {e}")
         return None
 
 def init_db():
