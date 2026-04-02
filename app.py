@@ -5,12 +5,12 @@ import requests
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# ================= WHATSAPP API CONFIGURATION (Meta Official) =================
-# 1. Get your Access Token and Phone Number ID from Meta Developers Portal
-WHATSAPP_TOKEN = 'your_access_token_here' 
-PHONE_NUMBER_ID = 'your_phone_number_id_here'
+# ================= WHATSAPP API CONFIGURATION (UltraMsg) =================
+# 1. Sign up at Ultramsg, scan the QR code, and get your credentials
+ULTRAMSG_INSTANCE_ID = 'your_instance_id_here' 
+ULTRAMSG_TOKEN = 'your_token_here'
 WHATSAPP_ENABLED = True
-OWNER_PHONE = '+918300302815' 
+OWNER_PHONE = '918300302815' # Admin phone number without '+'
 # ==============================================================
 
 app = Flask(__name__)
@@ -25,32 +25,24 @@ def db():
     return conn
 
 def send_whatsapp_message(phone, message_body):
-    """Sends an automated WhatsApp message via Meta Cloud API"""
-    if not WHATSAPP_ENABLED or WHATSAPP_TOKEN == 'your_access_token_here':
+    """Sends an automated WhatsApp message via UltraMsg API"""
+    if not WHATSAPP_ENABLED or ULTRAMSG_INSTANCE_ID == 'your_instance_id_here':
         print(f"WhatsApp API not configured. Not sending to {phone}")
         return None
     
-    # Clean phone number (must be digits only for Meta)
-    clean_phone = ''.join(filter(str.isdigit, phone))
+    # Clean phone number (remove + if present)
+    clean_phone = phone.replace('+', '').strip()
     
-    url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
+    url = f"https://api.ultramsg.com/{ULTRAMSG_INSTANCE_ID}/messages/chat"
     
-    headers = {
-        "Authorization": f"Bearer {WHATSAPP_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    
-    # Meta Cloud API requires using Templates for un-initiated messages to customers,
-    # but for simple text-based alerts, we use the "text" type (works with verified test numbers).
     payload = {
-        "messaging_product": "whatsapp",
+        "token": ULTRAMSG_TOKEN,
         "to": clean_phone,
-        "type": "text",
-        "text": { "body": message_body }
+        "body": message_body
     }
     
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response = requests.post(url, data=payload, timeout=10)
         return response.json()
     except Exception as e:
         print(f"Error sending WhatsApp: {e}")
