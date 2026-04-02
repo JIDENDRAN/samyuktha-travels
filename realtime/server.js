@@ -26,9 +26,12 @@ const io = socketIO(server, {
 // ================= RENDER CHROMIUM SETUP =================
 let executablePath = null;
 try {
-  // Try to find the chrome installed by puppeteer
-  executablePath = execSync("npx puppeteer browsers install chrome --path .cache/puppeteer --print-path").toString().trim();
-  console.log(`📍 Chrome binary found at: ${executablePath}`);
+  // Fix: split by space and take the last part (the path)
+  const output = execSync("npx puppeteer browsers install chrome --path .cache/puppeteer --print-path").toString().trim();
+  const parts = output.split(" ");
+  const rawPath = parts[parts.length - 1]; // Use the last part
+  executablePath = path.resolve(process.cwd(), rawPath); // Make it absolute
+  console.log(`📍 Real Chrome path: ${executablePath}`);
 } catch (err) {
   console.log("⚠️ Could not auto-detect Chrome, will use default.");
 }
