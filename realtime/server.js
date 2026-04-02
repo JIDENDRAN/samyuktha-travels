@@ -59,10 +59,35 @@ const client = new Client({
   }
 });
 
+let lastQrCode = null;
+
 client.on("qr", (qr) => {
+  lastQrCode = qr; // Store for the web scanner
   console.log("\n⚠️ [QR ACTION] SCAN THE CODE BELOW:");
-  console.log("Raw QR Link (Use with online generator if needed):", qr);
   qrcode.generate(qr, { small: true });
+});
+
+// Endpoint to see a clean QR code in the browser
+app.get("/scan", (req, res) => {
+  if (lastQrCode) {
+    res.send(`
+      <html>
+        <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
+          <h2>Scan with WhatsApp</h2>
+          <div id="qrcode"></div>
+          <p>Go to WhatsApp -> Linked Devices -> Link a Device</p>
+          <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+          <script>
+            new QRCode(document.getElementById("qrcode"), "${lastQrCode}");
+            // Refresh page every 30 seconds to get the latest QR
+            setTimeout(() => window.location.reload(), 30000);
+          </script>
+        </body>
+      </html>
+    `);
+  } else {
+    res.send("<h2>WhatsApp is already connected or loading...</h2><p>If not working, wait 10 seconds and refresh.</p>");
+  }
 });
 
 client.on("ready", () => {
