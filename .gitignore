@@ -1,0 +1,10 @@
+node_modules/
+__pycache__/
+*.pyc
+.wwebjs_auth/
+database.db
+.env
+.idea/
+.vscode/
+*.log
+.DS_Store

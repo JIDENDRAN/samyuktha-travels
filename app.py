@@ -1,17 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from flask_cors import CORS
+import os
 import sqlite3
 import requests
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# ================= WHATSAPP API CONFIGURATION (UltraMsg) =================
-# 1. Sign up at Ultramsg, scan the QR code, and get your credentials
-ULTRAMSG_INSTANCE_ID = 'your_instance_id_here' 
-ULTRAMSG_TOKEN = 'your_token_here'
-WHATSAPP_ENABLED = True
-OWNER_PHONE = '918300302815' # Admin phone number without '+'
-# ==============================================================
+# ================= WHATSAPP API CONFIGURATION (OPEN SOURCE) =================
+# This system now uses a local open-source Node.js bot (whatsapp-web.js)
+# You MUST run 'node realtime/server.js' and scan the QR code for it to work.
+OWNER_PHONE = '918300302815' # Admin phone number where bookings are sent
+# ============================================================================
 
 app = Flask(__name__)
 CORS(app) 
@@ -25,27 +24,24 @@ def db():
     return conn
 
 def send_whatsapp_message(phone, message_body):
-    """Sends an automated WhatsApp message via UltraMsg API"""
-    if not WHATSAPP_ENABLED or ULTRAMSG_INSTANCE_ID == 'your_instance_id_here':
-        print(f"WhatsApp API not configured. Not sending to {phone}")
-        return None
-    
-    # Clean phone number (remove + if present)
-    clean_phone = phone.replace('+', '').strip()
-    
-    url = f"https://api.ultramsg.com/{ULTRAMSG_INSTANCE_ID}/messages/chat"
-    
+    """Sends an automated WhatsApp message via LOCAL Open Source Bot"""
+    # Clean phone (ensure 91 prefix)
+    clean_phone = phone.replace('+', '').replace(' ', '').strip()
+    if not clean_phone.startswith('91'):
+        clean_phone = '91' + clean_phone
+
+    whatsapp_api_url = os.environ.get("WHATSAPP_API_URL", "http://localhost:4000")
+    url = f"{whatsapp_api_url}/api/send-whatsapp"
     payload = {
-        "token": ULTRAMSG_TOKEN,
-        "to": clean_phone,
-        "body": message_body
+        "phone": clean_phone,
+        "message": message_body
     }
-    
     try:
-        response = requests.post(url, data=payload, timeout=10)
+        # Calls your Node.js bot running on port 4000
+        response = requests.post(url, json=payload, timeout=15)
         return response.json()
     except Exception as e:
-        print(f"Error sending WhatsApp: {e}")
+        print(f"Error sending local WhatsApp: {e}")
         return None
 
 def init_db():
@@ -543,7 +539,8 @@ def api_update_trip_status(trip_id):
 
 @app.route("/simulate_driver")
 def simulate_driver():
-    return render_template("simulate_driver.html")
+    return render_template("simulate_driver.html", 
+        realtime_socket_url=os.environ.get("REALTIME_SOCKET_URL", "http://localhost:4000"))
 
 
 

@@ -10,7 +10,7 @@
 
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script>
-    const socket = io("http://localhost:4000");
+    const socket = io("{{ realtime_socket_url }}");
 
     function start() {
       const trip_id = parseInt(document.getElementById("trip_id").value);
