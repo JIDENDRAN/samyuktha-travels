@@ -20,15 +20,31 @@ const io = socketIO(server, {
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    headless: true, // Run in background
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--unhandled-rejections=strict"],
-  },
-  // Stable web version to prevent "Execution context was destroyed"
-  webVersionCache: {
-    type: "remote",
-    remotePath: "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
+    headless: true,
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null, // Allow overriding if needed
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--no-zygote",
+      "--single-process", // Helps with memory on some servers
+      "--unhandled-rejections=strict",
+    ],
   }
 });
+
+// For Render: Auto-detect the Puppeteer-installed Chrome path if not set
+if (!process.env.PUPPETEER_EXECUTABLE_PATH) {
+  try {
+    const { execSync } = require("child_process");
+    const path = execSync("npx puppeteer browsers install chrome --path .cache/puppeteer --print-path").toString().trim();
+    client.options.puppeteer.executablePath = path;
+    console.log(`📍 Found Chrome at: ${path}`);
+  } catch (err) {
+    console.log("⚠️ Could not auto-detect Chrome path, using default.");
+  }
+}
 
 console.log("🚀 Starting WhatsApp Engine initialization...");
 
