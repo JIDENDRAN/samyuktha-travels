@@ -67,6 +67,17 @@ client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
 });
 
+// Root status page
+app.get("/", (req, res) => {
+  const status = lastQrCode ? "WAITING FOR SCAN" : "READY OR CONNECTING...";
+  res.send(`
+    <body style="font-family:sans-serif; text-align:center; padding-top:50px;">
+      <h1>Realtime Server Status: ${status}</h1>
+      <p><a href="/scan" style="background:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Go to Scan Page</a></p>
+    </body>
+  `);
+});
+
 // Endpoint to see a clean QR code in the browser
 app.get("/scan", (req, res) => {
   if (lastQrCode) {
