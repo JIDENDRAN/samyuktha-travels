@@ -24,26 +24,35 @@ def db():
     return conn
 
 def send_whatsapp_message(phone, message_body):
-    """Sends an automated WhatsApp message via LOCAL Open Source Bot"""
-    # Clean phone (ensure 91 prefix)
+    """Sends WhatsApp via Green API (cloud-based, no Puppeteer needed).
+    Sender = 8754720031 (the WhatsApp number registered on Green API).
+    Receiver = phone (8300302815 = owner).
+    """
+    # Clean phone number → E.164 without + e.g. 918300302815
     clean_phone = phone.replace('+', '').replace(' ', '').strip()
     if not clean_phone.startswith('91'):
         clean_phone = '91' + clean_phone
 
-    whatsapp_api_url = os.environ.get("WHATSAPP_API_URL", "https://samyuktha-realtime.onrender.com")
-    url = f"{whatsapp_api_url}/api/send-whatsapp"
-    payload = {
-        "phone": clean_phone,
-        "message": message_body
-    }
+    chat_id = f"{clean_phone}@c.us"
+
+    id_instance = os.environ.get("GREEN_API_ID_INSTANCE", "")
+    api_token   = os.environ.get("GREEN_API_TOKEN", "")
+
+    if not id_instance or not api_token:
+        print("WARNING: GREEN_API_ID_INSTANCE or GREEN_API_TOKEN not set. WhatsApp NOT sent.")
+        return None
+
+    url = f"https://api.green-api.com/waInstance{id_instance}/sendMessage/{api_token}"
+    payload = {"chatId": chat_id, "message": message_body}
+
     try:
-        # Calls your Node.js bot running on port 4000 (or on Render)
         response = requests.post(url, json=payload, timeout=20)
-        print(f"WhatsApp Attempt: URL={url}, Status={response.status_code}")
+        print(f"WhatsApp Sent: Status={response.status_code}, Body={response.text}")
         return response.json()
     except Exception as e:
-        print(f"CRITICAL: Error sending WhatsApp to {url}: {e}")
+        print(f"CRITICAL: WhatsApp send failed: {e}")
         return None
+
 
 def init_db():
     conn = db()
