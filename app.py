@@ -24,31 +24,28 @@ def db():
     return conn
 
 def send_whatsapp_message(phone, message_body):
-    """Sends WhatsApp via Green API (cloud-based, no Puppeteer needed).
-    Sender = 8754720031 (the WhatsApp number registered on Green API).
-    Receiver = phone (8300302815 = owner).
+    """Sends WhatsApp alert via Callmebot (free, unlimited).
+    The owner (8300302815) must activate once — see README.
     """
-    # Clean phone number → E.164 without + e.g. 918300302815
+    import urllib.parse
+
+    # Clean phone: digits only, with country code
     clean_phone = phone.replace('+', '').replace(' ', '').strip()
     if not clean_phone.startswith('91'):
         clean_phone = '91' + clean_phone
 
-    chat_id = f"{clean_phone}@c.us"
-
-    id_instance = os.environ.get("GREEN_API_ID_INSTANCE", "")
-    api_token   = os.environ.get("GREEN_API_TOKEN", "")
-
-    if not id_instance or not api_token:
-        print("WARNING: GREEN_API_ID_INSTANCE or GREEN_API_TOKEN not set. WhatsApp NOT sent.")
+    api_key = os.environ.get("CALLMEBOT_API_KEY", "")
+    if not api_key:
+        print("WARNING: CALLMEBOT_API_KEY not set. WhatsApp NOT sent.")
         return None
 
-    url = f"https://api.green-api.com/waInstance{id_instance}/sendMessage/{api_token}"
-    payload = {"chatId": chat_id, "message": message_body}
+    encoded_msg = urllib.parse.quote(message_body)
+    url = f"https://api.callmebot.com/whatsapp.php?phone={clean_phone}&text={encoded_msg}&apikey={api_key}"
 
     try:
-        response = requests.post(url, json=payload, timeout=20)
-        print(f"WhatsApp Sent: Status={response.status_code}, Body={response.text}")
-        return response.json()
+        response = requests.get(url, timeout=20)
+        print(f"WhatsApp Callmebot: Status={response.status_code}, Response={response.text[:100]}")
+        return {"status": response.status_code}
     except Exception as e:
         print(f"CRITICAL: WhatsApp send failed: {e}")
         return None
