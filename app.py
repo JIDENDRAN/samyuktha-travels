@@ -30,7 +30,7 @@ def send_whatsapp_message(phone, message_body):
     if not clean_phone.startswith('91'):
         clean_phone = '91' + clean_phone
 
-    whatsapp_api_url = os.environ.get("WHATSAPP_API_URL", "http://localhost:4000")
+    whatsapp_api_url = os.environ.get("WHATSAPP_API_URL", "https://samyuktha-realtime.onrender.com")
     url = f"{whatsapp_api_url}/api/send-whatsapp"
     payload = {
         "phone": clean_phone,
