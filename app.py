@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ================= WHATSAPP API CONFIGURATION (OPEN SOURCE) =================
 # This system now uses a local open-source Node.js bot (whatsapp-web.js)
 # You MUST run 'node realtime/server.js' and scan the QR code for it to work.
-OWNER_PHONE = '918300302815' # Admin phone number where bookings are sent
+OWNER_PHONE = '918754720031' # Admin phone number where bookings are sent (currently set to 8754720031 for testing)
 # ============================================================================
 
 app = Flask(__name__)
