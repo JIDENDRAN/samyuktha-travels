@@ -80,9 +80,14 @@ const client = new Client({
   }
 });
 
+let lastQrTime = 0;
 client.on("qr", (qr) => {
+  const now = Date.now();
+  if (now - lastQrTime < 60000) return; // Only update every 60s
+
+  lastQrTime = now;
   lastQrCode = qr;
-  console.log("\n⚠️ [QR ACTION] SCAN THE CODE IN THE /SCAN PAGE!");
+  console.log("\n⚠️ [QR ACTION] SCAN THIS CODE (Stable for 60s):");
   qrcode.generate(qr, { small: true });
 });
 
