@@ -99,7 +99,7 @@ app.get("/logs", (req, res) => {
             }
           }
           // Reload if QR is visible to stay fresh
-          ${lastQrDataUrl ? "setTimeout(() => window.location.reload(), 10000);" : ""}
+          setTimeout(() => window.location.reload(), 120000);
         </script>
       </body>
     </html>
