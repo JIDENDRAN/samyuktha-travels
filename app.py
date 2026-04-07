@@ -232,6 +232,7 @@ def taxi():
         conn.close()
 
         # --- Notification: OWNER (Immediate Alert on New Booking) ---
+        print(f"DEBUG: [BOOKING] Building alert for {name} ({phone})...")
         owner_alert = (
             f"🔔 *New Booking Requested!*\n\n"
             f"👤 Customer: {name}\n"
@@ -241,6 +242,7 @@ def taxi():
             f"🚕 Vehicle: {car_type}\n\n"
             f"Please check the admin panel to confirm."
         )
+        print(f"DEBUG: [BOOKING] Handing over to notify_admins()...")
         notify_admins(owner_alert)
 
         return redirect(url_for(
