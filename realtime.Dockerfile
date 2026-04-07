@@ -4,6 +4,9 @@ FROM node:22-alpine
 # Set working directory
 WORKDIR /usr/src/app
 
+# Install small helpers that Baileys uses for media and speed
+RUN apk add --no-cache ffmpeg git
+
 # Copy package files and install
 COPY package*.json ./
 RUN npm install
