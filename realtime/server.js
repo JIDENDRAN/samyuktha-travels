@@ -81,11 +81,14 @@ client.on("ready", () => {
 });
 
 client.on("auth_failure", (msg) => {
-  console.error("❌ [AUTH ERROR]:", msg);
+  console.error("❌ [AUTH ERROR]: Authentication failed:", msg);
 });
 
-client.initialize().catch(err => {
-  console.error("❌ [STARTUP ERROR]:", err);
+console.log("[4] --- STARTING WHATSAPP CLIENT INITIALIZATION ---");
+client.initialize().then(() => {
+  console.log("[5] --- INITIALIZE COMMAND SENT ---");
+}).catch(err => {
+  console.error("❌ [STARTUP ERROR]: Critical failure during initialization:", err);
 });
 
 // ================= SEND WHATSAPP API =================
@@ -94,30 +97,35 @@ client.initialize().catch(err => {
 // The receiver = phone passed in the request body (8300302815 = owner).
 app.post("/api/send-whatsapp", async (req, res) => {
   const { phone, message } = req.body;
+  console.log(`\n📨 [NEW REQUEST] Attempting to send message to: ${phone}`);
 
   if (!phone || !message) {
+    console.warn("⚠️ [REJECTED] Missing phone or message in request body.");
     return res.status(400).json({ success: false, error: "phone and message are required" });
   }
 
   // Ensure E.164 format without the '+': e.g. "918300302815@c.us"
-  let cleanPhone = phone.replace(/\D/g, ""); // strip non-digits
+  let cleanPhone = phone.toString().replace(/\D/g, ""); // strip non-digits
   if (!cleanPhone.startsWith("91")) {
     cleanPhone = "91" + cleanPhone;
   }
   const chatId = `${cleanPhone}@c.us`;
 
   try {
-    const state = await client.getState();
+    const state = await client.getState().catch(() => "DISCONNECTED");
+    console.log(`ℹ️ [STATE CHECK] WhatsApp Client State: ${state}`);
+
     if (state !== "CONNECTED") {
-      console.warn(`⚠️ WhatsApp not connected (state: ${state}). Message NOT sent to ${chatId}`);
+      console.warn(`⚠️ [NOT CONNECTED] Message CANNOT be sent. Please scan the QR code first. (Target: ${chatId})`);
       return res.status(503).json({ success: false, error: `WhatsApp not connected. State: ${state}` });
     }
 
+    console.log(`🚀 [SENDING] Dispatching message to ${chatId}...`);
     await client.sendMessage(chatId, message);
-    console.log(`✅ WhatsApp alert sent to ${chatId}`);
+    console.log(`✅ [SUCCESS] WhatsApp alert successfully delivered to ${chatId}`);
     return res.json({ success: true, to: chatId });
   } catch (err) {
-    console.error(`❌ Failed to send WhatsApp to ${chatId}:`, err.message);
+    console.error(`❌ [FAILED] Error sending to ${chatId}:`, err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
