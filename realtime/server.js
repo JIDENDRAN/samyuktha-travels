@@ -14,6 +14,37 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// ================= LOG CAPTURE SYSTEM =================
+const logHistory = [];
+const originalLog = console.log;
+const originalError = console.error;
+
+function captureLog(type, args) {
+  const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(" ");
+  const timestamp = new Date().toLocaleTimeString();
+  logHistory.push(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+  if (logHistory.length > 100) logHistory.shift();
+}
+
+console.log = (...args) => { originalLog(...args); captureLog("info", args); };
+console.error = (...args) => { originalError(...args); captureLog("error", args); };
+console.warn = (...args) => { originalLog("⚠️", ...args); captureLog("warn", args); };
+
+app.get("/logs", (req, res) => {
+  res.send(`
+    <html>
+      <body style="background:#1a1a1a; color:#0f0; font-family:monospace; padding:20px;">
+        <h2>🚀 WhatsApp Bot Logs</h2>
+        <div style="background:#000; padding:15px; border-radius:8px; border:1px solid #333; max-height:80vh; overflow-y:auto;">
+          ${logHistory.reverse().map(log => `<div style="margin-bottom:5px; border-bottom:1px solid #222; padding-bottom:5px;">${log}</div>`).join("")}
+        </div>
+        <script>setTimeout(() => window.location.reload(), 5000);</script>
+      </body>
+    </html>
+  `);
+});
+// ======================================================
+
 const server = http.createServer(app);
 const io = socketIO(server, { cors: { origin: "*" } });
 
