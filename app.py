@@ -9,7 +9,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ================= WHATSAPP API CONFIGURATION (OPEN SOURCE) =================
 # This system now uses a local open-source Node.js bot (whatsapp-web.js)
 # You MUST run 'node realtime/server.js' and scan the QR code for it to work.
-OWNER_PHONE = '918754720031' # Admin phone number where bookings are sent (currently set to 8754720031 for testing)
+# Notifications will be sent from 87547200431 (linked via QR) TO 8300302815.
+ADMIN_PHONES = ['918300302815'] 
+WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000/api/send-whatsapp")
 # ============================================================================
 
 app = Flask(__name__)
@@ -24,19 +26,27 @@ def db():
     return conn
 
 def send_whatsapp_message(phone, message_body):
-    """Sends WhatsApp alert via Callmebot (free, unlimited).
-    The owner (8300302815) must activate once — see README.
-    """
+    """Sends WhatsApp alert via local bot or Callmebot fallback."""
     import urllib.parse
 
-    # Clean phone: digits only, with country code
-    clean_phone = phone.replace('+', '').replace(' ', '').strip()
-    if not clean_phone.startswith('91'):
+    # 1. Try Local WhatsApp Bot API (realtime/server.js)
+    try:
+        payload = {"phone": phone, "message": message_body}
+        resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=5)
+        if resp.status_code == 200:
+            print(f"WhatsApp Local Bot: Sent successfully to {phone}")
+            return {"status": "success", "provider": "local"}
+    except Exception as e:
+        print(f"WhatsApp Local Bot failed for {phone}: {e}. Falling back to Callmebot...")
+
+    # 2. Fallback to Callmebot
+    clean_phone = str(phone).replace('+', '').replace(' ', '').strip()
+    if not clean_phone.startswith('91') and len(clean_phone) == 10:
         clean_phone = '91' + clean_phone
 
     api_key = os.environ.get("CALLMEBOT_API_KEY", "")
     if not api_key:
-        print("WARNING: CALLMEBOT_API_KEY not set. WhatsApp NOT sent.")
+        print(f"WARNING: CALLMEBOT_API_KEY not set and Local Bot failed for {phone}. WhatsApp NOT sent.")
         return None
 
     encoded_msg = urllib.parse.quote(message_body)
@@ -45,10 +55,18 @@ def send_whatsapp_message(phone, message_body):
     try:
         response = requests.get(url, timeout=20)
         print(f"WhatsApp Callmebot: Status={response.status_code}, Response={response.text[:100]}")
-        return {"status": response.status_code}
+        return {"status": response.status_code, "provider": "callmebot"}
     except Exception as e:
-        print(f"CRITICAL: WhatsApp send failed: {e}")
+        print(f"CRITICAL: All WhatsApp providers failed for {phone}: {e}")
         return None
+
+def notify_admins(message_body):
+    """Sends a notification to all admin phone numbers."""
+    results = []
+    for phone in ADMIN_PHONES:
+        res = send_whatsapp_message(phone, message_body)
+        results.append(res)
+    return results
 
 
 def init_db():
@@ -224,7 +242,7 @@ def taxi():
             f"🚕 Vehicle: {car_type}\n\n"
             f"Please check the admin panel to confirm."
         )
-        send_whatsapp_message(OWNER_PHONE, owner_alert)
+        notify_admins(owner_alert)
 
         return redirect(url_for(
             "booking",
@@ -472,7 +490,7 @@ def admin_confirm_trip():
             f"Route: {trip['from_city']} ➡ {trip['to_city']} on {trip['date']}\n"
             f"Driver Assigned: {trip['driver_name']} ({trip['driver_phone']})\n"
         )
-        send_whatsapp_message(OWNER_PHONE, owner_msg)
+        notify_admins(owner_msg)
 
     flash(f"Trip #{trip_id} confirmed. Notification sent to owner.", "success")
     return redirect(url_for("admin_trips"))
@@ -585,7 +603,7 @@ def book_taxi():
         f"🚕 Vehicle: {vehicle_type}\n\n"
         f"Please check the admin panel."
     )
-    send_whatsapp_message(OWNER_PHONE, owner_alert)
+    notify_admins(owner_alert)
 
     return redirect(url_for(
         "booking",

@@ -32,8 +32,8 @@ const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     headless: true,
-    // Use the path we set in the Dockerfile
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium", 
+    // Use the environment variable if set (for Docker), otherwise let Puppeteer find its own (for Local dev)
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
