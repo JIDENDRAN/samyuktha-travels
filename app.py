@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ================= WHATSAPP API CONFIGURATION (OPEN SOURCE) =================
 # This system now uses a local open-source Node.js bot (whatsapp-web.js)
 # You MUST run 'node realtime/server.js' and scan the QR code for it to work.
-# Notifications will be sent from 87547200431 (linked via QR) TO 8300302815.
+# Notifications will be sent from 8754720041 (linked via QR) TO 8300302815.
 ADMIN_PHONES = ['918300302815'] 
 WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000/api/send-whatsapp")
 # ============================================================================
