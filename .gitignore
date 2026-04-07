@@ -8,3 +8,6 @@ database.db
 *.log
 .DS_Store
 .cache/
+baileys_auth/
+.wwebjs_auth/
+.wwebjs_cache/

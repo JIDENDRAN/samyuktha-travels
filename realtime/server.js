@@ -1,14 +1,15 @@
+const {
+  default: makeWASocket,
+  DisconnectReason,
+  useMultiFileAuthState
+} = require("@whiskeysockets/baileys");
 const express = require("express");
 const http = require("http");
-const socketIO = require("socket.io");
-const cors = require("cors");
-const axios = require("axios");
-const { Client, LocalAuth } = require("whatsapp-web.js");
-const qrcode = require("qrcode-terminal");
 const bodyParser = require("body-parser");
-const path = require("path");
-
-console.log("\n[1] --- DOCKER SERVER STARTING ---");
+const cors = require("cors");
+const qrcode = require("qrcode-terminal");
+const pino = require("pino");
+const socketIO = require("socket.io");
 
 const app = express();
 app.use(cors());
@@ -23,18 +24,17 @@ function captureLog(type, args) {
   const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(" ");
   const timestamp = new Date().toLocaleTimeString();
   logHistory.push(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
-  if (logHistory.length > 100) logHistory.shift();
+  if (logHistory.length > 50) logHistory.shift();
 }
 
 console.log = (...args) => { originalLog(...args); captureLog("info", args); };
 console.error = (...args) => { originalError(...args); captureLog("error", args); };
-console.warn = (...args) => { originalLog("⚠️", ...args); captureLog("warn", args); };
 
 app.get("/logs", (req, res) => {
   res.send(`
     <html>
       <body style="background:#1a1a1a; color:#0f0; font-family:monospace; padding:20px;">
-        <h2>🚀 WhatsApp Bot Logs</h2>
+        <h2>🚀 WhatsApp Bot Logs (Lightweight Mode)</h2>
         <div style="background:#000; padding:15px; border-radius:8px; border:1px solid #333; max-height:80vh; overflow-y:auto;">
           ${logHistory.reverse().map(log => `<div style="margin-bottom:5px; border-bottom:1px solid #222; padding-bottom:5px;">${log}</div>`).join("")}
         </div>
@@ -43,143 +43,73 @@ app.get("/logs", (req, res) => {
     </html>
   `);
 });
+
+app.get("/scan", (req, res) => {
+  res.send("<h3>Please check terminal or /logs for QR code</h3>");
+});
 // ======================================================
 
 const server = http.createServer(app);
 const io = socketIO(server, { cors: { origin: "*" } });
 
-// For Render Docker, prioritize PORT 10000 if not specified
-const PORT = process.env.PORT || 10000;
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`[2] --- HTTP SERVER LIVE ON PORT ${PORT} ---`);
-});
+let sock;
+let lastQrCode = "";
 
-// ================= WHATSAPP BOT SETUP =================
-console.log("[3] --- INITIALIZING WHATSAPP CLIENT (DOCKER MODE) ---");
+async function connectToWhatsApp() {
+  const { state, saveCreds } = await useMultiFileAuthState("baileys_auth");
 
-let lastQrCode = null;
+  sock = makeWASocket({
+    auth: state,
+    printQRInTerminal: true,
+    logger: pino({ level: "silent" }),
+    browser: ["Samyuktha Travels", "Chrome", "1.0.0"]
+  });
 
-const client = new Client({
-  authStrategy: new LocalAuth(),
-  puppeteer: {
-    headless: true,
-    // Use the environment variable if set (for Docker), otherwise let Puppeteer find its own (for Local dev)
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--no-zygote",
-      "--single-process",
-      "--no-first-run",
-      "--disable-extensions",
-      "--disable-accelerated-2d-canvas",
-      "--js-flags='--max-old-space-size=256'"
-    ],
-  }
-});
+  sock.ev.on("connection.update", (update) => {
+    const { connection, lastDisconnect, qr } = update;
 
-let lastQrTime = 0;
-client.on("qr", (qr) => {
-  const now = Date.now();
-  if (now - lastQrTime < 60000) return; // Only update every 60s
-
-  lastQrTime = now;
-  lastQrCode = qr;
-  console.log("\n⚠️ [QR ACTION] SCAN THIS CODE (Stable for 60s):");
-  qrcode.generate(qr, { small: true });
-});
-
-app.get("/", (req, res) => {
-  const status = lastQrCode ? "WAITING FOR SCAN" : "READY OR CONNECTING...";
-  res.send(`<h1>WhatsApp Status: ${status}</h1><p><a href="/scan">Scan Page</a></p>`);
-});
-
-app.get("/scan", (req, res) => {
-  if (lastQrCode) {
-    res.send(`
-      <html>
-        <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
-          <h2>Scan with WhatsApp</h2>
-          <div id="qrcode"></div>
-          <p>Go to WhatsApp -> Linked Devices -> Link a Device</p>
-          <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-          <script>new QRCode(document.getElementById("qrcode"), "${lastQrCode}"); setTimeout(() => window.location.reload(), 30000);</script>
-        </body>
-      </html>
-    `);
-  } else {
-    res.send("<h2>Bot is loading...</h2><p>Wait 10 seconds and refresh.</p>");
-  }
-});
-
-client.on("ready", () => {
-  console.log("\n✅ [READY] WHATSAPP ENGINE IS ONLINE! 🚀\n");
-});
-
-client.on("auth_failure", (msg) => {
-  console.error("❌ [AUTH ERROR]: Authentication failed:", msg);
-});
-
-console.log("[4] --- STARTING WHATSAPP CLIENT INITIALIZATION ---");
-client.initialize().then(() => {
-  console.log("[5] --- INITIALIZE COMMAND SENT ---");
-}).catch(err => {
-  console.error("❌ [STARTUP ERROR]: Critical failure during initialization:", err);
-});
-
-// ================= SEND WHATSAPP API =================
-// Called by Flask (app.py) whenever a new booking is placed.
-// The sender = whichever WhatsApp account is logged into this bot (8754720031).
-// The receiver = phone passed in the request body (8300302815 = owner).
-app.post("/api/send-whatsapp", async (req, res) => {
-  const { phone, message } = req.body;
-  console.log(`\n📨 [NEW REQUEST] Attempting to send message to: ${phone}`);
-
-  if (!phone || !message) {
-    console.warn("⚠️ [REJECTED] Missing phone or message in request body.");
-    return res.status(400).json({ success: false, error: "phone and message are required" });
-  }
-
-  // Ensure E.164 format without the '+': e.g. "918300302815@c.us"
-  let cleanPhone = phone.toString().replace(/\D/g, ""); // strip non-digits
-  if (!cleanPhone.startsWith("91")) {
-    cleanPhone = "91" + cleanPhone;
-  }
-  const chatId = `${cleanPhone}@c.us`;
-
-  try {
-    const state = await client.getState().catch(() => "DISCONNECTED");
-    console.log(`ℹ️ [STATE CHECK] WhatsApp Client State: ${state}`);
-
-    if (state !== "CONNECTED") {
-      console.warn(`⚠️ [NOT CONNECTED] Message CANNOT be sent. Please scan the QR code first. (Target: ${chatId})`);
-      return res.status(503).json({ success: false, error: `WhatsApp not connected. State: ${state}` });
+    if (qr) {
+      lastQrCode = qr;
+      console.log("\n⚠️ [QR ACTION] SCAN THE NEW QR CODE IN LOGS!");
+      qrcode.generate(qr, { small: true });
     }
 
-    console.log(`🚀 [SENDING] Dispatching message to ${chatId}...`);
-    await client.sendMessage(chatId, message);
-    console.log(`✅ [SUCCESS] WhatsApp alert successfully delivered to ${chatId}`);
-    return res.json({ success: true, to: chatId });
+    if (connection === "close") {
+      const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut;
+      console.log("❌ Connection closed. Reconnecting...", shouldReconnect);
+      if (shouldReconnect) connectToWhatsApp();
+    } else if (connection === "open") {
+      console.log("✅ [READY] WHATSAPP IS ONLINE! (BAILEYS ENGINE)");
+    }
+  });
+
+  sock.ev.on("creds.update", saveCreds);
+}
+
+// ================= SEND WHATSAPP API =================
+app.post("/api/send-whatsapp", async (req, res) => {
+  const { phone, message } = req.body;
+  console.log(`📨 [NEW REQUEST] Sending message to: ${phone}`);
+
+  if (!sock) return res.status(503).json({ success: false, error: "WhatsApp not initialized" });
+
+  let cleanPhone = phone.toString().replace(/\D/g, "");
+  if (!cleanPhone.startsWith("91")) cleanPhone = "91" + cleanPhone;
+  const chatId = `${cleanPhone}@s.whatsapp.net`;
+
+  try {
+    await sock.sendMessage(chatId, { text: message });
+    console.log(`✅ [SUCCESS] Sent to ${chatId}`);
+    return res.json({ success: true });
   } catch (err) {
-    console.error(`❌ [FAILED] Error sending to ${chatId}:`, err.message);
+    console.error(`❌ [FAILED] Error sending: ${err.message}`);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// ================= SOCKET.IO =================
-io.on("connection", (socket) => {
-  socket.on("driver_location", (data) => {
-    io.emit("location_update", data);
-  });
-
-  socket.on("trip_status", async (data) => {
-    try {
-      const flaskUrl = process.env.FLASK_API_URL || "https://maduraisamyukthatravels.com";
-      await axios.post(`${flaskUrl}/api/trip/${data.trip_id}/status`, { status: data.status });
-    } catch (err) {
-      console.error("Error updating trip status:", err.message);
-    }
-  });
+const PORT = process.env.PORT || 10000;
+server.listen(PORT, () => {
+  console.log(`[1] --- BROWSERLESS WHATSAPP BOT RELOADED ---`);
+  console.log(`[2] --- PORT: ${PORT} ---`);
+  connectToWhatsApp();
 });

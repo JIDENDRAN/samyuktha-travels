@@ -6,11 +6,11 @@ import requests
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# ================= WHATSAPP API CONFIGURATION (OPEN SOURCE) =================
-# This system now uses your local computer via ngrok tunnel.
-# You MUST run 'node realtime/server.js' AND 'ngrok http 10000' on your PC!
+# ================= WHATSAPP API CONFIGURATION (STABLE) =================
+# This system uses the new Lightweight Baileys Engine on Render.
+# 24/7 Online. No Computer Required.
 ADMIN_PHONES = ['918300302815'] 
-WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "https://enterpriseless-noma-nonadjunctively.ngrok-free.app/api/send-whatsapp")
+WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "https://samyuktha-realtime.onrender.com/api/send-whatsapp")
 # ============================================================================
 
 app = Flask(__name__)
