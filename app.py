@@ -7,11 +7,10 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # ================= WHATSAPP API CONFIGURATION (OPEN SOURCE) =================
-# This system now uses a local open-source Node.js bot (whatsapp-web.js)
-# You MUST run 'node realtime/server.js' and scan the QR code for it to work.
-# Notifications will be sent from 8754720041 (linked via QR) TO 8300302815.
+# This system now uses your local computer via ngrok tunnel.
+# You MUST run 'node realtime/server.js' AND 'ngrok http 10000' on your PC!
 ADMIN_PHONES = ['918300302815'] 
-WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000/api/send-whatsapp")
+WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "https://enterpriseless-noma-nonadjunctively.ngrok-free.app/api/send-whatsapp")
 # ============================================================================
 
 app = Flask(__name__)
