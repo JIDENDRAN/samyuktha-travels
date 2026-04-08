@@ -608,8 +608,33 @@ from flask import jsonify
 def test():
     return jsonify({"message": "Backend connected successfully"})
 
-
-
+@app.route("/api/test-notify")
+def test_notify():
+    """Visit this URL to test Flask to WhatsApp bot connection."""
+    test_msg = (
+        "🧪 *TEST MESSAGE*\n\n"
+        "If you see this, your WhatsApp notification system is working!\n"
+        f"Sent at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    )
+    print(f"DEBUG: [TEST] Calling WhatsApp API at {WHATSAPP_API_URL}")
+    try:
+        payload = {"phone": ADMIN_PHONES[0], "message": test_msg}
+        resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=60)
+        result = resp.json()
+        print(f"DEBUG: [TEST] Response: {resp.status_code} -> {result}")
+        return jsonify({
+            "status": "sent" if resp.status_code == 200 else "failed",
+            "bot_response": result,
+            "bot_url": WHATSAPP_API_URL,
+            "phone": ADMIN_PHONES[0]
+        })
+    except Exception as e:
+        print(f"DEBUG: [TEST] EXCEPTION: {e}")
+        return jsonify({
+            "status": "error",
+            "error": str(e),
+            "bot_url": WHATSAPP_API_URL
+        }), 500
 
 
 if __name__ == "__main__":
