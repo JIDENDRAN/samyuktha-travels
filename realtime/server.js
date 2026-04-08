@@ -12,6 +12,7 @@ const cors = require("cors");
 const qrcodeTerminal = require("qrcode-terminal");
 const QRCode = require("qrcode");
 const pino = require("pino");
+const path = require("path");
 const socketIO = require("socket.io");
 
 const app = express();
@@ -421,8 +422,11 @@ io.on("connection", (socket) => {
 let sock;
 
 async function connectToWhatsApp() {
-  const { state, saveCreds } = await useMultiFileAuthState("baileys_auth");
+  const authPath = path.join(__dirname, "..", "baileys_auth");
+  const { state, saveCreds } = await useMultiFileAuthState(authPath);
   const { version } = await fetchLatestBaileysVersion();
+
+  console.log(`📂 [AUTH] Using session folder: ${authPath}`);
 
   sock = makeWASocket({
     auth: state,
@@ -439,6 +443,7 @@ async function connectToWhatsApp() {
       lastQrDataUrl = await QRCode.toDataURL(qr);
       qrcodeTerminal.generate(qr, { small: true });
       io.emit("qr", lastQrDataUrl);
+      console.log("⚠️ [QR] New QR code generated. Please scan.");
     }
 
     if (connection === "close") {
@@ -454,11 +459,14 @@ async function connectToWhatsApp() {
       lastQrDataUrl = "";
       io.emit("qr", "");
       io.emit("status", "ONLINE");
-      console.log("✅ [READY] WHATSAPP IS ONLINE!");
+      console.log("✅ [READY] WHATSAPP IS ONLINE AND SAVED!");
     }
   });
 
-  sock.ev.on("creds.update", saveCreds);
+  sock.ev.on("creds.update", () => {
+    console.log("💾 [AUTH] Session credentials updated/saved.");
+    saveCreds();
+  });
 }
 
 // ================= SEND WHATSAPP API =================
