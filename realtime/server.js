@@ -428,8 +428,8 @@ async function connectToWhatsApp() {
     auth: state,
     version,
     printQRInTerminal: false,
-    logger: pino({ level: "silent" }),
-    browser: ["Windows", "Chrome", "11.0.0"]
+    logger: pino({ level: "error" }),
+    browser: ["Windows", "Chrome", "122.0.6261.129"]
   });
 
   sock.ev.on("connection.update", async (update) => {
@@ -485,15 +485,29 @@ app.post("/api/send-whatsapp", async (req, res) => {
   const chatId = `${cleanPhone}@s.whatsapp.net`;
 
   try {
-    // Wait for the socket to be stable
-    await sock.waitForConnectionUpdate((v) => v.connection === 'open', 2000).catch(() => { });
+    // 1. Check if we are even initialized
+    if (!sock || !sock.user) {
+      return res.status(401).json({
+        success: false,
+        error: "Not logged in. Please scan the QR code on the dashboard first."
+      });
+    }
+
+    // 2. Wait for the socket to be open if it's currently connecting
+    await sock.waitForConnectionUpdate((v) => v.connection === 'open', 5000).catch(() => { });
 
     await sock.sendMessage(chatId, { text: message });
     console.log(`✅ [SENT] Message delivered to ${chatId}`);
     return res.json({ success: true });
   } catch (err) {
     console.error(`❌ [ERROR] Could not send to ${chatId}: ${err.message}`);
-    return res.status(500).json({ success: false, error: err.message });
+
+    // Check for specific Baileys "not opened" state
+    const errorMsg = err.message.includes("reading 'id'")
+      ? "Connection unstable. Please wait a moment or refresh the dashboard."
+      : err.message;
+
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
