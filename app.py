@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import sqlite3
 import requests
+import threading
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -25,47 +26,31 @@ def db():
     return conn
 
 def send_whatsapp_message(phone, message_body):
-    """Sends WhatsApp alert via local bot or Callmebot fallback."""
-    import urllib.parse
-
-    # 1. Try Local WhatsApp Bot API (realtime/server.js)
+    """Sends WhatsApp alert via cloud bot. Long timeout to handle Render cold-start."""
     try:
         payload = {"phone": phone, "message": message_body}
-        resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=5)
+        # 60s timeout: Render free tier can take up to 30s to wake up
+        resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=60)
         if resp.status_code == 200:
-            print(f"WhatsApp Local Bot: Sent successfully to {phone}")
-            return {"status": "success", "provider": "local"}
+            print(f"✅ WhatsApp Bot: Sent to {phone}")
+            return {"status": "success", "provider": "bot"}
+        else:
+            print(f"❌ WhatsApp Bot: Bad response {resp.status_code} for {phone}")
+            return None
     except Exception as e:
-        print(f"WhatsApp Local Bot failed for {phone}: {e}. Falling back to Callmebot...")
-
-    # 2. Fallback to Callmebot
-    clean_phone = str(phone).replace('+', '').replace(' ', '').strip()
-    if not clean_phone.startswith('91') and len(clean_phone) == 10:
-        clean_phone = '91' + clean_phone
-
-    api_key = os.environ.get("CALLMEBOT_API_KEY", "")
-    if not api_key:
-        print(f"WARNING: CALLMEBOT_API_KEY not set and Local Bot failed for {phone}. WhatsApp NOT sent.")
-        return None
-
-    encoded_msg = urllib.parse.quote(message_body)
-    url = f"https://api.callmebot.com/whatsapp.php?phone={clean_phone}&text={encoded_msg}&apikey={api_key}"
-
-    try:
-        response = requests.get(url, timeout=20)
-        print(f"WhatsApp Callmebot: Status={response.status_code}, Response={response.text[:100]}")
-        return {"status": response.status_code, "provider": "callmebot"}
-    except Exception as e:
-        print(f"CRITICAL: All WhatsApp providers failed for {phone}: {e}")
+        print(f"❌ WhatsApp Bot: FAILED for {phone}: {e}")
         return None
 
 def notify_admins(message_body):
-    """Sends a notification to all admin phone numbers."""
-    results = []
-    for phone in ADMIN_PHONES:
-        res = send_whatsapp_message(phone, message_body)
-        results.append(res)
-    return results
+    """Sends notification to all admins in a BACKGROUND THREAD.
+    This ensures the booking page loads instantly, even if the bot is waking up."""
+    def _send():
+        for phone in ADMIN_PHONES:
+            send_whatsapp_message(phone, message_body)
+    
+    t = threading.Thread(target=_send, daemon=True)
+    t.start()
+    print(f"DEBUG: Background WhatsApp thread started for {len(ADMIN_PHONES)} admin(s).")
 
 
 def init_db():
