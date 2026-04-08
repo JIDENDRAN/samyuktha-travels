@@ -9,9 +9,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # ================= WHATSAPP API CONFIGURATION (STABLE) =================
 # This system uses the new Lightweight Baileys Engine on Render.
-# 24/7 Online. No Computer Required.
 ADMIN_PHONES = ['918300302815'] 
-WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "https://samyuktha-realtime.onrender.com/api/send-whatsapp")
+_BASE_BOT_URL = os.environ.get("WHATSAPP_API_URL", "https://samyuktha-realtime.onrender.com").rstrip("/")
+WHATSAPP_API_URL = f"{_BASE_BOT_URL}/api/send-whatsapp"
 # ============================================================================
 
 app = Flask(__name__)
