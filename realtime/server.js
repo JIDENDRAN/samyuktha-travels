@@ -1,9 +1,10 @@
 const {
     default: makeWASocket,
     DisconnectReason,
-    useMultiFileAuthState,
     fetchLatestBaileysVersion,
-    delay
+    delay,
+    BufferJSON,
+    initAuthCreds
 } = require("@whiskeysockets/baileys");
 const fs = require("fs");
 const express = require("express");
@@ -15,6 +16,18 @@ const QRCode = require("qrcode");
 const pino = require("pino");
 const path = require("path");
 const socketIO = require("socket.io");
+const Database = require("better-sqlite3");
+
+// Connect to the same database Flask uses
+const db = new Database(path.join(__dirname, "..", "database.db"));
+
+// Initialize Auth Table for SQLite session storage
+db.exec(`
+    CREATE TABLE IF NOT EXISTS whatsapp_auth (
+        id TEXT PRIMARY KEY,
+        data TEXT
+    )
+`);
 
 const app = express();
 app.use(cors());
@@ -37,6 +50,70 @@ function captureLog(type, args) {
 console.log = (...args) => { originalLog(...args); captureLog("info", args); };
 console.error = (...args) => { originalLog("❌", ...args); captureLog("error", args); };
 
+// ================= CUSTOM SQLITE AUTH STATE =================
+async function useSQLiteAuthState() {
+    const credsId = 'creds';
+    
+    const readData = (id) => {
+        try {
+            const row = db.prepare('SELECT data FROM whatsapp_auth WHERE id = ?').get(id);
+            return row ? JSON.parse(row.data, BufferJSON.reviver) : null;
+        } catch (e) {
+            console.error(`[SQL] Read Error (${id}):`, e.message);
+            return null;
+        }
+    };
+
+    const writeData = (data, id) => {
+        try {
+            const json = JSON.stringify(data, BufferJSON.replacer);
+            db.prepare('INSERT OR REPLACE INTO whatsapp_auth (id, data) VALUES (?, ?)').run(id, json);
+        } catch (e) {
+            console.error(`[SQL] Write Error (${id}):`, e.message);
+        }
+    };
+
+    const removeData = (id) => {
+        try {
+            db.prepare('DELETE FROM whatsapp_auth WHERE id = ?').run(id);
+        } catch (e) {
+            console.error(`[SQL] Delete Error (${id}):`, e.message);
+        }
+    };
+
+    const creds = readData(credsId) || initAuthCreds();
+
+    return {
+        state: {
+            creds,
+            keys: {
+                get: async (type, ids) => {
+                    const data = {};
+                    for (const id of ids) {
+                        data[id] = readData(`${type}-${id}`);
+                    }
+                    return data;
+                },
+                set: async (data) => {
+                    for (const type in data) {
+                        for (const id in data[type]) {
+                            const value = data[type][id];
+                            const key = `${type}-${id}`;
+                            if (value) writeData(value, key);
+                            else removeData(key);
+                        }
+                    }
+                }
+            }
+        },
+        saveCreds: () => writeData(creds, credsId),
+        clearState: () => {
+            db.prepare('DELETE FROM whatsapp_auth').run();
+            console.log("🧹 [AUTH] Database session cleared.");
+        }
+    };
+}
+
 app.get("/logs", (req, res) => {
     res.send(`
     <!DOCTYPE html>
@@ -44,7 +121,7 @@ app.get("/logs", (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>WhatsApp Bot Dashboard | Premium</title>
+        <title>WhatsApp Bot Dashboard | Samyuktha</title>
         <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
         <style>
@@ -74,7 +151,6 @@ app.get("/logs", (req, res) => {
                 overflow-x: hidden;
             }
 
-            /* Animated Background Blobs */
             .blob {
                 position: fixed;
                 width: 500px;
@@ -135,7 +211,6 @@ app.get("/logs", (req, res) => {
                 height: 8px;
                 border-radius: 50%;
                 background: #aaa;
-                box-shadow: 0 0 10px rgba(170, 170, 170, 0.5);
             }
 
             .status-online .status-dot {
@@ -161,66 +236,16 @@ app.get("/logs", (req, res) => {
             }
 
             .card-title {
-                font-size: 14px;
+                font-size: 13px;
                 text-transform: uppercase;
                 letter-spacing: 1px;
                 color: var(--text-dim);
                 margin-bottom: 20px;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .input-group {
-                display: grid;
-                grid-template-columns: 1fr 2fr auto;
-                gap: 12px;
-            }
-
-            input {
-                background: rgba(255,255,255,0.05);
-                border: 1px solid var(--border);
-                padding: 14px 20px;
-                border-radius: 12px;
-                color: #fff;
-                font-family: inherit;
-                font-size: 15px;
-            }
-
-            input:focus {
-                outline: none;
-                border-color: var(--primary);
-                background: rgba(0, 255, 136, 0.05);
-            }
-
-            button {
-                background: var(--primary);
-                color: #000;
-                border: none;
-                padding: 0 24px;
-                height: 50px;
-                border-radius: 12px;
                 font-weight: 700;
-                cursor: pointer;
-                font-size: 14px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
             }
-
-            button:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px var(--primary-glow);
-            }
-
-            button:active { transform: translateY(0); }
-
-            button:disabled { opacity: 0.5; cursor: not-allowed; }
 
             .qr-container {
                 text-align: center;
-                padding: 40px;
                 display: none;
             }
 
@@ -230,7 +255,6 @@ app.get("/logs", (req, res) => {
                 border-radius: 16px;
                 display: inline-block;
                 margin-bottom: 20px;
-                box-shadow: 0 0 40px rgba(255,255,255,0.1);
             }
 
             .qr-image img {
@@ -243,40 +267,55 @@ app.get("/logs", (req, res) => {
                 height: 350px;
                 overflow-y: auto;
                 font-family: 'JetBrains Mono', monospace;
-                font-size: 13px;
-                padding: 10px;
-                background: rgba(0,0,0,0.3);
-                border-radius: 12px;
+                font-size: 12px;
+                padding: 15px;
+                background: rgba(0,0,0,0.4);
+                border-radius: 15px;
                 border: 1px solid rgba(255,255,255,0.05);
             }
 
             .log-entry {
-                padding: 8px 12px;
+                padding: 6px 0;
                 border-bottom: 1px solid rgba(255,255,255,0.03);
                 white-space: pre-wrap;
-                word-break: break-all;
             }
 
             .log-timestamp { color: var(--text-dim); margin-right: 10px; }
             .log-info { color: var(--primary); }
             .log-error { color: var(--error); }
 
-            /* Custom Scrollbar */
-            ::-webkit-scrollbar { width: 6px; }
-            ::-webkit-scrollbar-track { background: transparent; }
+            .input-group {
+                display: grid;
+                grid-template-columns: 1fr 2fr auto;
+                gap: 12px;
+            }
+
+            input {
+                background: rgba(255,255,255,0.05);
+                border: 1px solid var(--border);
+                padding: 12px 18px;
+                border-radius: 10px;
+                color: #fff;
+                font-family: inherit;
+            }
+
+            input:focus { outline: none; border-color: var(--primary); }
+
+            button {
+                background: var(--primary);
+                color: #000;
+                border: none;
+                padding: 0 20px;
+                border-radius: 10px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+            button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+            button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+            ::-webkit-scrollbar { width: 4px; }
             ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-            ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
-            #msg-status {
-                margin-top: 15px;
-                font-size: 13px;
-                font-weight: 500;
-            }
-
-            @media (max-width: 600px) {
-                .input-group { grid-template-columns: 1fr; }
-                button { width: 100%; }
-            }
         </style>
     </head>
     <body>
@@ -285,39 +324,33 @@ app.get("/logs", (req, res) => {
 
         <div class="container">
             <header>
-                <h1>🚀 Samyuktha WhatsApp</h1>
+                <h1>🚀 WhatsApp Persistence</h1>
                 <div id="status-badge" class="status-badge">
                     <div class="status-dot"></div>
-                    <span id="status-text">INITIALIZING...</span>
+                    <span id="status-text">CONNECTING...</span>
                 </div>
             </header>
 
-            <!-- QR SECTION -->
             <div id="qr-card" class="card qr-container">
-                <div class="card-title">⚠️ LOGIN REQUIRED</div>
+                <div class="card-title">🔑 LOGIN REQUIRED (SQLITE)</div>
                 <div class="qr-image">
                     <img id="qr-img" src="" alt="Scan this QR">
                 </div>
-                <p style="color: var(--text-dim)">Scan this QR code with your Linked Devices in WhatsApp.</p>
+                <p style="color: var(--text-dim); font-size: 14px;">Scan with WhatsApp Linked Devices. Session will be saved to your Database.</p>
             </div>
 
-            <!-- MESSAGING SECTION -->
             <div class="card">
-                <div class="card-title">🧪 SEND TEST MESSAGE</div>
+                <div class="card-title">🧪 TEST CONNECTION</div>
                 <div class="input-group">
-                    <input type="text" id="phone" placeholder="Phone (10 digits)" maxlength="10">
-                    <input type="text" id="msg" placeholder="Your message here...">
-                    <button id="send-btn" onclick="sendTest()">
-                        <span>SEND</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
+                    <input type="text" id="phone" placeholder="Phone (10 digits)">
+                    <input type="text" id="msg" placeholder="Test Message">
+                    <button id="send-btn" onclick="sendTest()">SEND</button>
                 </div>
-                <div id="msg-status"></div>
+                <div id="msg-status" style="margin-top: 10px; font-size: 13px;"></div>
             </div>
 
-            <!-- LOGS SECTION -->
             <div class="card">
-                <div class="card-title">📋 ACTIVITY LOGS</div>
+                <div class="card-title">📋 SYSTEM LOGS</div>
                 <div id="logs" class="logs-container"></div>
             </div>
         </div>
@@ -351,10 +384,7 @@ app.get("/logs", (req, res) => {
                 }
             });
 
-            socket.on('log', (log) => {
-                addLog(log);
-            });
-
+            socket.on('log', addLog);
             socket.on('logs', (history) => {
                 logsContainer.innerHTML = '';
                 history.forEach(addLog);
@@ -363,12 +393,9 @@ app.get("/logs", (req, res) => {
             function addLog(log) {
                 const div = document.createElement('div');
                 div.className = 'log-entry';
-                
-                // Style log parts
                 const styledLog = log.replace(/\\[(.*?)\\]/, '<span class="log-timestamp">[$1]</span>')
                                     .replace(/INFO:/, '<span class="log-info">INFO:</span>')
                                     .replace(/ERROR:/, '<span class="log-error">ERROR:</span>');
-                
                 div.innerHTML = styledLog;
                 logsContainer.appendChild(div);
                 logsContainer.scrollTop = logsContainer.scrollHeight;
@@ -377,13 +404,11 @@ app.get("/logs", (req, res) => {
             async function sendTest() {
                 const phone = document.getElementById('phone').value;
                 const message = document.getElementById('msg').value;
-                
                 if(!phone || !message) return;
                 
                 sendBtn.disabled = true;
-                msgStatus.innerText = "⏳ Processing...";
-                msgStatus.style.color = "var(--text-dim)";
-
+                msgStatus.innerText = "⏳ Sending...";
+                
                 try {
                     const res = await fetch('/api/send-whatsapp', {
                         method: 'POST',
@@ -391,16 +416,10 @@ app.get("/logs", (req, res) => {
                         body: JSON.stringify({ phone, message })
                     });
                     const data = await res.json();
-                    if(data.success) {
-                        msgStatus.innerText = "✅ Message sent successfully!";
-                        msgStatus.style.color = "var(--primary)";
-                    } else {
-                        msgStatus.innerText = "❌ Error: " + data.error;
-                        msgStatus.style.color = "var(--error)";
-                    }
+                    msgStatus.innerText = data.success ? "✅ Success!" : "❌ " + data.error;
+                    msgStatus.style.color = data.success ? "var(--primary)" : "var(--error)";
                 } catch (e) {
-                    msgStatus.innerText = "❌ Network error";
-                    msgStatus.style.color = "var(--error)";
+                    msgStatus.innerText = "❌ Network Error";
                 } finally {
                     sendBtn.disabled = false;
                 }
@@ -408,14 +427,14 @@ app.get("/logs", (req, res) => {
         </script>
     </body>
     </html>
-  `);
+    `);
 });
 
 const server = http.createServer(app);
 const io = socketIO(server, { cors: { origin: "*" } });
 
 io.on("connection", (socket) => {
-    socket.emit("status", sock ? "ONLINE" : "INITIALIZING...");
+    socket.emit("status", sock && sock.user ? "ONLINE" : "INITIALIZING...");
     if (lastQrDataUrl) socket.emit("qr", lastQrDataUrl);
     socket.emit("logs", logHistory);
 });
@@ -423,20 +442,17 @@ io.on("connection", (socket) => {
 let sock;
 
 async function connectToWhatsApp() {
-    const authPath = path.join(__dirname, "..", "baileys_auth");
-    // Ensure the auth folder exists before Baileys tries to read it
-    if (!fs.existsSync(authPath)) fs.mkdirSync(authPath, { recursive: true });
-    const { state, saveCreds } = await useMultiFileAuthState(authPath);
+    console.log("🔄 [AUTH] Initializing SQLite Session Storage...");
+    const { state, saveCreds, clearState } = await useSQLiteAuthState();
     const { version } = await fetchLatestBaileysVersion();
-
-    console.log(`📂 [AUTH] Using session folder: ${authPath}`);
 
     sock = makeWASocket({
         auth: state,
         version,
         printQRInTerminal: false,
         logger: pino({ level: "error" }),
-        browser: ["Windows", "Chrome", "122.0.6261.129"]
+        // Using a more stable browser identity
+        browser: ["Samyuktha Travels", "Chrome", "20.0.04"]
     });
 
     sock.ev.on("connection.update", async (update) => {
@@ -450,88 +466,53 @@ async function connectToWhatsApp() {
         }
 
         if (connection === "close") {
-            const statusCode = lastDisconnect?.error?.output?.statusCode;
+            const statusCode = (lastDisconnect?.error)?.output?.statusCode;
             lastQrDataUrl = "";
             io.emit("qr", "");
 
             if (statusCode === DisconnectReason.loggedOut) {
-                // Device was manually logged out from WhatsApp — clear stale session and show fresh QR
-                console.log("⚠️ [AUTH] Logged out remotely. Clearing session and restarting...");
+                console.log("⚠️ [AUTH] Device logged out. Clearing Database session...");
                 io.emit("status", "LOGGED OUT - RESETTING...");
-                try {
-                    fs.rmSync(authPath, { recursive: true, force: true });
-                    fs.mkdirSync(authPath, { recursive: true });
-                } catch (e) {
-                    console.error("[AUTH] Could not clear session folder:", e.message);
-                }
+                clearState();
                 setTimeout(() => connectToWhatsApp(), 2000);
             } else {
-                // Any other disconnect — just reconnect normally
-                io.emit("status", "DISCONNECTED - RECONNECTING...");
-                console.log(`❌ Connection closed (Status: ${statusCode}). Reconnecting in 3s...`);
+                io.emit("status", "RECONNECTING...");
+                console.log(`❌ Connection closed (Code: ${statusCode}). Reconnecting...`);
                 setTimeout(() => connectToWhatsApp(), 3000);
             }
         } else if (connection === "open") {
             lastQrDataUrl = "";
             io.emit("qr", "");
             io.emit("status", "ONLINE");
-            console.log("✅ [READY] WHATSAPP IS ONLINE AND SAVED!");
+            console.log("✅ [READY] WhatsApp is Online! Session secured in SQLite.");
         }
     });
 
     sock.ev.on("creds.update", async () => {
-        console.log("💾 [AUTH] Session credentials updated/saved.");
         await saveCreds();
+        console.log("💾 [AUTH] Session updated in Database.");
     });
 }
 
 // ================= SEND WHATSAPP API =================
 app.post("/api/send-whatsapp", async (req, res) => {
     const { phone, message } = req.body;
-    console.log(`📨 [API] Request to send to: ${phone}`);
-
-    if (!sock) return res.status(503).json({ success: false, error: "Bot is starting, try again in 5s." });
-
-    // 1. Clean the phone number
-    let cleanPhone = phone.toString().replace(/\D/g, ""); // Remove everything except numbers
-
-    // 2. Handle Indian numbers (ensure 91 prefix)
-    if (cleanPhone.length === 10) {
-        cleanPhone = "91" + cleanPhone;
-    } else if (cleanPhone.length === 12 && cleanPhone.startsWith("91")) {
-        // Already has 91
-    } else if (!cleanPhone.startsWith("91")) {
-        // Some other format? Let's assume user wants 91 if it's 10 digits inside
-        if (cleanPhone.length > 10) cleanPhone = cleanPhone.slice(-10);
-        cleanPhone = "91" + cleanPhone;
+    
+    if (!sock || !sock.user) {
+        return res.status(503).json({ success: false, error: "Bot not logged in. Visit /logs to scan QR." });
     }
 
+    let cleanPhone = phone.toString().replace(/\D/g, "");
+    if (cleanPhone.length === 10) cleanPhone = "91" + cleanPhone;
     const chatId = `${cleanPhone}@s.whatsapp.net`;
 
     try {
-        // 1. Check if we are even initialized
-        if (!sock || !sock.user) {
-            return res.status(401).json({
-                success: false,
-                error: "Not logged in. Please scan the QR code on the dashboard first."
-            });
-        }
-
-        // 2. Wait for the socket to be open if it's currently connecting
-        await sock.waitForConnectionUpdate((v) => v.connection === 'open', 5000).catch(() => { });
-
         await sock.sendMessage(chatId, { text: message });
-        console.log(`✅ [SENT] Message delivered to ${chatId}`);
+        console.log(`✅ [SENT] Message to ${chatId}`);
         return res.json({ success: true });
     } catch (err) {
-        console.error(`❌ [ERROR] Could not send to ${chatId}: ${err.message}`);
-
-        // Check for specific Baileys "not opened" state
-        const errorMsg = err.message.includes("reading 'id'")
-            ? "Connection unstable. Please wait a moment or refresh the dashboard."
-            : err.message;
-
-        return res.status(500).json({ success: false, error: errorMsg });
+        console.error(`❌ [ERROR] ${err.message}`);
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 
@@ -540,15 +521,12 @@ server.listen(PORT, () => {
     console.log(`[1] --- BOT ACTIVE ON PORT ${PORT} ---`);
     connectToWhatsApp().catch(err => console.error("Critical Start Error:", err));
 
-    // ============ KEEP-ALIVE: Prevent Render free tier from sleeping ============
+    // Keep-alive to prevent sleep
     const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
     setInterval(() => {
         const httpModule = SELF_URL.startsWith("https") ? require("https") : require("http");
         httpModule.get(`${SELF_URL}/logs`, (res) => {
-            console.log(`[KEEP-ALIVE] ✅ Self-ping OK → ${SELF_URL} (Status: ${res.statusCode})`);
-        }).on("error", (e) => {
-            console.error(`[KEEP-ALIVE] ❌ Self-ping failed: ${e.message}`);
-        });
-    }, 5 * 60 * 1000); // Every 5 minutes
-    // ===========================================================================
+            if(res.statusCode === 200) console.log("[KEEP-ALIVE] Ping OK");
+        }).on("error", () => {});
+    }, 5 * 60 * 1000);
 });
