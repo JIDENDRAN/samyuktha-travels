@@ -1,10 +1,11 @@
 const {
-  default: makeWASocket,
-  DisconnectReason,
-  useMultiFileAuthState,
-  fetchLatestBaileysVersion,
-  delay
+    default: makeWASocket,
+    DisconnectReason,
+    useMultiFileAuthState,
+    fetchLatestBaileysVersion,
+    delay
 } = require("@whiskeysockets/baileys");
+const fs = require("fs");
 const express = require("express");
 const http = require("http");
 const bodyParser = require("body-parser");
@@ -25,19 +26,19 @@ const originalLog = console.log;
 let lastQrDataUrl = "";
 
 function captureLog(type, args) {
-  const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(" ");
-  const timestamp = new Date().toLocaleTimeString();
-  const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
-  logHistory.push(logEntry);
-  if (logHistory.length > 50) logHistory.shift();
-  if (io) io.emit("log", logEntry);
+    const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(" ");
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+    logHistory.push(logEntry);
+    if (logHistory.length > 50) logHistory.shift();
+    if (io) io.emit("log", logEntry);
 }
 
 console.log = (...args) => { originalLog(...args); captureLog("info", args); };
 console.error = (...args) => { originalLog("❌", ...args); captureLog("error", args); };
 
 app.get("/logs", (req, res) => {
-  res.send(`
+    res.send(`
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -414,125 +415,140 @@ const server = http.createServer(app);
 const io = socketIO(server, { cors: { origin: "*" } });
 
 io.on("connection", (socket) => {
-  socket.emit("status", sock ? "ONLINE" : "INITIALIZING...");
-  if (lastQrDataUrl) socket.emit("qr", lastQrDataUrl);
-  socket.emit("logs", logHistory);
+    socket.emit("status", sock ? "ONLINE" : "INITIALIZING...");
+    if (lastQrDataUrl) socket.emit("qr", lastQrDataUrl);
+    socket.emit("logs", logHistory);
 });
 
 let sock;
 
 async function connectToWhatsApp() {
-  const authPath = path.join(__dirname, "..", "baileys_auth");
-  const { state, saveCreds } = await useMultiFileAuthState(authPath);
-  const { version } = await fetchLatestBaileysVersion();
+    const authPath = path.join(__dirname, "..", "baileys_auth");
+    // Ensure the auth folder exists before Baileys tries to read it
+    if (!fs.existsSync(authPath)) fs.mkdirSync(authPath, { recursive: true });
+    const { state, saveCreds } = await useMultiFileAuthState(authPath);
+    const { version } = await fetchLatestBaileysVersion();
 
-  console.log(`📂 [AUTH] Using session folder: ${authPath}`);
+    console.log(`📂 [AUTH] Using session folder: ${authPath}`);
 
-  sock = makeWASocket({
-    auth: state,
-    version,
-    printQRInTerminal: false,
-    logger: pino({ level: "error" }),
-    browser: ["Windows", "Chrome", "122.0.6261.129"]
-  });
+    sock = makeWASocket({
+        auth: state,
+        version,
+        printQRInTerminal: false,
+        logger: pino({ level: "error" }),
+        browser: ["Windows", "Chrome", "122.0.6261.129"]
+    });
 
-  sock.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect, qr } = update;
+    sock.ev.on("connection.update", async (update) => {
+        const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {
-      lastQrDataUrl = await QRCode.toDataURL(qr);
-      qrcodeTerminal.generate(qr, { small: true });
-      io.emit("qr", lastQrDataUrl);
-      console.log("⚠️ [QR] New QR code generated. Please scan.");
-    }
+        if (qr) {
+            lastQrDataUrl = await QRCode.toDataURL(qr);
+            qrcodeTerminal.generate(qr, { small: true });
+            io.emit("qr", lastQrDataUrl);
+            console.log("⚠️ [QR] New QR code generated. Please scan.");
+        }
 
-    if (connection === "close") {
-      const statusCode = lastDisconnect.error?.output?.statusCode;
-      const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
-      lastQrDataUrl = "";
-      io.emit("qr", "");
-      io.emit("status", "DISCONNECTED - RECONNECTING...");
+        if (connection === "close") {
+            const statusCode = lastDisconnect?.error?.output?.statusCode;
+            lastQrDataUrl = "";
+            io.emit("qr", "");
 
-      console.log(`❌ Connection closed (Status: ${statusCode}). Reconnecting...`, shouldReconnect);
-      if (shouldReconnect) setTimeout(() => connectToWhatsApp(), 3000);
-    } else if (connection === "open") {
-      lastQrDataUrl = "";
-      io.emit("qr", "");
-      io.emit("status", "ONLINE");
-      console.log("✅ [READY] WHATSAPP IS ONLINE AND SAVED!");
-    }
-  });
+            if (statusCode === DisconnectReason.loggedOut) {
+                // Device was manually logged out from WhatsApp — clear stale session and show fresh QR
+                console.log("⚠️ [AUTH] Logged out remotely. Clearing session and restarting...");
+                io.emit("status", "LOGGED OUT - RESETTING...");
+                try {
+                    fs.rmSync(authPath, { recursive: true, force: true });
+                    fs.mkdirSync(authPath, { recursive: true });
+                } catch (e) {
+                    console.error("[AUTH] Could not clear session folder:", e.message);
+                }
+                setTimeout(() => connectToWhatsApp(), 2000);
+            } else {
+                // Any other disconnect — just reconnect normally
+                io.emit("status", "DISCONNECTED - RECONNECTING...");
+                console.log(`❌ Connection closed (Status: ${statusCode}). Reconnecting in 3s...`);
+                setTimeout(() => connectToWhatsApp(), 3000);
+            }
+        } else if (connection === "open") {
+            lastQrDataUrl = "";
+            io.emit("qr", "");
+            io.emit("status", "ONLINE");
+            console.log("✅ [READY] WHATSAPP IS ONLINE AND SAVED!");
+        }
+    });
 
-  sock.ev.on("creds.update", () => {
-    console.log("💾 [AUTH] Session credentials updated/saved.");
-    saveCreds();
-  });
+    sock.ev.on("creds.update", async () => {
+        console.log("💾 [AUTH] Session credentials updated/saved.");
+        await saveCreds();
+    });
 }
 
 // ================= SEND WHATSAPP API =================
 app.post("/api/send-whatsapp", async (req, res) => {
-  const { phone, message } = req.body;
-  console.log(`📨 [API] Request to send to: ${phone}`);
+    const { phone, message } = req.body;
+    console.log(`📨 [API] Request to send to: ${phone}`);
 
-  if (!sock) return res.status(503).json({ success: false, error: "Bot is starting, try again in 5s." });
+    if (!sock) return res.status(503).json({ success: false, error: "Bot is starting, try again in 5s." });
 
-  // 1. Clean the phone number
-  let cleanPhone = phone.toString().replace(/\D/g, ""); // Remove everything except numbers
+    // 1. Clean the phone number
+    let cleanPhone = phone.toString().replace(/\D/g, ""); // Remove everything except numbers
 
-  // 2. Handle Indian numbers (ensure 91 prefix)
-  if (cleanPhone.length === 10) {
-    cleanPhone = "91" + cleanPhone;
-  } else if (cleanPhone.length === 12 && cleanPhone.startsWith("91")) {
-    // Already has 91
-  } else if (!cleanPhone.startsWith("91")) {
-    // Some other format? Let's assume user wants 91 if it's 10 digits inside
-    if (cleanPhone.length > 10) cleanPhone = cleanPhone.slice(-10);
-    cleanPhone = "91" + cleanPhone;
-  }
-
-  const chatId = `${cleanPhone}@s.whatsapp.net`;
-
-  try {
-    // 1. Check if we are even initialized
-    if (!sock || !sock.user) {
-      return res.status(401).json({
-        success: false,
-        error: "Not logged in. Please scan the QR code on the dashboard first."
-      });
+    // 2. Handle Indian numbers (ensure 91 prefix)
+    if (cleanPhone.length === 10) {
+        cleanPhone = "91" + cleanPhone;
+    } else if (cleanPhone.length === 12 && cleanPhone.startsWith("91")) {
+        // Already has 91
+    } else if (!cleanPhone.startsWith("91")) {
+        // Some other format? Let's assume user wants 91 if it's 10 digits inside
+        if (cleanPhone.length > 10) cleanPhone = cleanPhone.slice(-10);
+        cleanPhone = "91" + cleanPhone;
     }
 
-    // 2. Wait for the socket to be open if it's currently connecting
-    await sock.waitForConnectionUpdate((v) => v.connection === 'open', 5000).catch(() => { });
+    const chatId = `${cleanPhone}@s.whatsapp.net`;
 
-    await sock.sendMessage(chatId, { text: message });
-    console.log(`✅ [SENT] Message delivered to ${chatId}`);
-    return res.json({ success: true });
-  } catch (err) {
-    console.error(`❌ [ERROR] Could not send to ${chatId}: ${err.message}`);
+    try {
+        // 1. Check if we are even initialized
+        if (!sock || !sock.user) {
+            return res.status(401).json({
+                success: false,
+                error: "Not logged in. Please scan the QR code on the dashboard first."
+            });
+        }
 
-    // Check for specific Baileys "not opened" state
-    const errorMsg = err.message.includes("reading 'id'")
-      ? "Connection unstable. Please wait a moment or refresh the dashboard."
-      : err.message;
+        // 2. Wait for the socket to be open if it's currently connecting
+        await sock.waitForConnectionUpdate((v) => v.connection === 'open', 5000).catch(() => { });
 
-    return res.status(500).json({ success: false, error: errorMsg });
-  }
+        await sock.sendMessage(chatId, { text: message });
+        console.log(`✅ [SENT] Message delivered to ${chatId}`);
+        return res.json({ success: true });
+    } catch (err) {
+        console.error(`❌ [ERROR] Could not send to ${chatId}: ${err.message}`);
+
+        // Check for specific Baileys "not opened" state
+        const errorMsg = err.message.includes("reading 'id'")
+            ? "Connection unstable. Please wait a moment or refresh the dashboard."
+            : err.message;
+
+        return res.status(500).json({ success: false, error: errorMsg });
+    }
 });
 
 const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
-  console.log(`[1] --- BOT ACTIVE ON PORT ${PORT} ---`);
-  connectToWhatsApp().catch(err => console.error("Critical Start Error:", err));
+    console.log(`[1] --- BOT ACTIVE ON PORT ${PORT} ---`);
+    connectToWhatsApp().catch(err => console.error("Critical Start Error:", err));
 
-  // ============ KEEP-ALIVE: Prevent Render free tier from sleeping ============
-  const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
-  setInterval(() => {
-    const httpModule = SELF_URL.startsWith("https") ? require("https") : require("http");
-    httpModule.get(`${SELF_URL}/logs`, (res) => {
-      console.log(`[KEEP-ALIVE] ✅ Self-ping OK → ${SELF_URL} (Status: ${res.statusCode})`);
-    }).on("error", (e) => {
-      console.error(`[KEEP-ALIVE] ❌ Self-ping failed: ${e.message}`);
-    });
-  }, 5 * 60 * 1000); // Every 5 minutes
-  // ===========================================================================
+    // ============ KEEP-ALIVE: Prevent Render free tier from sleeping ============
+    const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+    setInterval(() => {
+        const httpModule = SELF_URL.startsWith("https") ? require("https") : require("http");
+        httpModule.get(`${SELF_URL}/logs`, (res) => {
+            console.log(`[KEEP-ALIVE] ✅ Self-ping OK → ${SELF_URL} (Status: ${res.statusCode})`);
+        }).on("error", (e) => {
+            console.error(`[KEEP-ALIVE] ❌ Self-ping failed: ${e.message}`);
+        });
+    }, 5 * 60 * 1000); // Every 5 minutes
+    // ===========================================================================
 });
