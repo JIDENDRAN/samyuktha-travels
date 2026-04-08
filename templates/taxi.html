@@ -1017,15 +1017,21 @@
     document.querySelectorAll('.scroll-reveal').forEach(el => scrollObserver.observe(el));
   });
 
-  // Form validation feedback
+  // ===== DEBUG: FORM SUBMISSION LOGGER =====
   const form = document.getElementById('taxiForm');
   if (form) {
+    console.log('✅ [DEBUG] Taxi booking form found and ready.');
+
     form.addEventListener('submit', function (e) {
+      console.log('🚀 [DEBUG] Book Now clicked! Checking fields...');
+
       const inputs = form.querySelectorAll('input[required], select[required]');
       let allValid = true;
 
       inputs.forEach(input => {
-        if (!input.value.trim()) {
+        const val = input.value ? input.value.trim() : '';
+        console.log(`  - Field [${input.name || input.id}]: "${val}" → ${val ? 'OK ✅' : 'EMPTY ❌'}`);
+        if (!val) {
           allValid = false;
           input.style.borderColor = '#ef4444';
         } else {
@@ -1034,8 +1040,12 @@
       });
 
       if (!allValid) {
+        console.error('❌ [DEBUG] Form blocked: some fields are empty. See above.');
         e.preventDefault();
         alert('Please fill in all required fields');
+      } else {
+        console.log('✅ [DEBUG] All fields valid! Submitting form to server...');
+        console.log('  → Destination:', form.action);
       }
     });
 
@@ -1046,7 +1056,10 @@
         this.style.borderColor = '';
       });
     });
+  } else {
+    console.error('❌ [DEBUG] taxiForm NOT FOUND on this page!');
   }
+  // ===== END DEBUG =====
 
   // Phone number validation
   const phoneInput = document.getElementById('customer_phone');

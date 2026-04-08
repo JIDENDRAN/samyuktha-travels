@@ -2335,6 +2335,23 @@
         this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
       });
     }
+
+    // ===== DEBUG: BOOK NOW LOGGER (Index Page) =====
+    const indexBookingForm = document.querySelector('.booking-form-card form');
+    if (indexBookingForm) {
+      console.log('✅ [DEBUG] Index page booking form found and ready.');
+      indexBookingForm.addEventListener('submit', function (e) {
+        console.log('🚀 [DEBUG] Index Book Now clicked!');
+        const fields = this.querySelectorAll('input[required], select[required]');
+        fields.forEach(f => {
+          console.log(`  - [${f.name}]: "${f.value}" → ${f.value.trim() ? 'OK ✅' : 'EMPTY ❌'}`);
+        });
+        console.log('  → Posting to:', this.action);
+      });
+    } else {
+      console.error('❌ [DEBUG] Index booking form NOT FOUND!');
+    }
+    // ===== END DEBUG =====
   });
 
   // Trip Planner Modal
