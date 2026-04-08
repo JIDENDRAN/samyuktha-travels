@@ -189,14 +189,13 @@ server.listen(PORT, () => {
   connectToWhatsApp().catch(err => console.error("Critical Start Error:", err));
 
   // ============ KEEP-ALIVE: Prevent Render free tier from sleeping ============
-  // Render spins down free services after 15 minutes of inactivity.
-  // This self-ping runs every 14 minutes to keep the bot awake 24/7.
   const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
   setInterval(() => {
-    require("http").get(`${SELF_URL}/logs`, (res) => {
-      console.log(`[KEEP-ALIVE] Self-ping OK (Status: ${res.statusCode})`);
+    const httpModule = SELF_URL.startsWith("https") ? require("https") : require("http");
+    httpModule.get(`${SELF_URL}/logs`, (res) => {
+      console.log(`[KEEP-ALIVE] ✅ Self-ping OK → ${SELF_URL} (Status: ${res.statusCode})`);
     }).on("error", (e) => {
-      console.error(`[KEEP-ALIVE] Self-ping failed: ${e.message}`);
+      console.error(`[KEEP-ALIVE] ❌ Self-ping failed: ${e.message}`);
     });
   }, 14 * 60 * 1000); // Every 14 minutes
   // ===========================================================================
