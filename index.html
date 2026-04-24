@@ -14,12 +14,11 @@
   <!-- Google Verification -->
   <meta name="google-site-verification" content="911Ale-MXYcQ846t2oubWGGE0k-vat2PmZrzNiWAgyQ" />
 
-  <!-- ✅ FIXED FAVICON (IMPORTANT) -->
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="/favicon.ico">
+  <!-- ✅ Flask Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <!-- ✅ Flask CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -27,15 +26,17 @@
   <!-- HEADER -->
   <header>
     <div class="logo">
-      <img src="/static/images/logo.jpeg" alt="Samyutha Travels Logo" width="120">
+      <!-- ✅ Flask Image -->
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" 
+           alt="Samyutha Travels Logo" width="120">
     </div>
 
     <nav>
-      <a href="index.html">Home</a>
+      <a href="/">Home</a>
       <a href="#">Taxi</a>
       <a href="#">Trips</a>
       <a href="#">Tours</a>
-      <a href="login.html" class="btn">Login</a>
+      <a href="/login" class="btn">Login</a>
     </nav>
   </header>
 
@@ -47,9 +48,9 @@
       <h1>Plan Your Perfect Trip</h1>
 
       <div class="search-box">
-        <input type="text" id="from" placeholder="From" aria-label="From Location">
-        <input type="text" id="to" placeholder="To" aria-label="To Location">
-        <input type="date" id="date" aria-label="Travel Date">
+        <input type="text" id="from" placeholder="From">
+        <input type="text" id="to" placeholder="To">
+        <input type="date" id="date">
         <button class="btn" onclick="searchTaxi()">Search</button>
       </div>
     </section>
@@ -82,7 +83,7 @@
       }
 
       window.location.href =
-        `taxi.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`;
+        `/taxi?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`;
     }
   </script>
 
