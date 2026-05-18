@@ -2,42 +2,117 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
-  <!-- SEO -->
-  <title>Samyutha Travels | Best Travels in Madurai</title>
+  <!-- Mobile Responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Samyutha Travels is the best travels in Madurai offering taxi booking and tour services.">
-  <meta name="keywords" content="Taxi Madurai, Travels Madurai, Tour Booking, Cab Service Madurai">
+
+  <!-- SEO -->
+  <title>Samyutha Travels | Best Taxi & Tour Services in Madurai</title>
+
+  <meta name="description"
+    content="Samyutha Travels provides the best taxi booking, tour packages, and travel services in Madurai. Safe, affordable, and comfortable rides.">
+
+  <meta name="keywords"
+    content="Samyutha Travels, Madurai Travels, Taxi Booking Madurai, Cab Service Madurai, Tour Packages">
+
   <meta name="author" content="Samyutha Travels">
 
   <!-- Google Verification -->
-  <meta name="google-site-verification" content="911Ale-MXYcQ846t2oubWGGE0k-vat2PmZrzNiWAgyQ" />
+  <meta name="google-site-verification"
+    content="911Ale-MXYcQ846t2oubWGGE0k-vat2PmZrzNiWAgyQ" />
 
-  <!-- ✅ Flask Favicon -->
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://yourdomain.com/">
 
-  <!-- ✅ Flask CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Open Graph -->
+  <meta property="og:title"
+    content="Samyutha Travels | Best Travels in Madurai">
+
+  <meta property="og:description"
+    content="Book taxi and tour services in Madurai with Samyutha Travels.">
+
+  <meta property="og:type" content="website">
+
+  <meta property="og:url"
+    content="https://yourdomain.com/">
+
+  <meta property="og:image"
+    content="https://yourdomain.com/static/images/logo.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="twitter:title"
+    content="Samyutha Travels">
+
+  <meta name="twitter:description"
+    content="Best taxi and tour services in Madurai">
+
+  <meta name="twitter:image"
+    content="https://yourdomain.com/static/images/logo.png">
+
+  <!-- Favicon -->
+  <link rel="icon"
+    type="image/png"
+    href="{{ url_for('static', filename='favicon.png') }}">
+
+  <!-- CSS -->
+  <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Samyutha Travels",
+    "url": "https://yourdomain.com",
+    "logo": "https://yourdomain.com/static/images/logo.png",
+    "image": "https://yourdomain.com/static/images/logo.png",
+    "description": "Best taxi and travel services in Madurai",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Madurai",
+      "addressRegion": "Tamil Nadu",
+      "addressCountry": "India"
+    },
+    "telephone": "+91-9876543210"
+  }
+  </script>
+
 </head>
 
 <body>
 
   <!-- HEADER -->
-  <header>
+  <header class="header">
+
     <div class="logo">
-      <!-- ✅ Flask Image -->
-      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" 
-           alt="Samyutha Travels Logo" width="120">
+
+      <img
+        src="{{ url_for('static', filename='images/logo.png') }}"
+        alt="Samyutha Travels Logo"
+        width="120"
+        height="120">
+
     </div>
 
-    <nav>
+    <nav class="navbar">
+
       <a href="/">Home</a>
-      <a href="#">Taxi</a>
-      <a href="#">Trips</a>
-      <a href="#">Tours</a>
-      <a href="/login" class="btn">Login</a>
+      <a href="/taxi">Taxi</a>
+      <a href="/trips">Trips</a>
+      <a href="/tours">Tours</a>
+      <a href="/contact">Contact</a>
+
+      <a href="/login" class="btn">
+        Login
+      </a>
+
     </nav>
+
   </header>
 
   <!-- MAIN -->
@@ -45,46 +120,125 @@
 
     <!-- HERO -->
     <section class="hero">
-      <h1>Plan Your Perfect Trip</h1>
 
-      <div class="search-box">
-        <input type="text" id="from" placeholder="From">
-        <input type="text" id="to" placeholder="To">
-        <input type="date" id="date">
-        <button class="btn" onclick="searchTaxi()">Search</button>
+      <div class="overlay">
+
+        <h1>
+          Book Your Perfect Ride
+        </h1>
+
+        <p>
+          Trusted taxi and tour services in Madurai
+        </p>
+
+        <!-- SEARCH -->
+        <div class="search-box">
+
+          <input
+            type="text"
+            id="from"
+            placeholder="From Location">
+
+          <input
+            type="text"
+            id="to"
+            placeholder="Destination">
+
+          <input
+            type="date"
+            id="date">
+
+          <button
+            class="btn"
+            onclick="searchTaxi()">
+
+            Search Taxi
+
+          </button>
+
+        </div>
+
       </div>
+
     </section>
 
     <!-- FEATURES -->
     <section class="features">
-      <div class="card">🚕 Quick Taxi Booking</div>
-      <div class="card">🧭 Smart Trip Planning</div>
-      <div class="card">🌐 Multi Language</div>
-      <div class="card">💳 Secure Booking</div>
+
+      <div class="card">
+        <h3>🚕 Quick Taxi Booking</h3>
+        <p>Fast and easy taxi reservation system.</p>
+      </div>
+
+      <div class="card">
+        <h3>🧭 Smart Trip Planning</h3>
+        <p>Plan your journey with comfort and ease.</p>
+      </div>
+
+      <div class="card">
+        <h3>🌐 Multi Language Support</h3>
+        <p>Supports multiple regional languages.</p>
+      </div>
+
+      <div class="card">
+        <h3>💳 Secure Payments</h3>
+        <p>Trusted and secure booking process.</p>
+      </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about">
+
+      <h2>Why Choose Samyutha Travels?</h2>
+
+      <p>
+        We provide reliable taxi booking and tour services
+        across Madurai with professional drivers and affordable pricing.
+      </p>
+
     </section>
 
   </main>
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2026 Samyutha Travels | Madurai</p>
+
+    <p>
+      © 2026 Samyutha Travels | All Rights Reserved
+    </p>
+
+    <p>
+      Madurai, Tamil Nadu, India
+    </p>
+
   </footer>
 
   <!-- SCRIPT -->
   <script>
+
     function searchTaxi() {
-      const from = document.getElementById("from").value;
-      const to = document.getElementById("to").value;
-      const date = document.getElementById("date").value;
+
+      const from =
+        document.getElementById("from").value.trim();
+
+      const to =
+        document.getElementById("to").value.trim();
+
+      const date =
+        document.getElementById("date").value;
 
       if (!from || !to || !date) {
+
         alert("Please fill all fields");
+
         return;
       }
 
       window.location.href =
         `/taxi?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`;
     }
+
   </script>
 
 </body>
