@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from flask_cors import CORS
+from flask import Response
 import os
 import sqlite3
 import requests
@@ -110,16 +111,33 @@ init_db()
 # ================ PERFORMANCE: CACHING HEADERS ================
 @app.after_request
 def add_cache_headers(response):
-    """Add caching headers for static files to improve performance"""
+    """Add caching headers"""
+
+    # Static files
     if request.path.startswith('/static/'):
-        # Cache static files for 1 year
-        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+
+        response.headers['Cache-Control'] = (
+            'public, max-age=31536000, immutable'
+        )
+
+    # SEO files
     elif request.path in ['/sitemap.xml', '/robots.txt']:
-        # Cache SEO files for 1 day
-        response.headers['Cache-Control'] = 'public, max-age=86400'
+
+        # IMPORTANT:
+        # Prevent Google from using old cached robots.txt
+        response.headers['Cache-Control'] = 'no-cache'
+
+    # Dynamic pages
     else:
-        # Don't cache dynamic pages
-        response.headers['Cache-Control'] = 'no-cache, must-revalidate'
+
+        response.headers['Cache-Control'] = (
+            'no-cache, no-store, must-revalidate'
+        )
+
+        response.headers['Pragma'] = 'no-cache'
+
+        response.headers['Expires'] = '0'
+
     return response
 
 # ---------------- SEO & UTILS ----------------
@@ -139,18 +157,22 @@ def sitemap():
     response.headers["Content-Type"] = "application/xml"
     return response
 
-@app.route('/robots.txt')
-def robots():
-    lines = [
-        "User-agent: *",
-        "Disallow: /admin/",
-        "Disallow: /api/",
-        f"Sitemap: {request.url_root}sitemap.xml"
-    ]
-    response = make_response("\n".join(lines))
-    response.headers["Content-Type"] = "text/plain"
-    return response
+@app.route("/robots.txt")
+def robots_txt():
 
+    robots = """User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://maduraisamyukthatravels.com/sitemap.xml
+"""
+
+    return Response(
+        robots,
+        mimetype="text/plain"
+    )
 # ---------------- FRONT PAGES ----------------
 
 @app.route("/")
