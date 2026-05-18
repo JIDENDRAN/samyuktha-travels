@@ -107,13 +107,16 @@ def init_db():
     conn.close()
 
 init_db()
+from flask import Response, make_response, render_template, request, url_for
+from datetime import datetime
 
 # ================ PERFORMANCE: CACHING HEADERS ================
+
 @app.after_request
 def add_cache_headers(response):
     """Add caching headers"""
 
-    # Static files
+    # Static assets (CSS, JS, Images, Fonts)
     if request.path.startswith('/static/'):
 
         response.headers['Cache-Control'] = (
@@ -123,11 +126,12 @@ def add_cache_headers(response):
     # SEO files
     elif request.path in ['/sitemap.xml', '/robots.txt']:
 
-        # IMPORTANT:
-        # Prevent Google from using old cached robots.txt
-        response.headers['Cache-Control'] = 'no-cache'
+        # Always allow fresh fetch by Google
+        response.headers['Cache-Control'] = (
+            'no-cache, must-revalidate'
+        )
 
-    # Dynamic pages
+    # HTML pages
     else:
 
         response.headers['Cache-Control'] = (
@@ -135,27 +139,47 @@ def add_cache_headers(response):
         )
 
         response.headers['Pragma'] = 'no-cache'
-
         response.headers['Expires'] = '0'
 
     return response
 
-# ---------------- SEO & UTILS ----------------
+
+# ---------------- SITEMAP ----------------
 
 @app.route('/sitemap.xml', methods=['GET'])
 def sitemap():
-    pages = []
-    ten_days_ago = datetime.now().date().isoformat()
-    # Add static pages
-    for rule in app.url_map.iter_rules():
-        if "GET" in rule.methods and len(rule.arguments) == 0:
-            if not rule.rule.startswith("/admin") and not rule.rule.startswith("/api") and rule.endpoint != 'static':
-                pages.append([url_for(rule.endpoint, _external=True), ten_days_ago])
 
-    sitemap_xml = render_template('sitemap.xml', pages=pages)
+    pages = []
+    today = datetime.utcnow().date().isoformat()
+
+    for rule in app.url_map.iter_rules():
+
+        if (
+            "GET" in rule.methods
+            and len(rule.arguments) == 0
+            and not rule.rule.startswith("/admin")
+            and not rule.rule.startswith("/api")
+            and rule.endpoint != 'static'
+        ):
+
+            pages.append({
+                "loc": url_for(rule.endpoint, _external=True),
+                "lastmod": today
+            })
+
+    sitemap_xml = render_template(
+        'sitemap.xml',
+        pages=pages
+    )
+
     response = make_response(sitemap_xml)
+
     response.headers["Content-Type"] = "application/xml"
+
     return response
+
+
+# ---------------- ROBOTS ----------------
 
 @app.route("/robots.txt")
 def robots_txt():
@@ -169,10 +193,16 @@ Disallow: /api/
 Sitemap: https://maduraisamyukthatravels.com/sitemap.xml
 """
 
-    return Response(
+    response = Response(
         robots,
         mimetype="text/plain"
     )
+
+    response.headers["Cache-Control"] = (
+        "no-cache, no-store, must-revalidate"
+    )
+
+    return response
 # ---------------- FRONT PAGES ----------------
 
 @app.route("/")
