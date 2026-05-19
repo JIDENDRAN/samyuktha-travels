@@ -8,55 +8,73 @@
   <!-- Mobile Responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- SEO -->
-  <title>Samyutha Travels | Best Taxi & Tour Services in Madurai</title>
+  <!-- Primary SEO -->
+  <title>Samyuktha Travels | Best Taxi & Tour Services in Madurai</title>
 
   <meta name="description"
-    content="Samyutha Travels provides the best taxi booking, tour packages, and travel services in Madurai. Safe, affordable, and comfortable rides.">
+    content="Samyuktha Travels provides reliable taxi booking, tour packages, airport transfers, and travel services in Madurai with safe, affordable, and comfortable rides.">
 
   <meta name="keywords"
-    content="Samyutha Travels, Madurai Travels, Taxi Booking Madurai, Cab Service Madurai, Tour Packages">
+    content="Samyuktha Travels, Madurai Travels, Taxi Booking Madurai, Cab Service Madurai, Tour Packages Madurai, Madurai Taxi, Airport Taxi Madurai">
 
-  <meta name="author" content="Samyutha Travels">
+  <meta name="author"
+    content="Samyuktha Travels">
+
+  <meta name="robots"
+    content="index, follow">
 
   <!-- Google Verification -->
   <meta name="google-site-verification"
     content="911Ale-MXYcQ846t2oubWGGE0k-vat2PmZrzNiWAgyQ" />
 
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://maduraismyukthatravels.com/">
+  <!-- Canonical -->
+  <link rel="canonical"
+    href="https://www.maduraisamyukthatravels.com/">
 
   <!-- Open Graph -->
   <meta property="og:title"
-    content="Samyutha Travels | Best Travels in Madurai">
+    content="Samyuktha Travels | Best Taxi & Tour Services in Madurai">
 
   <meta property="og:description"
-    content="Book taxi and tour services in Madurai with Samyutha Travels.">
+    content="Book taxi and tour services in Madurai with Samyuktha Travels. Safe, affordable, and comfortable rides.">
 
-  <meta property="og:type" content="website">
+  <meta property="og:type"
+    content="website">
 
   <meta property="og:url"
-    content="https://maduraismyukthatravels.com/">
+    content="https://www.maduraisamyukthatravels.com/">
 
   <meta property="og:image"
-    content="https://maduraismyukthatravels.com/static/images/logo.png">
+    content="https://www.maduraisamyukthatravels.com/static/images/logo.png">
+
+  <meta property="og:site_name"
+    content="Samyuktha Travels">
+
+  <meta property="og:locale"
+    content="en_IN">
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card"
+    content="summary_large_image">
 
   <meta name="twitter:title"
-    content="Samyutha Travels">
+    content="Samyuktha Travels">
 
   <meta name="twitter:description"
-    content="Best taxi and tour services in Madurai">
+    content="Best taxi and travel services in Madurai">
 
   <meta name="twitter:image"
-    content="https://maduraismyukthatravels.com/static/images/logo.png">
+    content="https://www.maduraisamyukthatravels.com/static/images/logo.png">
 
   <!-- Favicon -->
   <link rel="icon"
     type="image/png"
-    href="{{ url_for('static', filename='favicon.png') }}">
+    sizes="512x512"
+    href="{{ url_for('static', filename='images/logo.png') }}">
+
+  <!-- Apple Icon -->
+  <link rel="apple-touch-icon"
+    href="{{ url_for('static', filename='images/logo.png') }}">
 
   <!-- CSS -->
   <link rel="stylesheet"
@@ -67,18 +85,25 @@
   {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
-    "name": "Samyutha Travels",
-    "url": "https://maduraismyukthatravels.com",
-    "logo": "https://maduraismyukthatravels.com/static/images/logo.png",
-    "image": "https://maduraismyukthatravels.com/static/images/logo.png",
+    "name": "Samyuktha Travels",
+    "url": "https://www.maduraisamyukthatravels.com",
+    "logo": "https://www.maduraisamyukthatravels.com/static/images/logo.png",
+    "image": "https://www.maduraisamyukthatravels.com/static/images/logo.png",
     "description": "Best taxi and travel services in Madurai",
+    "telephone": "+91-8300302815",
+
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Madurai",
       "addressRegion": "Tamil Nadu",
-      "addressCountry": "India"
+      "postalCode": "625001",
+      "addressCountry": "IN"
     },
-    "telephone": "+91-9876543210"
+
+    "sameAs": [
+      "https://www.facebook.com/",
+      "https://www.instagram.com/"
+    ]
   }
   </script>
 
@@ -93,7 +118,7 @@
 
       <img
         src="{{ url_for('static', filename='images/logo.png') }}"
-        alt="Samyutha Travels Logo"
+        alt="Samyuktha Travels Logo"
         width="120"
         height="120">
 
@@ -103,8 +128,8 @@
 
       <a href="/">Home</a>
       <a href="/taxi">Taxi</a>
-      <a href="/trips">Trips</a>
-      <a href="/tours">Tours</a>
+      <a href="/packages">Packages</a>
+      <a href="/cars">Cars</a>
       <a href="/contact">Contact</a>
 
       <a href="/login" class="btn">
@@ -115,20 +140,19 @@
 
   </header>
 
-  <!-- MAIN -->
+  <!-- HERO -->
   <main>
 
-    <!-- HERO -->
     <section class="hero">
 
       <div class="overlay">
 
         <h1>
-          Book Your Perfect Ride
+          Book Your Perfect Ride in Madurai
         </h1>
 
         <p>
-          Trusted taxi and tour services in Madurai
+          Trusted taxi and tour services with affordable pricing and professional drivers.
         </p>
 
         <!-- SEARCH -->
@@ -172,7 +196,7 @@
 
       <div class="card">
         <h3>🧭 Smart Trip Planning</h3>
-        <p>Plan your journey with comfort and ease.</p>
+        <p>Comfortable and reliable travel planning.</p>
       </div>
 
       <div class="card">
@@ -181,7 +205,7 @@
       </div>
 
       <div class="card">
-        <h3>💳 Secure Payments</h3>
+        <h3>💳 Secure Booking</h3>
         <p>Trusted and secure booking process.</p>
       </div>
 
@@ -190,11 +214,12 @@
     <!-- ABOUT -->
     <section class="about">
 
-      <h2>Why Choose Samyutha Travels?</h2>
+      <h2>
+        Why Choose Samyuktha Travels?
+      </h2>
 
       <p>
-        We provide reliable taxi booking and tour services
-        across Madurai with professional drivers and affordable pricing.
+        We provide reliable taxi booking and tour services across Madurai with professional drivers, affordable pricing, and 24/7 customer support.
       </p>
 
     </section>
@@ -205,7 +230,7 @@
   <footer>
 
     <p>
-      © 2026 Samyutha Travels | All Rights Reserved
+      © 2026 Samyuktha Travels | All Rights Reserved
     </p>
 
     <p>
