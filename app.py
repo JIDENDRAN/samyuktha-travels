@@ -181,28 +181,33 @@ def sitemap():
 
 # ---------------- ROBOTS ----------------
 
-@app.route("/robots.txt")
-def robots_txt():
-
-    robots = """User-agent: *
+robots = """User-agent: *
 Allow: /
 
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://maduraisamyukthatravels.com/sitemap.xml
+Sitemap: https://www.maduraisamyukthatravels.com/sitemap.xml
 """
 
-    response = Response(
-        robots,
-        mimetype="text/plain"
-    )
-
-    response.headers["Cache-Control"] = (
-        "no-cache, no-store, must-revalidate"
-    )
-
     return response
+
+from flask import redirect, request
+
+@app.before_request
+def force_www():
+
+    host = request.host
+
+    if host == "maduraisamyukthatravels.com":
+
+        return redirect(
+            request.url.replace(
+                "https://maduraisamyukthatravels.com",
+                "https://www.maduraisamyukthatravels.com"
+            ),
+            code=301
+        )
 # ---------------- FRONT PAGES ----------------
 
 @app.route("/")
