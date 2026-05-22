@@ -701,7 +701,9 @@
     font-size: 100px;
     opacity: 0.05;
     animation: float 25s ease-in-out infinite reverse;
+    pointer-events: none;
   }
+  
 
   .about-box {
     display: grid;
@@ -2099,6 +2101,32 @@ img{
     grid-template-columns:1fr;
   }
 
+}
+  /* Fix airplane decoration blocking inputs */
+
+.about-right,
+.booking-form-card {
+  position: relative;
+  z-index: 5;
+}
+
+.booking-form-card input,
+.booking-form-card select,
+.booking-form-card button {
+  position: relative;
+  z-index: 10;
+}
+
+/* Make decorative elements ignore clicks */
+
+.sun-decoration,
+.floating-element,
+.hero-overlay,
+.hero-content-wrapper::before,
+.hero-content-wrapper::after,
+.about-trendy::before,
+.about-trendy::after {
+  pointer-events: none;
 }
 </style>
 {% endblock %}
