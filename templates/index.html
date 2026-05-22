@@ -2128,6 +2128,134 @@ img{
 .about-trendy::after {
   pointer-events: none;
 }
+  /* ================= MOBILE FULL FIX ================= */
+
+@media (max-width:768px){
+
+  body{
+    overflow-x:hidden;
+  }
+
+  /* HERO SECTION */
+
+  .hero-section{
+    padding:20px 12px !important;
+    min-height:auto !important;
+  }
+
+  .hero-content-wrapper{
+    width:100% !important;
+    max-width:100% !important;
+    padding:20px 15px !important;
+    border-radius:18px !important;
+  }
+
+  .hero-title{
+    font-size:1.8rem !important;
+    line-height:1.3 !important;
+  }
+
+  .hero-subtext{
+    font-size:0.9rem !important;
+    line-height:1.7 !important;
+  }
+
+  /* BUTTONS */
+
+  .hero-buttons{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:12px !important;
+    width:100% !important;
+  }
+
+  .hero-buttons a,
+  .hero-buttons button{
+    width:100% !important;
+    justify-content:center !important;
+  }
+
+  /* STATS SECTION */
+
+  .stats-row{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:25px !important;
+    padding:30px 15px !important;
+  }
+
+  .stat-item h3{
+    font-size:2rem !important;
+  }
+
+  .stat-item p{
+    font-size:0.85rem !important;
+  }
+
+  /* ABOUT SECTION */
+
+  .about-box{
+    grid-template-columns:1fr !important;
+    gap:30px !important;
+  }
+
+  /* BOOKING FORM */
+
+  .booking-form-card{
+    width:100% !important;
+    padding:20px 15px !important;
+  }
+
+  .booking-form-card input,
+  .booking-form-card select,
+  .booking-form-card textarea{
+    width:100% !important;
+    font-size:16px !important;
+  }
+
+  /* FIX FLOAT BUTTONS */
+
+  .float-buttons{
+    right:12px !important;
+    bottom:15px !important;
+    z-index:9999 !important;
+  }
+
+  .float-btn{
+    width:50px !important;
+    height:50px !important;
+    font-size:20px !important;
+  }
+
+  /* AIRPLANE DECORATION */
+
+  .about-trendy::after{
+    display:none !important;
+  }
+
+}
+
+/* ================= EXTRA SMALL DEVICES ================= */
+
+@media (max-width:480px){
+
+  .hero-title{
+    font-size:1.5rem !important;
+  }
+
+  .hero-subtext{
+    font-size:0.82rem !important;
+  }
+
+  .stats-row{
+    grid-template-columns:1fr !important;
+  }
+
+  .hero-content-wrapper{
+    padding:18px 12px !important;
+  }
+
+}
 </style>
 {% endblock %}
 
