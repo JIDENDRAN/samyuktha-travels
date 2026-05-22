@@ -1891,6 +1891,215 @@
   .float-btn:active {
     text-decoration: none !important;
   }
+  /* ================= GLOBAL RESPONSIVE ================= */
+
+*{
+  box-sizing:border-box;
+}
+
+img{
+  max-width:100%;
+  height:auto;
+}
+
+.container{
+  width:100%;
+  max-width:1200px;
+  margin:auto;
+  padding:0 15px;
+}
+
+/* ================= LARGE TABLETS ================= */
+
+@media (max-width: 992px){
+
+  .hero-title{
+    font-size:2.8rem;
+  }
+
+  .hero-content-wrapper{
+    padding:40px 25px;
+    width:95%;
+  }
+
+  .about-box{
+    grid-template-columns:1fr;
+  }
+
+  .why-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .t-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stats-row{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px){
+
+  body{
+    overflow-x:hidden;
+  }
+
+  .hero-section{
+    min-height:auto;
+    padding:40px 15px;
+  }
+
+  .hero-content-wrapper{
+    width:100%;
+    padding:25px 18px;
+    border-radius:15px;
+  }
+
+  .hero-location{
+    font-size:1rem;
+    letter-spacing:3px;
+  }
+
+  .hero-title{
+    font-size:2rem;
+    line-height:1.2;
+  }
+
+  .hero-subtext{
+    font-size:0.9rem;
+    line-height:1.6;
+  }
+
+  .hero-buttons{
+    flex-direction:column;
+    width:100%;
+  }
+
+  .hero-buttons a,
+  .hero-buttons button{
+    width:100%;
+  }
+
+  .hero-badge{
+    width:60px;
+    height:60px;
+    font-size:8px;
+    right:10px;
+    top:-20px;
+  }
+
+  .about-left h2{
+    font-size:2rem;
+  }
+
+  .booking-form-card{
+    padding:20px 15px;
+  }
+
+  .stats-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+
+  .why-grid{
+    grid-template-columns:1fr;
+  }
+
+  .destinations-table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+
+  .t-header h2{
+    font-size:2rem;
+  }
+
+  .t-card{
+    padding:20px;
+  }
+
+  .float-btn{
+    width:50px;
+    height:50px;
+  }
+
+}
+
+/* ================= SMALL MOBILE ================= */
+
+@media (max-width: 480px){
+
+  .hero-section{
+    padding:20px 10px;
+  }
+
+  .hero-content-wrapper{
+    padding:18px 12px;
+  }
+
+  .hero-location{
+    font-size:0.8rem;
+  }
+
+  .hero-pretitle{
+    font-size:1.1rem;
+  }
+
+  .hero-title{
+    font-size:1.5rem;
+  }
+
+  .hero-subtext{
+    font-size:0.8rem;
+  }
+
+  .hero-buttons .btn,
+  .hero-buttons .btn-ai,
+  .hero-buttons .btn-whatsapp,
+  .hero-buttons .btn-call{
+    font-size:0.75rem;
+    padding:10px;
+  }
+
+  .about-left h2{
+    font-size:1.6rem;
+  }
+
+  .section-title{
+    font-size:1.6rem;
+  }
+
+  .t-header h2{
+    font-size:1.5rem;
+  }
+
+  .booking-form-card h3{
+    font-size:1.2rem;
+  }
+
+  .form-control,
+  .form-select{
+    font-size:0.85rem;
+    padding:10px;
+  }
+
+  .btn-book-now{
+    padding:12px;
+    font-size:0.9rem;
+  }
+
+  .stats-row{
+    grid-template-columns:1fr;
+  }
+
+}
 </style>
 {% endblock %}
 
