@@ -697,6 +697,162 @@
   .float-btn:active {
     text-decoration: none !important;
   }
+  /* ================= GLOBAL MOBILE FIX ================= */
+
+*{
+  box-sizing:border-box;
+}
+
+img{
+  max-width:100%;
+  height:auto;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+  .about-box{
+    grid-template-columns:1fr !important;
+  }
+
+  .why-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px){
+
+  body{
+    overflow-x:hidden;
+  }
+
+  section{
+    padding-left:15px !important;
+    padding-right:15px !important;
+  }
+
+  /* HERO */
+
+  .hero-section{
+    min-height:auto !important;
+    padding:25px 15px !important;
+  }
+
+  .hero-content-wrapper{
+    width:100% !important;
+    max-width:100% !important;
+    padding:20px 15px !important;
+  }
+
+  .hero-title{
+    font-size:1.8rem !important;
+    line-height:1.3 !important;
+  }
+
+  .hero-subtext{
+    font-size:0.9rem !important;
+    line-height:1.7 !important;
+  }
+
+  /* BUTTONS */
+
+  .hero-buttons{
+    flex-direction:column !important;
+    width:100% !important;
+    gap:12px !important;
+  }
+
+  .hero-buttons a,
+  .hero-buttons button{
+    width:100% !important;
+    justify-content:center !important;
+  }
+
+  /* GRID FIX */
+
+  .about-box,
+  .why-grid,
+  .t-grid,
+  .features{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:20px !important;
+  }
+
+  /* STATS */
+
+  .stats-row{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:20px !important;
+    padding:30px 15px !important;
+  }
+
+  /* FORMS */
+
+  input,
+  textarea,
+  select{
+    width:100% !important;
+    max-width:100% !important;
+    font-size:16px !important;
+  }
+
+  /* TABLES */
+
+  table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+
+  /* FLOAT BUTTONS */
+
+  .float-buttons{
+    right:12px !important;
+    bottom:15px !important;
+    z-index:9999 !important;
+  }
+
+  .float-btn{
+    width:50px !important;
+    height:50px !important;
+  }
+
+  /* AIRPLANE */
+
+  .about-trendy::after,
+  .about-trendy::before{
+    display:none !important;
+  }
+
+}
+
+/* ================= SMALL MOBILE ================= */
+
+@media (max-width:480px){
+
+  .hero-title{
+    font-size:1.5rem !important;
+  }
+
+  .hero-subtext{
+    font-size:0.82rem !important;
+  }
+
+  .stats-row{
+    grid-template-columns:1fr !important;
+  }
+
+}
 </style>
 {% endblock %}
 
