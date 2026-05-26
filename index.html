@@ -8,7 +8,7 @@
   <!-- Mobile Responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- SEO -->
+  <!-- Primary SEO -->
   <title>Samyuktha Travels | Best Taxi & Tour Services in Madurai</title>
 
   <meta name="description"
@@ -29,7 +29,7 @@
 
   <!-- Canonical -->
   <link rel="canonical"
-    href="https://www.maduraisamyukthatravels.com/">
+    href="https://maduraisamyukthatravels.com/">
 
   <!-- Open Graph -->
   <meta property="og:title"
@@ -42,10 +42,10 @@
     content="website">
 
   <meta property="og:url"
-    content="https://www.maduraisamyukthatravels.com/">
+    content="https://maduraisamyukthatravels.com/">
 
   <meta property="og:image"
-    content="https://www.maduraisamyukthatravels.com/static/images/logo.jpeg">
+    content="https://maduraisamyukthatravels.com/static/images/samyuktha_logo.png">
 
   <meta property="og:site_name"
     content="Samyuktha Travels">
@@ -61,16 +61,28 @@
     content="Best taxi and travel services in Madurai">
 
   <meta name="twitter:image"
-    content="https://www.maduraisamyukthatravels.com/static/images/logo.jpeg">
+    content="https://maduraisamyukthatravels.com/static/images/samyuktha_logo.png">
 
-  <!-- Favicon -->
+  <!-- Favicons -->
   <link rel="icon"
-    type="image/jpeg"
-    href="{{ url_for('static', filename='images/logo.jpeg') }}">
+    type="image/png"
+    sizes="32x32"
+    href="{{ url_for('static', filename='images/samyuktha_logo.png') }}">
 
-  <!-- Apple Icon -->
+  <link rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="{{ url_for('static', filename='images/samyuktha_logo.png') }}">
+
   <link rel="apple-touch-icon"
-    href="{{ url_for('static', filename='images/logo.jpeg') }}">
+    href="{{ url_for('static', filename='images/samyuktha_logo.png') }}">
+
+  <link rel="shortcut icon"
+    href="{{ url_for('static', filename='images/samyuktha_logo.png') }}">
+
+  <!-- Theme Color -->
+  <meta name="theme-color"
+    content="#ffffff">
 
   <!-- CSS -->
   <link rel="stylesheet"
@@ -84,11 +96,11 @@
 
     "name": "Samyuktha Travels",
 
-    "url": "https://www.maduraisamyukthatravels.com",
+    "url": "https://maduraisamyukthatravels.com",
 
-    "logo": "https://www.maduraisamyukthatravels.com/static/images/logo.jpeg",
+    "logo": "https://maduraisamyukthatravels.com/static/images/samyuktha_logo.png",
 
-    "image": "https://www.maduraisamyukthatravels.com/static/images/logo.jpeg",
+    "image": "https://maduraisamyukthatravels.com/static/images/samyuktha_logo.png",
 
     "description": "Reliable taxi and travel services in Madurai",
 
@@ -104,6 +116,20 @@
   }
   </script>
 
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+
+    "name": "Samyuktha Travels",
+
+    "url": "https://maduraisamyukthatravels.com",
+
+    "logo": "https://maduraisamyukthatravels.com/static/images/samyuktha_logo.png"
+  }
+  </script>
+
 </head>
 
 <body>
@@ -114,7 +140,7 @@
     <div class="logo">
 
       <img
-        src="{{ url_for('static', filename='images/logo.jpeg') }}"
+        src="{{ url_for('static', filename='images/samyuktha_logo.png') }}"
         alt="Samyuktha Travels Logo"
         width="120"
         height="120">
