@@ -181,6 +181,8 @@ def sitemap():
 
 # ---------------- ROBOTS ----------------
 
+# ---------------- ROBOTS ----------------
+
 @app.route('/robots.txt')
 def robots_txt():
 
@@ -190,7 +192,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://www.maduraisamyukthatravels.com/sitemap.xml
+Sitemap: https://maduraisamyukthatravels.com/sitemap.xml
 """
 
     response = make_response(robots)
