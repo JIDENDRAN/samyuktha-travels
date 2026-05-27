@@ -178,15 +178,13 @@ def sitemap():
 
     return response
 
-
-# ---------------- ROBOTS ----------------
-
 # ---------------- ROBOTS ----------------
 
 @app.route('/robots.txt')
 def robots_txt():
 
     robots = """User-agent: *
+
 Allow: /
 
 Disallow: /admin/
