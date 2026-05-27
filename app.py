@@ -194,7 +194,9 @@ Sitemap: https://maduraisamyukthatravels.com/sitemap.xml
 """
 
     response = make_response(robots)
+
     response.headers["Content-Type"] = "text/plain"
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
 
     return response
 # ---------------- FRONT PAGES ----------------
