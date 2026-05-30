@@ -184,9 +184,7 @@ def sitemap():
 def robots_txt():
 
     robots = """User-agent: *
-
 Allow: /
-
 Disallow: /admin/
 Disallow: /api/
 
