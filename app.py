@@ -197,6 +197,13 @@ Sitemap: https://maduraisamyukthatravels.com/sitemap.xml
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
 
     return response
+
+# ---------------- FAVICON ----------------
+
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file('favicon.ico')
+
 # ---------------- FRONT PAGES ----------------
 
 @app.route("/")
