@@ -234,6 +234,18 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route("/privacy-policy")
+@app.route("/privacy_policy")
+def privacy_policy():
+    return render_template("privacy_policy.html")
+
+
+@app.route("/terms-conditions")
+@app.route("/terms_conditions")
+def terms_conditions():
+    return render_template("terms_conditions.html")
+
+
 @app.route("/taxi", methods=["GET", "POST"])
 def taxi():
     if request.method == "POST":
