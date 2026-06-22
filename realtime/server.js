@@ -20,6 +20,13 @@ const Database = require("better-sqlite3");
 
 // Connect to the same database Flask uses (or customizable SQLITE_DB_PATH for persistent mount)
 const dbPath = process.env.SQLITE_DB_PATH || path.join(__dirname, "..", "database.db");
+
+// Ensure parent directory exists to prevent better-sqlite3 from crashing
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new Database(dbPath);
 
 // Initialize Auth Table for SQLite session storage
