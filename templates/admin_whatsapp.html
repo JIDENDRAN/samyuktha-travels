@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}WhatsApp Connection - Samyuktha Travels Admin{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --travel-green: #1a4d2e;
+  --travel-green-dark: #2d6a4f;
+  --travel-orange: #ff6b35;
+  --travel-orange-light: #f7931e;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --text-dark: #2d3748;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* ===== ADMIN HEADER ===== */
+.admin-header {
+  background: white;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.admin-brand h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--travel-green);
+  margin: 0;
+}
+
+.admin-brand h1 span {
+  color: var(--travel-orange);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.admin-nav .btn {
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-nav .btn-outline {
+  background: transparent;
+  color: var(--travel-green);
+  border: 2px solid var(--travel-green);
+}
+
+.admin-nav .btn-outline:hover {
+  background: var(--travel-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 77, 46, 0.3);
+}
+
+.admin-nav .btn-primary {
+  background: linear-gradient(135deg, var(--travel-orange), var(--travel-orange-light));
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.admin-nav .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* ===== MAIN CONTENT ===== */
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px 60px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--travel-green);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title i {
+  color: var(--travel-orange);
+  font-size: 1.8rem;
+}
+
+.iframe-card {
+  background: white;
+  padding: 10px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+iframe {
+  width: 100%;
+  height: 800px;
+  border: none;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .admin-header .container {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .admin-nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin-container {
+    padding: 0 15px 40px;
+  }
+
+  .iframe-card {
+    padding: 5px;
+  }
+
+  iframe {
+    height: 650px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== ADMIN HEADER ===== -->
+<div class="admin-header">
+  <div class="container">
+    <div class="admin-brand">
+      <h1>
+        WhatsApp
+        <span>Bot Connection</span>
+      </h1>
+    </div>
+    <nav class="admin-nav">
+      <a href="/admin" class="btn btn-outline">
+        <i class="fa-solid fa-chart-line"></i> Dashboard
+      </a>
+      <a href="/admin/drivers" class="btn btn-outline">
+        <i class="fa-solid fa-user-tie"></i> Drivers
+      </a>
+      <a href="/admin/trips" class="btn btn-outline">
+        <i class="fa-solid fa-route"></i> Trips
+      </a>
+      <a href="/admin/logout" class="btn btn-primary">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="admin-container">
+  
+  <h2 class="section-title">
+    <i class="fa-brands fa-whatsapp"></i> Scan & Connect WhatsApp Bot
+  </h2>
+
+  <div class="iframe-card">
+    <!-- Embedded Render Bot Dashboard Logs & QR Panel -->
+    <iframe src="{{ whatsapp_bot_url }}" title="WhatsApp Bot Status"></iframe>
+  </div>
+
+</div>
+
+{% endblock %}

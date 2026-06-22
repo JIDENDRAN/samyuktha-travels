@@ -18,8 +18,9 @@ const path = require("path");
 const socketIO = require("socket.io");
 const Database = require("better-sqlite3");
 
-// Connect to the same database Flask uses
-const db = new Database(path.join(__dirname, "..", "database.db"));
+// Connect to the same database Flask uses (or customizable SQLITE_DB_PATH for persistent mount)
+const dbPath = process.env.SQLITE_DB_PATH || path.join(__dirname, "..", "database.db");
+const db = new Database(dbPath);
 
 // Initialize Auth Table for SQLite session storage
 db.exec(`
@@ -121,26 +122,33 @@ app.get("/logs", (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>WhatsApp Bot Dashboard | Samyuktha</title>
+        <title>WhatsApp Notification Bot Status</title>
         <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <style>
             :root {
-                --bg: #050505;
-                --card-bg: rgba(20, 20, 20, 0.7);
-                --primary: #00ff88;
-                --primary-glow: rgba(0, 255, 136, 0.3);
-                --error: #ff4757;
-                --text: #e0e0e0;
-                --text-dim: #888;
-                --border: rgba(255, 255, 255, 0.1);
+                --body-bg: #f6f5f3;
+                --card-bg: #ffffff;
+                --panel-bg: #fbfbfd;
+                --border-color: #e5e5ea;
+                --text-dark: #1c1c1e;
+                --text-muted: #8e8e93;
+                
+                --red-bg: #fde8e8;
+                --red-text: #e11d48;
+                --green-bg: #d1fae5;
+                --green-text: #059669;
+                
+                --primary: #ff6b35;
+                --primary-hover: #ff5216;
             }
 
-            * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+            * { box-sizing: border-box; transition: all 0.2s ease-in-out; }
             
             body {
-                background: var(--bg);
-                color: var(--text);
+                background: var(--body-bg);
+                color: var(--text-dark);
                 font-family: 'Plus Jakarta Sans', sans-serif;
                 margin: 0;
                 padding: 0;
@@ -148,266 +156,415 @@ app.get("/logs", (req, res) => {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                overflow-x: hidden;
+                justify-content: center;
             }
 
-            .blob {
-                position: fixed;
-                width: 500px;
-                height: 500px;
-                background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-                filter: blur(80px);
-                z-index: -1;
-                opacity: 0.5;
-                pointer-events: none;
-            }
-            .blob-1 { top: -250px; left: -250px; }
-            .blob-2 { bottom: -250px; right: -250px; }
-
-            .container {
+            .main-card {
+                background: var(--card-bg);
                 width: 100%;
-                max-width: 900px;
-                padding: 40px 20px;
-                animation: fadeIn 0.8s ease-out;
+                max-width: 580px;
+                border-radius: 24px;
+                padding: 35px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+                border: 1px solid var(--border-color);
             }
 
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
+            .card-header {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid var(--border-color);
+                margin-bottom: 25px;
             }
 
-            header {
+            .card-header h1 {
+                font-size: 20px;
+                font-weight: 800;
+                color: #0c2340;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .card-header h1 i {
+                color: #ff9f0a;
+            }
+
+            .panel {
+                background: var(--panel-bg);
+                border: 1px solid #f2f2f7;
+                border-radius: 16px;
+                padding: 20px 24px;
+                margin-bottom: 20px;
+            }
+
+            .status-panel {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: 30px;
             }
 
-            h1 {
-                font-size: 24px;
-                margin: 0;
-                font-weight: 700;
-                letter-spacing: -0.5px;
-                background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-
-            .status-badge {
-                padding: 8px 16px;
-                border-radius: 100px;
-                font-size: 12px;
-                font-weight: 600;
+            .status-info {
                 display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .panel-label {
+                font-size: 11px;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: var(--text-muted);
+            }
+
+            .status-pill {
+                display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                background: var(--card-bg);
-                border: 1px solid var(--border);
-                backdrop-filter: blur(10px);
+                padding: 6px 16px;
+                border-radius: 100px;
+                font-size: 12px;
+                font-weight: 800;
+                letter-spacing: 0.5px;
+                width: fit-content;
+            }
+
+            .status-pill.disconnected {
+                background: var(--red-bg);
+                color: var(--red-text);
+            }
+
+            .status-pill.connected {
+                background: var(--green-bg);
+                color: var(--green-text);
+            }
+
+            .status-pill.connecting {
+                background: #f2f2f7;
+                color: #8e8e93;
             }
 
             .status-dot {
-                width: 8px;
-                height: 8px;
+                width: 7px;
+                height: 7px;
                 border-radius: 50%;
-                background: #aaa;
+                background: currentColor;
             }
 
-            .status-online .status-dot {
-                background: var(--primary);
-                box-shadow: 0 0 15px var(--primary);
+            .status-pill.connected .status-dot {
                 animation: pulse 2s infinite;
             }
 
             @keyframes pulse {
                 0% { opacity: 1; transform: scale(1); }
-                50% { opacity: 0.5; transform: scale(1.2); }
+                50% { opacity: 0.5; transform: scale(1.25); }
                 100% { opacity: 1; transform: scale(1); }
             }
 
-            .card {
-                background: var(--card-bg);
-                border: 1px solid var(--border);
-                border-radius: 20px;
-                padding: 30px;
-                backdrop-filter: blur(20px);
-                margin-bottom: 24px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            }
-
-            .card-title {
+            .btn-action {
+                background: #ffffff;
+                color: var(--text-dark);
+                border: 1px solid #d1d1d6;
+                padding: 10px 20px;
+                border-radius: 12px;
                 font-size: 13px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: var(--text-dim);
-                margin-bottom: 20px;
-                font-weight: 700;
-            }
-
-            .qr-container {
-                text-align: center;
-                display: none;
-            }
-
-            .qr-image {
-                background: #fff;
-                padding: 15px;
-                border-radius: 16px;
-                display: inline-block;
-                margin-bottom: 20px;
-            }
-
-            .qr-image img {
-                display: block;
-                width: 240px;
-                height: 240px;
-            }
-
-            .logs-container {
-                height: 350px;
-                overflow-y: auto;
-                font-family: 'JetBrains Mono', monospace;
-                font-size: 12px;
-                padding: 15px;
-                background: rgba(0,0,0,0.4);
-                border-radius: 15px;
-                border: 1px solid rgba(255,255,255,0.05);
-            }
-
-            .log-entry {
-                padding: 6px 0;
-                border-bottom: 1px solid rgba(255,255,255,0.03);
-                white-space: pre-wrap;
-            }
-
-            .log-timestamp { color: var(--text-dim); margin-right: 10px; }
-            .log-info { color: var(--primary); }
-            .log-error { color: var(--error); }
-
-            .input-group {
-                display: grid;
-                grid-template-columns: 1fr 2fr auto;
-                gap: 12px;
-            }
-
-            input {
-                background: rgba(255,255,255,0.05);
-                border: 1px solid var(--border);
-                padding: 12px 18px;
-                border-radius: 10px;
-                color: #fff;
-                font-family: inherit;
-            }
-
-            input:focus { outline: none; border-color: var(--primary); }
-
-            button {
-                background: var(--primary);
-                color: #000;
-                border: none;
-                padding: 0 20px;
-                border-radius: 10px;
                 font-weight: 700;
                 cursor: pointer;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             }
 
-            button:hover { filter: brightness(1.1); transform: translateY(-1px); }
-            button:disabled { opacity: 0.5; cursor: not-allowed; }
+            .btn-action:hover {
+                background: #f2f2f7;
+                transform: translateY(-1px);
+            }
 
-            ::-webkit-scrollbar { width: 4px; }
-            ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+            .qr-panel {
+                text-align: center;
+                padding: 30px;
+            }
+
+            .qr-panel h3 {
+                font-size: 15px;
+                font-weight: 700;
+                margin: 0 0 25px 0;
+                color: var(--text-dark);
+            }
+
+            .qr-display {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 200px;
+                margin-bottom: 25px;
+            }
+
+            .qr-image-wrapper {
+                background: #ffffff;
+                padding: 12px;
+                border-radius: 16px;
+                border: 1px solid var(--border-color);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            }
+
+            .qr-image-wrapper img {
+                display: block;
+                width: 180px;
+                height: 180px;
+            }
+
+            .spinner-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .spinner {
+                width: 40px;
+                height: 40px;
+                border: 4px solid rgba(255, 107, 53, 0.15);
+                border-top: 4px solid var(--primary);
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .qr-footer {
+                font-size: 12px;
+                color: var(--text-muted);
+                line-height: 1.5;
+                margin: 0;
+            }
+
+            .connected-panel {
+                text-align: center;
+                padding: 40px 20px;
+            }
+
+            .success-icon {
+                font-size: 64px;
+                color: #22c55e;
+                margin-bottom: 20px;
+            }
+
+            .connected-panel h2 {
+                font-size: 20px;
+                font-weight: 700;
+                margin: 0 0 10px 0;
+            }
+
+            .connected-panel p {
+                font-size: 14px;
+                color: var(--text-muted);
+                margin: 0;
+                line-height: 1.6;
+            }
+
+            .test-connection-panel {
+                border-top: 1px solid var(--border-color);
+                padding-top: 25px;
+                margin-top: 25px;
+                text-align: left;
+            }
+
+            .test-form {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 15px;
+            }
+
+            .test-form input {
+                background: #ffffff;
+                border: 1px solid #d1d1d6;
+                padding: 12px 16px;
+                border-radius: 12px;
+                color: var(--text-dark);
+                font-family: inherit;
+                font-size: 13px;
+            }
+
+            .test-form input:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            }
+
+            .btn-send {
+                background: #25D366;
+                color: #ffffff;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                font-size: 13px;
+                box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+            }
+
+            .btn-send:hover {
+                filter: brightness(1.05);
+                transform: translateY(-1px);
+            }
+
+            .btn-send:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            .footer-note {
+                font-size: 12px;
+                color: var(--text-muted);
+                margin-top: 20px;
+                text-align: center;
+            }
         </style>
     </head>
     <body>
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-
-        <div class="container">
-            <header>
-                <h1>🚀 WhatsApp Persistence</h1>
-                <div id="status-badge" class="status-badge">
-                    <div class="status-dot"></div>
-                    <span id="status-text">CONNECTING...</span>
-                </div>
-            </header>
-
-            <div id="qr-card" class="card qr-container">
-                <div class="card-title">🔑 LOGIN REQUIRED (SQLITE)</div>
-                <div class="qr-image">
-                    <img id="qr-img" src="" alt="Scan this QR">
-                </div>
-                <p style="color: var(--text-dim); font-size: 14px;">Scan with WhatsApp Linked Devices. Session will be saved to your Database.</p>
+        <div class="main-card">
+            <!-- Header -->
+            <div class="card-header">
+                <h1><i class="fa-solid fa-bolt"></i> WhatsApp Notification Bot Status</h1>
             </div>
 
-            <div class="card">
-                <div class="card-title">🧪 TEST CONNECTION</div>
-                <div class="input-group">
-                    <input type="text" id="phone" placeholder="Phone (10 digits)">
-                    <input type="text" id="msg" placeholder="Test Message">
-                    <button id="send-btn" onclick="sendTest()">SEND</button>
+            <!-- Bot Status Panel -->
+            <div class="panel status-panel">
+                <div class="status-info">
+                    <span class="panel-label">Bot Status</span>
+                    <div id="status-badge" class="status-pill disconnected">
+                        <div class="status-dot"></div>
+                        <span id="status-text">DISCONNECTED</span>
+                    </div>
                 </div>
-                <div id="msg-status" style="margin-top: 10px; font-size: 13px;"></div>
+                <button class="btn-action" onclick="reconnectBot()" id="btn-reconnect">Reconnect Bot</button>
             </div>
 
-            <div class="card">
-                <div class="card-title">📋 SYSTEM LOGS</div>
-                <div id="logs" class="logs-container"></div>
+            <!-- Lower Box: QR Panel -->
+            <div id="qr-panel" class="panel qr-panel">
+                <h3>Scan QR code using WhatsApp Link a Device:</h3>
+                
+                <div class="qr-display">
+                    <!-- Spinner View -->
+                    <div id="qr-spinner" class="spinner-wrapper">
+                        <div class="spinner"></div>
+                        <span style="color: var(--text-muted); font-size: 13px;">Waiting for server to generate QR code...</span>
+                    </div>
+                    <!-- QR View -->
+                    <div id="qr-image-wrapper" class="qr-image-wrapper" style="display: none;">
+                        <img id="qr-img" src="" alt="WhatsApp Connection QR">
+                    </div>
+                </div>
+
+                <p class="qr-footer">Open WhatsApp on your phone → Tap Menu or Settings → Linked Devices → Link a Device.</p>
             </div>
+
+            <!-- Lower Box: Connected Panel -->
+            <div id="connected-panel" class="panel connected-panel" style="display: none;">
+                <div class="success-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h2>WhatsApp Connected</h2>
+                <p>Your WhatsApp bot is active and successfully authenticated.</p>
+
+                <!-- Test Connection Form -->
+                <div class="test-connection-panel">
+                    <span class="panel-label" style="text-align: center; display: block; margin-bottom: 5px;">🧪 Test Connection</span>
+                    <div class="test-form">
+                        <input type="text" id="phone" placeholder="Phone (10 digits)">
+                        <input type="text" id="msg" placeholder="Test Message">
+                        <button id="send-btn" class="btn-send" onclick="sendTest()">SEND MESSAGE</button>
+                    </div>
+                    <div id="msg-status" style="margin-top: 15px; font-size: 13px; text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            Note: Session credentials are stored securely in SQLite and persist across restarts.
         </div>
 
         <script>
             const socket = io();
             const statusBadge = document.getElementById('status-badge');
             const statusText = document.getElementById('status-text');
-            const qrCard = document.getElementById('qr-card');
+            const qrPanel = document.getElementById('qr-panel');
+            const qrSpinner = document.getElementById('qr-spinner');
+            const qrImageWrapper = document.getElementById('qr-image-wrapper');
             const qrImg = document.getElementById('qr-img');
-            const logsContainer = document.getElementById('logs');
-            const sendBtn = document.getElementById('send-btn');
-            const msgStatus = document.getElementById('msg-status');
+            const connectedPanel = document.getElementById('connected-panel');
+            const btnReconnect = document.getElementById('btn-reconnect');
 
             socket.on('status', (status) => {
                 statusText.innerText = status;
-                if(status === 'ONLINE') {
-                    statusBadge.classList.add('status-online');
-                    qrCard.style.display = 'none';
+                
+                // Update Badge Class
+                statusBadge.className = 'status-pill';
+                if (status === 'ONLINE') {
+                    statusBadge.classList.add('connected');
+                    connectedPanel.style.display = 'block';
+                    qrPanel.style.display = 'none';
+                } else if (status === 'INITIALIZING...' || status === 'RECONNECTING...') {
+                    statusBadge.classList.add('connecting');
+                    connectedPanel.style.display = 'none';
+                    qrPanel.style.display = 'block';
                 } else {
-                    statusBadge.classList.remove('status-online');
+                    statusBadge.classList.add('disconnected');
+                    connectedPanel.style.display = 'none';
+                    qrPanel.style.display = 'block';
                 }
             });
 
             socket.on('qr', (dataUrl) => {
-                if(dataUrl) {
+                if (dataUrl) {
                     qrImg.src = dataUrl;
-                    qrCard.style.display = 'block';
+                    qrSpinner.style.display = 'none';
+                    qrImageWrapper.style.display = 'block';
                 } else {
-                    qrCard.style.display = 'none';
+                    qrImageWrapper.style.display = 'none';
+                    qrSpinner.style.display = 'flex';
                 }
             });
 
-            socket.on('log', addLog);
-            socket.on('logs', (history) => {
-                logsContainer.innerHTML = '';
-                history.forEach(addLog);
-            });
-
-            function addLog(log) {
-                const div = document.createElement('div');
-                div.className = 'log-entry';
-                const styledLog = log.replace(/\\[(.*?)\\]/, '<span class="log-timestamp">[$1]</span>')
-                                    .replace(/INFO:/, '<span class="log-info">INFO:</span>')
-                                    .replace(/ERROR:/, '<span class="log-error">ERROR:</span>');
-                div.innerHTML = styledLog;
-                logsContainer.appendChild(div);
-                logsContainer.scrollTop = logsContainer.scrollHeight;
+            async function reconnectBot() {
+                btnReconnect.disabled = true;
+                btnReconnect.innerText = "Reconnecting...";
+                
+                try {
+                    const res = await fetch('/api/reconnect', { method: 'POST' });
+                    const data = await res.json();
+                    if(data.success) {
+                        qrImg.src = '';
+                        qrImageWrapper.style.display = 'none';
+                        qrSpinner.style.display = 'flex';
+                    }
+                } catch (e) {
+                    console.error("Failed to trigger reconnect:", e);
+                } finally {
+                    setTimeout(() => {
+                        btnReconnect.disabled = false;
+                        btnReconnect.innerText = "Reconnect Bot";
+                    }, 3000);
+                }
             }
 
             async function sendTest() {
                 const phone = document.getElementById('phone').value;
                 const message = document.getElementById('msg').value;
+                const sendBtn = document.getElementById('send-btn');
+                const msgStatus = document.getElementById('msg-status');
                 if(!phone || !message) return;
                 
                 sendBtn.disabled = true;
                 msgStatus.innerText = "⏳ Sending...";
+                msgStatus.style.color = "var(--text-muted)";
                 
                 try {
                     const res = await fetch('/api/send-whatsapp', {
@@ -417,9 +574,10 @@ app.get("/logs", (req, res) => {
                     });
                     const data = await res.json();
                     msgStatus.innerText = data.success ? "✅ Success!" : "❌ " + data.error;
-                    msgStatus.style.color = data.success ? "var(--primary)" : "var(--error)";
+                    msgStatus.style.color = data.success ? "var(--green-text)" : "var(--red-text)";
                 } catch (e) {
                     msgStatus.innerText = "❌ Network Error";
+                    msgStatus.style.color = "var(--red-text)";
                 } finally {
                     sendBtn.disabled = false;
                 }
@@ -513,6 +671,21 @@ app.post("/api/send-whatsapp", async (req, res) => {
     } catch (err) {
         console.error(`❌ [ERROR] ${err.message}`);
         return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ================= RECONNECT BOT API =================
+app.post("/api/reconnect", async (req, res) => {
+    try {
+        console.log("🧹 [AUTH] Reconnect requested. Clearing SQLite session...");
+        db.prepare('DELETE FROM whatsapp_auth').run();
+        if (sock) {
+            // Logout closes connection and triggers clearState inside connection.update
+            await sock.logout().catch(() => {});
+        }
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ success: false, error: e.message });
     }
 });
 

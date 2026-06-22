@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Terms & Conditions | Samyuktha Travels{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --primary-blue: #0066cc;
+    --secondary-blue: #4a90e2;
+    --accent-orange: #ff9800;
+    --dark-text: #2c3e50;
+    --gray-text: #5a6c7d;
+    --light-gray: #f8fafc;
+    --white: #ffffff;
+    --border-light: #e2e8f0;
+  }
+
+  body {
+    background: #f8fafc;
+    color: var(--dark-text);
+  }
+
+  .terms-hero {
+    position: relative;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+  }
+
+  .terms-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('https://images.unsplash.com/photo-1450133064473-71024230f91b?w=1200&q=60&auto=format') center/cover no-repeat;
+    z-index: 0;
+  }
+
+  .terms-hero-content {
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 0.8s ease;
+  }
+
+  .terms-hero h1 {
+    font-size: clamp(32px, 4vw, 46px);
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .terms-hero p {
+    font-size: clamp(14px, 1.5vw, 18px);
+    opacity: 0.9;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .terms-container {
+    max-width: 900px;
+    margin: -40px auto 80px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .terms-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 50px 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-light);
+  }
+
+  .terms-section {
+    margin-bottom: 40px;
+  }
+
+  .terms-section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .terms-section h2 i {
+    font-size: 20px;
+    color: var(--accent-orange);
+  }
+
+  .terms-section p {
+    font-size: 15px;
+    color: var(--gray-text);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .terms-section ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 16px;
+  }
+
+  .terms-section li {
+    font-size: 15px;
+    color: var(--gray-text);
+    line-height: 1.8;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .terms-section li::before {
+    content: '\f054';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 11px;
+    position: absolute;
+    left: 0;
+    top: 3px;
+    color: var(--primary-blue);
+  }
+
+  .last-updated {
+    font-size: 13px;
+    color: var(--gray-text);
+    opacity: 0.7;
+    margin-bottom: 30px;
+    text-align: right;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .terms-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="terms-hero">
+  <div class="terms-hero-content">
+    <h1>Terms & Conditions</h1>
+    <p>Please read these terms and conditions carefully before booking with us</p>
+  </div>
+</section>
+
+<div class="terms-container">
+  <div class="terms-card">
+    <div class="last-updated">Last Updated: June 22, 2026</div>
+
+    <div class="terms-section">
+      <h2><i class="fa-solid fa-file-contract"></i>1. Acceptance of Terms</h2>
+      <p>By accessing our website and utilizing the booking services provided by Samyuktha Travels, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our services.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2><i class="fa-solid fa-calendar-check"></i>2. Booking and Services</h2>
+      <p>Samyuktha Travels provides car rental and taxi booking services for local sightseeing, outstation trips, airport transfers, and customized tours.</p>
+      <ul>
+        <li>Bookings are subject to vehicle availability.</li>
+        <li>Online booking requests are confirmed once an administrator reviews the booking and assigns a driver.</li>
+        <li>Confirmation alerts with driver details will be triggered and sent via WhatsApp to the contact number provided.</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2><i class="fa-solid fa-indian-rupee-sign"></i>3. Pricing & Additional Charges</h2>
+      <p>Our pricing model is transparent and detailed in our tariff charts. However, please note:</p>
+      <ul>
+        <li>Quoted base fare is for the standard route and distance.</li>
+        <li>Toll charges, parking fees, state border permit taxes, and hill station charges (if applicable) are extra and must be paid by the customer.</li>
+        <li>Night driver allowance or driver batta is charged extra for trips extending between 10:00 PM and 6:00 AM.</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2><i class="fa-solid fa-rectangle-xmark"></i>4. Cancellation & Refund Policy</h2>
+      <p>We understand plans change. Our cancellation rules are as follows:</p>
+      <ul>
+        <li>Cancellations made 24 hours prior to the scheduled pickup time incur no cancellation fee.</li>
+        <li>Cancellations made within 12 hours of pickup may attract a cancellation charge equal to the basic package amount.</li>
+        <li>In case of a no-show by the customer, the booking request will be marked as canceled, and booking deposit (if any) will not be refunded.</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2><i class="fa-solid fa-user-check"></i>5. Passenger Conduct</h2>
+      <p>To ensure safety and comfort for our drivers and passengers:</p>
+      <ul>
+        <li>Smoking, consumption of alcohol, or usage of illicit drugs inside the vehicles is strictly prohibited.</li>
+        <li>Passengers must respect the driver and vehicle integrity. Any damage caused to the vehicle interior/exterior by the passenger will be billed directly to the customer.</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2><i class="fa-solid fa-gavel"></i>6. Limitation of Liability</h2>
+      <p>Samyuktha Travels will not be held responsible for delay in pickups or trip disruptions caused by factors beyond our control, including heavy traffic, extreme weather, road blockages, natural disasters, or technical breakdowns. In case of vehicle failure during the trip, we will make alternate arrangements as quickly as possible.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -7,11 +7,19 @@ import requests
 import threading
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+import urllib.parse as urlparse
+
+try:
+    import psycopg2
+    import psycopg2.extras
+    HAS_POSTGRES = True
+except ImportError:
+    HAS_POSTGRES = False
 
 # ================= WHATSAPP API CONFIGURATION (STABLE) =================
 # This system uses the new Lightweight Baileys Engine on Render.
 ADMIN_PHONES = ['918300302815'] 
-_BASE_BOT_URL = os.environ.get("WHATSAPP_API_URL", "https://samyuktha-realtime.onrender.com").rstrip("/")
+_BASE_BOT_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000").rstrip("/")
 WHATSAPP_API_URL = f"{_BASE_BOT_URL}/api/send-whatsapp"
 # ============================================================================
 
@@ -21,10 +29,59 @@ app.secret_key = "CHANGE_THIS_SECRET_KEY"
 
 DB = "database.db"
 
+
+class PostgresCursorWrapper:
+    def __init__(self, cursor):
+        self.cursor = cursor
+    def execute(self, sql, params=None):
+        # Translate SQLite syntax to PostgreSQL
+        sql = sql.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
+        sql = sql.replace("?", "%s")
+        return self.cursor.execute(sql, params)
+    def fetchone(self):
+        row = self.cursor.fetchone()
+        if row is None:
+            return None
+        return row
+    def fetchall(self):
+        return self.cursor.fetchall()
+    def __getattr__(self, name):
+        return getattr(self.cursor, name)
+
+class PostgresConnWrapper:
+    def __init__(self, conn):
+        self.conn = conn
+    def cursor(self):
+        return PostgresCursorWrapper(self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor))
+    def commit(self):
+        return self.conn.commit()
+    def close(self):
+        return self.conn.close()
+    def __getattr__(self, name):
+        return getattr(self.conn, name)
+
 def db():
-    conn = sqlite3.connect(DB,timeout=10)
+    db_url = os.environ.get("DATABASE_URL")
+    if db_url:
+        if not HAS_POSTGRES:
+            raise ImportError("psycopg2 is not installed or failed to import, but DATABASE_URL is set.")
+        conn = psycopg2.connect(db_url)
+        return PostgresConnWrapper(conn)
+        
+    db_path = DB
+    if os.environ.get("VERCEL"):
+        db_path = "/tmp/database.db"
+        if not os.path.exists(db_path):
+            import shutil
+            if os.path.exists(DB):
+                shutil.copy(DB, db_path)
+            else:
+                # Initialize an empty db structure if source db is not found
+                pass
+    conn = sqlite3.connect(db_path, timeout=10)
     conn.row_factory = sqlite3.Row
     return conn
+
 
 def send_whatsapp_message(phone, message_body):
     """Sends WhatsApp alert via cloud bot. Long timeout to handle Render cold-start."""
@@ -234,6 +291,17 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+
+
 @app.route("/taxi", methods=["GET", "POST"])
 def taxi():
     if request.method == "POST":
@@ -347,6 +415,14 @@ def admin_login():
 def admin_logout():
     session.clear()
     return redirect(url_for("admin_login"))
+
+
+@app.route("/admin/whatsapp")
+def admin_whatsapp():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    return render_template("admin_whatsapp.html", whatsapp_bot_url=f"{_BASE_BOT_URL}/logs")
+
 
 
 # ---------------- ADMIN DASHBOARD ----------------
