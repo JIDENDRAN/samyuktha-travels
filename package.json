@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "concurrently \"python app.py\" \"node realtime/server.js\"",
+    "realtime": "node realtime/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,5 +23,8 @@
     "qrcode": "^1.5.3",
     "qrcode-terminal": "^0.12.0",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
   }
 }

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Terms & Conditions | Samyuktha Travels{% endblock %}
+
+{% block extra_css %}
+<style>
+  .policy-banner {
+    background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+    padding: 90px 0 120px;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  .policy-icon-wrapper {
+    margin-bottom: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .policy-icon-wrapper svg {
+    width: 64px;
+    height: 64px;
+    color: #eab308;
+  }
+  .policy-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .policy-title span {
+    color: #eab308;
+  }
+  .policy-subtitle {
+    font-size: clamp(14px, 2vw, 18px);
+    color: #cbd5e1;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .policy-container {
+    width: min(1150px, 92%);
+    margin: -60px auto 80px;
+    position: relative;
+    z-index: 10;
+  }
+  .policy-card {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: var(--shadow);
+  }
+  .policy-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 35px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 8px;
+  }
+  .policy-card h2:first-of-type {
+    margin-top: 0;
+  }
+  .policy-card p {
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .policy-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+  }
+  .policy-list li {
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 25px;
+  }
+  .policy-list li::before {
+    content: "•";
+    color: var(--primary);
+    font-size: 20px;
+    position: absolute;
+    left: 5px;
+    top: -2px;
+    font-weight: bold;
+  }
+  @media (max-width: 768px) {
+    .policy-banner {
+      padding: 60px 0 90px;
+    }
+    .policy-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="policy-banner">
+  <div class="container">
+    <div class="policy-icon-wrapper">
+      <!-- Gold document icon matching screenshot -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+      </svg>
+    </div>
+    <h1 class="policy-title">Terms & <span>Conditions</span></h1>
+    <p class="policy-subtitle">Please read these terms and conditions carefully before using our service.</p>
+  </div>
+</section>
+
+<div class="policy-container">
+  <div class="policy-card">
+    <h2>1. Acceptance of Terms</h2>
+    <p>
+      By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement. In addition, when using these particular services, you shall be subject to any posted guidelines or rules applicable to such services.
+    </p>
+
+    <h2>2. Booking and Payments</h2>
+    <ul class="policy-list">
+      <li>All bookings are subject to availability and confirmation.</li>
+      <li>A minimum advance payment is required to confirm outstation bookings.</li>
+      <li>The final fare will be calculated based on the actual distance traveled and time taken.</li>
+      <li>Toll charges, parking fees, and state permits (if applicable) are to be paid by the customer unless otherwise specified.</li>
+    </ul>
+
+    <h2>3. Cancellations and Refunds</h2>
+    <ul class="policy-list">
+      <li>Cancellations made 24 hours prior to the journey time will incur no charges.</li>
+      <li>Cancellations made within 24 hours of the journey may be subject to a cancellation fee.</li>
+      <li>Refunds for advance payments will be processed within 5-7 business days.</li>
+    </ul>
+
+    <h2>4. Passenger Responsibilities</h2>
+    <p>
+      Passengers are requested to take care of their personal belongings. Management will not be responsible for any loss or damage to luggage or personal items during the journey. Any damage caused to the vehicle by the passenger will be charged accordingly.
+    </p>
+
+    <h2>5. Modifications to Service</h2>
+    <p>
+      Samyuktha Travels reserves the right to modify or discontinue, temporarily or permanently, the service with or without notice at any time.
+    </p>
+
+    <h2>6. Contact Information</h2>
+    <p>
+      If you have any queries regarding any of our terms, please contact us at <a href="mailto:samyukthatravels2025@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">samyukthatravels2025@gmail.com</a>.
+    </p>
+  </div>
+</div>
+{% endblock %}

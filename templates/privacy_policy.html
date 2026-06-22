@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy | Samyuktha Travels{% endblock %}
+
+{% block extra_css %}
+<style>
+  .policy-banner {
+    background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+    padding: 90px 0 120px;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  .policy-icon-wrapper {
+    margin-bottom: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .policy-icon-wrapper svg {
+    width: 64px;
+    height: 64px;
+    color: #eab308;
+  }
+  .policy-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .policy-title span {
+    color: #eab308;
+  }
+  .policy-subtitle {
+    font-size: clamp(14px, 2vw, 18px);
+    color: #cbd5e1;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .policy-container {
+    width: min(1150px, 92%);
+    margin: -60px auto 80px;
+    position: relative;
+    z-index: 10;
+  }
+  .policy-card {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: var(--shadow);
+  }
+  .policy-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 35px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 8px;
+  }
+  .policy-card h2:first-of-type {
+    margin-top: 0;
+  }
+  .policy-card p {
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .policy-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+  }
+  .policy-list li {
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 25px;
+  }
+  .policy-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-size: 18px;
+    position: absolute;
+    left: 5px;
+    top: 0;
+    font-weight: bold;
+  }
+  @media (max-width: 768px) {
+    .policy-banner {
+      padding: 60px 0 90px;
+    }
+    .policy-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="policy-banner">
+  <div class="container">
+    <div class="policy-icon-wrapper">
+      <!-- Shield outline icon matching screenshot -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+      </svg>
+    </div>
+    <h1 class="policy-title">Privacy <span>Policy</span></h1>
+    <p class="policy-subtitle">Your privacy is important to us. Learn how we protect your data.</p>
+  </div>
+</section>
+
+<div class="policy-container">
+  <div class="policy-card">
+    <h2>Introduction</h2>
+    <p>
+      Welcome to Samyuktha Travels. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you as to how we look after your personal data when you visit our website and tell you about your privacy rights.
+    </p>
+
+    <h2>1. Data We Collect</h2>
+    <p>
+      We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:
+    </p>
+    <ul class="policy-list">
+      <li><strong>Identity Data:</strong> includes first name, last name, username or similar identifier.</li>
+      <li><strong>Contact Data:</strong> includes billing address, delivery address, email address and telephone numbers.</li>
+      <li><strong>Transaction Data:</strong> includes details about payments to and from you and other details of products and services you have purchased from us.</li>
+    </ul>
+
+    <h2>2. How We Use Your Data</h2>
+    <p>
+      We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:
+    </p>
+    <ul class="policy-list">
+      <li>Where we need to perform the contract we are about to enter into or have entered into with you.</li>
+      <li>Where it is necessary for our legitimate interests (or those of a third party) and your interests and fundamental rights do not override those interests.</li>
+      <li>Where we need to comply with a legal obligation.</li>
+    </ul>
+
+    <h2>3. Data Security</h2>
+    <p>
+      We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorised way, altered or disclosed. In addition, we limit access to your personal data to those employees, agents, contractors and other third parties who have a business need to know.
+    </p>
+
+    <h2>4. Contact Us</h2>
+    <p>
+      If you have any questions about this privacy policy or our privacy practices, please contact us at <a href="mailto:samyukthatravels2025@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">samyukthatravels2025@gmail.com</a>.
+    </p>
+  </div>
+</div>
+{% endblock %}

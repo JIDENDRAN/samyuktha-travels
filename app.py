@@ -292,14 +292,17 @@ def contact():
 
 
 @app.route("/privacy")
-def privacy():
-    return render_template("privacy.html")
+@app.route("/privacy-policy")
+@app.route("/privacy_policy")
+def privacy_policy():
+    return render_template("privacy_policy.html")
 
 
 @app.route("/terms")
-def terms():
-    return render_template("terms.html")
-
+@app.route("/terms-conditions")
+@app.route("/terms_conditions")
+def terms_conditions():
+    return render_template("terms_conditions.html")
 
 
 @app.route("/taxi", methods=["GET", "POST"])
