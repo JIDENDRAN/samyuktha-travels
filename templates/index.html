@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}Home | Samyuktha Travels - Leading Cab Service in Madurai{% endblock %}
 
@@ -1168,10 +1168,10 @@
     cursor: pointer;
   }
 
-  /* ================= TESTIMONIALS ================= */
+  /* ================= TESTIMONIALS SLIDER ================= */
   .testimonials-modern {
     position: relative;
-    padding: 60px 0;
+    padding: 80px 0;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     overflow: hidden;
   }
@@ -1182,6 +1182,8 @@
     font-size: 80px;
     opacity: 0.04;
     animation: float 20s ease-in-out infinite;
+    user-select: none;
+    pointer-events: none;
   }
 
   .testimonials-modern::before {
@@ -1199,7 +1201,7 @@
 
   .t-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
   }
 
   .t-tag {
@@ -1218,7 +1220,7 @@
 
   .t-header h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     font-weight: 900;
     color: var(--travel-green);
     margin-bottom: 10px;
@@ -1226,76 +1228,225 @@
 
   .t-header p {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #4a5568;
     font-weight: 500;
   }
 
-  .t-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .t-card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+  .testimonials-slider-container {
+    overflow: hidden;
     position: relative;
-    border: 2px solid transparent;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px;
   }
 
-  .t-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(255, 107, 53, 0.15);
-    border-color: rgba(255, 107, 53, 0.2);
+  .testimonials-slider-track {
+    display: flex;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 24px;
+    will-change: transform;
   }
 
-  .quote {
-    font-size: 2rem;
-    color: var(--travel-orange);
-    opacity: 0.3;
-    margin-bottom: 15px;
+  .t-card-modern {
+    flex: 0 0 calc(33.333% - 16px);
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .t-card p {
-    font-family: 'Montserrat', sans-serif;
+  .t-card-modern:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 107, 53, 0.18);
+    border-color: rgba(255, 107, 53, 0.25);
+  }
+
+  .t-img-box {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    background-color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .t-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .t-card-modern:hover .t-img-box img {
+    transform: scale(1.05);
+  }
+
+  .t-location-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 2;
+  }
+
+  .t-info-box {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .t-stars {
+    color: #fbbf24;
     font-size: 0.95rem;
-    line-height: 1.7;
-    color: #2d3748;
-    margin-bottom: 20px;
-    font-style: italic;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 3px;
   }
 
-  .t-card h4 {
+  .t-text {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #4a5568;
+    font-style: italic;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+
+  .t-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--travel-green);
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
-  .t-card h4::before {
+  .t-name::before {
     content: '—';
     color: var(--travel-orange);
-    font-weight: 400;
+    font-weight: 600;
   }
 
-  .t-card::after {
-    content: '★★★★★';
-    position: absolute;
-    bottom: 15px;
-    right: 20px;
-    font-size: 0.7rem;
-    color: #fbbf24;
-    letter-spacing: 2px;
+  /* Dots Navigation */
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dot.active {
+    background: var(--travel-orange);
+    width: 32px;
+    border-radius: 10px;
+  }
+
+  /* Responsive CSS */
+  @media (max-width: 992px) {
+    .t-card-modern {
+      flex: 0 0 calc(33.333% - 16px);
+    }
+    .t-img-box {
+      height: 150px;
+      padding: 8px;
+    }
+    .t-info-box {
+      padding: 15px;
+    }
+    .t-text {
+      font-size: 0.8rem;
+      margin-bottom: 12px;
+    }
+    .t-name {
+      font-size: 0.9rem;
+    }
+    .t-header h2 {
+      font-size: 2.3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .testimonials-slider-track {
+      gap: 12px;
+    }
+    .t-card-modern {
+      flex: 0 0 calc(50% - 6px);
+      border-radius: 14px;
+    }
+    .testimonials-modern {
+      padding: 45px 0;
+    }
+    .t-header h2 {
+      font-size: 1.9rem;
+      margin-bottom: 6px;
+    }
+    .t-header p {
+      font-size: 0.9rem;
+    }
+    .t-img-box {
+      height: 135px;
+      padding: 8px;
+    }
+    .t-location-badge {
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      font-size: 0.62rem;
+      gap: 4px;
+    }
+    .t-info-box {
+      padding: 12px;
+    }
+    .t-stars {
+      font-size: 0.72rem;
+      margin-bottom: 8px;
+      gap: 3px;
+    }
+    .t-text {
+      font-size: 0.76rem;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .t-name {
+      font-size: 0.8rem;
+      gap: 8px;
+    }
   }
 
   /* ================= WHATSAPP FLOAT ================= */
@@ -2555,34 +2706,206 @@ img{
       <div class="t-header">
         <span class="t-tag">Testimonials</span>
         <h2>What Our Customers Say</h2>
-        <p>Real experiences from happy travellers</p>
+        <p>Real experiences from happy travellers about the destinations we covered</p>
       </div>
 
-      <div class="t-grid">
-        <div class="t-card">
-          <i class="fa-solid fa-quote-left quote"></i>
-          <p>Nice conversation skill. Very helpful, car was in very good condition. Knows very good places and shopping
-            ideas.</p>
-          <h4>Harshita Dadheech</h4>
-        </div>
+      <div class="testimonials-slider-container">
+        <div class="testimonials-slider-track" id="testimonialTrack">
+          
+          <!-- Card 1 (review1.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review1.png') }}" alt="Madurai Trip">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Madurai</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <p class="t-text">"मदुरै मीनाक्षी मंदिर के लिए बहुत ही बढ़िया कैब सर्विस। ड्राइवर समय पर आया और गाड़ी काफी साफ-सुथरी थी।"</p>
+              <h4 class="t-name">राजेश यादव</h4>
+            </div>
+          </div>
 
-        <div class="t-card">
-          <i class="fa-solid fa-quote-left quote"></i>
-          <p>He is a very good & caring person. Whenever we need a cab, we call him without second thought.</p>
-          <h4>Mersal Hari</h4>
-        </div>
+          <!-- Card 2 (review2.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review2.png') }}" alt="Ooty Hills">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Ooty</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="t-text">"Amazing trip to Ooty. Driver was skilled on the mountain hairpins, polite, and punctual. Neat car. Highly recommended!"</p>
+              <h4 class="t-name">David Miller</h4>
+            </div>
+          </div>
 
-        <div class="t-card">
-          <i class="fa-solid fa-quote-left quote"></i>
-          <p>Highly recommended. Amazing driver Kaleeswaran. Best travels with affordable price in Madurai.</p>
-          <h4>Deepika Aravindaraj</h4>
-        </div>
+          <!-- Card 3 (review3.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review3.png') }}" alt="Rameshwaram Pamban Bridge">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Rameshwaram</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
+              <p class="t-text">"ராமேஸ்வரம் பயணம் அருமையாக இருந்தது. பம்பன் பாலம் வழியாக சென்றது மறக்க முடியாத அனுபவம். நல்ல டிரைவர்!"</p>
+              <h4 class="t-name">கார்த்திக் ராஜா</h4>
+            </div>
+          </div>
 
-        <div class="t-card">
-          <i class="fa-solid fa-quote-left quote"></i>
-          <p>Best travels in Madurai. Good vehicle and excellent service. All drivers are very professional.</p>
-          <h4>Sathis Kumar</h4>
+          <!-- Card 4 (review4.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review4.png') }}" alt="Kodaikanal Lake">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Kodaikanal</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <p class="t-text">"कोदईकनाल की यात्रा बहुत ही सुखद रही। ड्राइवर ने सुरक्षित रूप से गाड़ी चलाई। बहुत अच्छी सर्विस!"</p>
+              <h4 class="t-name">अमित शर्मा</h4>
+            </div>
+          </div>
+
+          <!-- Card 5 (review5.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review5.png') }}" alt="Madurai Meenakshi Temple">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Madurai</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
+              <p class="t-text">"மதுரை பயணம் நன்றாக இருந்தது. கார் சுத்தமாக இருந்தது, ஓட்டுநரும் பொறுமையாகவும் மரியாதையாகவும் நடந்து கொண்டார்."</p>
+              <h4 class="t-name">பிரியா கிருஷ்ணன்</h4>
+            </div>
+          </div>
+
+          <!-- Card 6 (review6.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review6.png') }}" alt="Coimbatore City">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Coimbatore</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="t-text">"कोयंबटूर की यात्रा काफी अच्छी रही। ड्राइवर को रास्तों का पूरा पता था और गाड़ी का किराया भी काफी किफायती था।"</p>
+              <h4 class="t-name">विक्रम सिंह</h4>
+            </div>
+          </div>
+
+          <!-- Card 7 (review7.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review7.png') }}" alt="Chennai Marina">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Chennai</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
+              <p class="t-text">"Safe and comfortable ride to Chennai. Driver was very professional and navigated city traffic smoothly. Clean vehicle."</p>
+              <h4 class="t-name">Anjali Sharma</h4>
+            </div>
+          </div>
+
+          <!-- Card 8 (review8.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review8.png') }}" alt="Chennai Central">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Chennai</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <p class="t-text">"சென்னை பயணம் சிறப்பாக அமைந்தது. சரியான நேரத்தில் கார் வந்தது, ஓட்டுநர் மிகவும் மரியாதையாக நடந்து கொண்டார்."</p>
+              <h4 class="t-name">செல்வம் குமார்</h4>
+            </div>
+          </div>
+
+          <!-- Card 9 (review9.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review9.png') }}" alt="Munnar Hills Ganesha Statue">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Munnar</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="t-text">"मुन्नार रोड ट्रिप बहुत शानदार थी। रास्ते में श्री महागणपति मंदिर के दर्शन भी किए। ड्राइवर काफी अनुभवी था।"</p>
+              <h4 class="t-name">मनोज कुमार</h4>
+            </div>
+          </div>
+
+          <!-- Card 10 (review10.png) -->
+          <div class="t-card-modern">
+            <div class="t-img-box">
+              <img src="{{ url_for('static', filename='images/review10.png') }}" alt="Kodaikanal Pine Forest">
+              <span class="t-location-badge"><i class="fa-solid fa-map-marker-alt"></i> Kodaikanal</span>
+            </div>
+            <div class="t-info-box">
+              <div class="t-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
+              <p class="t-text">"கொடைக்கானல் ஏரி மற்றும் பைன் காடுகள் சுற்றி பார்த்தோம். டிரைவர் மிகவும் உதவியாகவும் இருந்தார். சிறந்த சேவை!"</p>
+              <h4 class="t-name">விஜய் ஆர்</h4>
+            </div>
+          </div>
+
         </div>
+        
+        <!-- Slider Dots -->
+        <div class="slider-dots" id="sliderDots"></div>
       </div>
     </div>
   </section>
@@ -3043,6 +3366,124 @@ img{
         result.appendChild(planDiv);
       });
     }
+  });
+
+  // Testimonials Auto-swiping Slider
+  document.addEventListener("DOMContentLoaded", function() {
+    const track = document.getElementById("testimonialTrack");
+    const dotsContainer = document.getElementById("sliderDots");
+    if (!track || !dotsContainer) return;
+
+    const cards = Array.from(track.children);
+    let currentIndex = 0;
+    let itemsPerView = getItemsPerView();
+    let totalSlides = Math.ceil(cards.length / itemsPerView);
+
+    // Initialize Dots
+    updateDots();
+
+    // Determine visible items per view
+    function getItemsPerView() {
+      const width = window.innerWidth;
+      if (width <= 768) return 2; // Show 2 reviews on mobile screen
+      return 3; // Show 3 reviews on desktop
+    }
+
+    // Render/Update dots
+    function updateDots() {
+      dotsContainer.innerHTML = '';
+      totalSlides = Math.ceil(cards.length / itemsPerView);
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement("span");
+        dot.className = "dot" + (i === currentIndex ? " active" : "");
+        dot.addEventListener("click", () => {
+          goToSlide(i);
+          resetAutoPlay();
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    // Translate track to slide position
+    function goToSlide(index) {
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) index = 0;
+      currentIndex = index;
+
+      let gap = 24;
+      try {
+        const computedGap = window.getComputedStyle(track).gap;
+        if (computedGap && computedGap !== 'normal') {
+          gap = parseFloat(computedGap);
+        }
+      } catch (e) {}
+
+      const cardWidth = cards[0].getBoundingClientRect().width;
+      let offset = currentIndex * itemsPerView * (cardWidth + gap);
+      
+      const maxOffset = track.scrollWidth - track.parentElement.clientWidth;
+      if (offset > maxOffset) {
+        offset = maxOffset;
+      }
+      if (offset < 0) {
+        offset = 0;
+      }
+      
+      track.style.transform = `translateX(-${offset}px)`;
+
+      // Active dot styling
+      const dots = dotsContainer.querySelectorAll(".dot");
+      dots.forEach((dot, idx) => {
+        if (idx === currentIndex) dot.classList.add("active");
+        else dot.classList.remove("active");
+      });
+    }
+
+    // Auto Play Intervals
+    let autoPlayTimer = setInterval(nextSlide, 5000);
+
+    function nextSlide() {
+      goToSlide(currentIndex + 1);
+    }
+
+    function resetAutoPlay() {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = setInterval(nextSlide, 5000);
+    }
+
+    // Adjust layout dynamically on window resize
+    window.addEventListener("resize", () => {
+      // Recalculate slider settings
+      const newItemsPerView = getItemsPerView();
+      itemsPerView = newItemsPerView;
+      updateDots();
+      goToSlide(currentIndex);
+    });
+
+    // Touch/Swipe support for mobile/tablets
+    let startX = 0;
+    let isDragging = false;
+
+    track.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+      clearInterval(autoPlayTimer);
+    }, { passive: true });
+
+    track.addEventListener("touchend", (e) => {
+      if (!isDragging) return;
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          goToSlide(currentIndex + 1);
+        } else {
+          goToSlide(currentIndex - 1);
+        }
+      }
+      isDragging = false;
+      resetAutoPlay();
+    }, { passive: true });
   });
 </script>
 
