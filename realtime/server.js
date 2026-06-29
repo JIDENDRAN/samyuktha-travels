@@ -619,7 +619,9 @@ async function connectToWhatsApp() {
         // Using a more stable browser identity
         browser: ["Samyuktha Travels", "Chrome", "20.0.04"],
         syncFullHistory: false,
-        fireInitQueries: false
+         fireInitQueries: false,
+        keepAliveIntervalMs: 30000,
+        defaultQueryTimeoutMs: 90000
     });
 
     sock.ev.on("connection.update", async (update) => {
