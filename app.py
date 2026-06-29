@@ -18,9 +18,13 @@ except ImportError:
 
 # ================= WHATSAPP API CONFIGURATION (STABLE) =================
 # This system uses the new Lightweight Baileys Engine on Render.
-ADMIN_PHONES = ['918300302815'] 
+ADMIN_PHONES = ['918300302815']
 _BASE_BOT_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000").rstrip("/")
+# Guard: if someone accidentally set the env var to the full endpoint URL, strip it
+if _BASE_BOT_URL.endswith("/api/send-whatsapp"):
+    _BASE_BOT_URL = _BASE_BOT_URL[: -len("/api/send-whatsapp")]
 WHATSAPP_API_URL = f"{_BASE_BOT_URL}/api/send-whatsapp"
+print(f"[CONFIG] WHATSAPP_API_URL resolved to: {WHATSAPP_API_URL}", flush=True)
 # ============================================================================
 
 app = Flask(__name__)
@@ -85,18 +89,20 @@ def db():
 
 def send_whatsapp_message(phone, message_body):
     """Sends WhatsApp alert via cloud bot. Long timeout to handle Render cold-start."""
+    print(f"[WA] Attempting send to {phone} via {WHATSAPP_API_URL}", flush=True)
     try:
         payload = {"phone": phone, "message": message_body}
         # 60s timeout: Render free tier can take up to 30s to wake up
         resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=60)
+        print(f"[WA] Response: HTTP {resp.status_code} | Body: {resp.text[:200]}", flush=True)
         if resp.status_code == 200:
-            print(f"✅ WhatsApp Bot: Sent to {phone}")
+            print(f"✅ WhatsApp Bot: Sent to {phone}", flush=True)
             return {"status": "success", "provider": "bot"}
         else:
-            print(f"❌ WhatsApp Bot: Bad response {resp.status_code} for {phone}")
+            print(f"❌ WhatsApp Bot: Bad response {resp.status_code} for {phone}", flush=True)
             return None
     except Exception as e:
-        print(f"❌ WhatsApp Bot: FAILED for {phone}: {e}")
+        print(f"❌ WhatsApp Bot: FAILED for {phone}: {e}", flush=True)
         return None
 
 def notify_admins(message_body):
@@ -773,7 +779,6 @@ def test_notify():
             "error": str(e),
             "bot_url": WHATSAPP_API_URL
         }), 500
-        
 
 
 if __name__ == "__main__":
