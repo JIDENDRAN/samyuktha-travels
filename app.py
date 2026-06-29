@@ -18,9 +18,13 @@ except ImportError:
 
 # ================= WHATSAPP API CONFIGURATION (STABLE) =================
 # This system uses the new Lightweight Baileys Engine on Render.
-ADMIN_PHONES = ['918300302815'] 
+ADMIN_PHONES = ['918300302815']
 _BASE_BOT_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000").rstrip("/")
+# Guard: if someone accidentally set the env var to the full endpoint URL, strip it
+if _BASE_BOT_URL.endswith("/api/send-whatsapp"):
+    _BASE_BOT_URL = _BASE_BOT_URL[: -len("/api/send-whatsapp")]
 WHATSAPP_API_URL = f"{_BASE_BOT_URL}/api/send-whatsapp"
+print(f"[CONFIG] WHATSAPP_API_URL resolved to: {WHATSAPP_API_URL}", flush=True)
 # ============================================================================
 
 app = Flask(__name__)
@@ -85,18 +89,20 @@ def db():
 
 def send_whatsapp_message(phone, message_body):
     """Sends WhatsApp alert via cloud bot. Long timeout to handle Render cold-start."""
+    print(f"[WA] Attempting send to {phone} via {WHATSAPP_API_URL}", flush=True)
     try:
         payload = {"phone": phone, "message": message_body}
         # 60s timeout: Render free tier can take up to 30s to wake up
         resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=60)
+        print(f"[WA] Response: HTTP {resp.status_code} | Body: {resp.text[:200]}", flush=True)
         if resp.status_code == 200:
-            print(f"✅ WhatsApp Bot: Sent to {phone}")
+            print(f"✅ WhatsApp Bot: Sent to {phone}", flush=True)
             return {"status": "success", "provider": "bot"}
         else:
-            print(f"❌ WhatsApp Bot: Bad response {resp.status_code} for {phone}")
+            print(f"❌ WhatsApp Bot: Bad response {resp.status_code} for {phone}", flush=True)
             return None
     except Exception as e:
-        print(f"❌ WhatsApp Bot: FAILED for {phone}: {e}")
+        print(f"❌ WhatsApp Bot: FAILED for {phone}: {e}", flush=True)
         return None
 
 def notify_admins(message_body):
@@ -307,7 +313,9 @@ def terms_conditions():
 
 @app.route("/taxi", methods=["GET", "POST"])
 def taxi():
+    print("===== TAXI ROUTE HIT =====", flush=True)
     if request.method == "POST":
+        print("===== TAXI POST RECEIVED =====", flush=True)
         from_city = request.form.get("from")
         to_city = request.form.get("to")
         date = request.form.get("date")
@@ -346,7 +354,8 @@ def taxi():
             f"🔔 *New Booking Requested!*\n\n"
             f"👤 Customer: {name}\n"
             f"📱 Phone: {phone}\n"
-            f"📍 Route: {from_city} ➡ {to_city}\n"
+            f"📍 Pickup: {from_city}\n"
+            f"📍 Drop: {to_city}\n"
             f"📅 Date: {date}\n"
             f"🚕 Vehicle: {car_type}\n\n"
             f"Please check the admin panel to confirm."
@@ -605,7 +614,9 @@ def admin_confirm_trip():
             f"✅ *Trip Confirmed & Assigned!*\n\n"
             f"Trip ID: #{trip['id']}\n"
             f"Customer: {trip['customer_name']} ({trip['customer_phone']})\n"
-            f"Route: {trip['from_city']} ➡ {trip['to_city']} on {trip['date']}\n"
+            f"📍 Pickup: {trip['from_city']}\n"
+            f"📍 Drop: {trip['to_city']}\n"
+            f"📅 Date: {trip['date']}\n"
             f"Driver Assigned: {trip['driver_name']} ({trip['driver_phone']})\n"
         )
         notify_admins(owner_msg)
@@ -716,7 +727,8 @@ def book_taxi():
         f"🔔 *New Booking Requested!*\n\n"
         f"👤 Customer: {customer_name}\n"
         f"📱 Phone: {customer_phone}\n"
-        f"📍 Route: {from_city} ➡ {to_city}\n"
+        f"📍 Pickup: {from_city}\n"
+        f"📍 Drop: {to_city}\n"
         f"📅 Date: {date}\n"
         f"🚕 Vehicle: {vehicle_type}\n\n"
         f"Please check the admin panel."

@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}Book Your Ride | Samyuktha Travels{% endblock %}
 
@@ -1173,49 +1173,16 @@ body{
     document.querySelectorAll('.scroll-reveal').forEach(el => scrollObserver.observe(el));
   });
 
-  // ===== DEBUG: FORM SUBMISSION LOGGER =====
+  // ===== FORM SUBMISSION =====
   const form = document.getElementById('taxiForm');
   if (form) {
-    console.log('✅ [DEBUG] Taxi booking form found and ready.');
-
-    form.addEventListener('submit', function (e) {
-      console.log('🚀 [DEBUG] Book Now clicked! Checking fields...');
-
-      const inputs = form.querySelectorAll('input[required], select[required]');
-      let allValid = true;
-
-      inputs.forEach(input => {
-        const val = input.value ? input.value.trim() : '';
-        console.log(`  - Field [${input.name || input.id}]: "${val}" → ${val ? 'OK ✅' : 'EMPTY ❌'}`);
-        if (!val) {
-          allValid = false;
-          input.style.borderColor = '#ef4444';
-        } else {
-          input.style.borderColor = '#10b981';
-        }
-      });
-
-      if (!allValid) {
-        console.error('❌ [DEBUG] Form blocked: some fields are empty. See above.');
-        e.preventDefault();
-        alert('Please fill in all required fields');
-      } else {
-        console.log('✅ [DEBUG] All fields valid! Submitting form to server...');
-        console.log('  → Destination:', form.action);
-      }
+    console.log('✅ Taxi booking form ready.');
+    form.addEventListener('submit', function () {
+      // HTML5 `required` attributes handle validation — just log and let it submit
+      console.log('🚀 Form submitting to:', form.action);
     });
-
-    // Reset border colors on input
-    const inputs = form.querySelectorAll('input, select');
-    inputs.forEach(input => {
-      input.addEventListener('input', function () {
-        this.style.borderColor = '';
-      });
-    });
-  } else {
-    console.error('❌ [DEBUG] taxiForm NOT FOUND on this page!');
   }
-  // ===== END DEBUG =====
+  // ===== END FORM =====
 
   // Phone number validation
   const phoneInput = document.getElementById('customer_phone');
