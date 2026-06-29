@@ -307,7 +307,9 @@ def terms_conditions():
 
 @app.route("/taxi", methods=["GET", "POST"])
 def taxi():
+    print("===== TAXI ROUTE HIT =====", flush=True)
     if request.method == "POST":
+        print("===== TAXI POST RECEIVED =====", flush=True)
         from_city = request.form.get("from")
         to_city = request.form.get("to")
         date = request.form.get("date")
