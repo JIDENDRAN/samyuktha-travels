@@ -96,13 +96,13 @@ def send_whatsapp_message(phone, message_body):
         resp = requests.post(WHATSAPP_API_URL, json=payload, timeout=60)
         print(f"[WA] Response: HTTP {resp.status_code} | Body: {resp.text[:200]}", flush=True)
         if resp.status_code == 200:
-            print(f"✅ WhatsApp Bot: Sent to {phone}", flush=True)
+            print(f"[WA-OK] WhatsApp Bot: Sent to {phone}", flush=True)
             return {"status": "success", "provider": "bot"}
         else:
-            print(f"❌ WhatsApp Bot: Bad response {resp.status_code} for {phone}", flush=True)
+            print(f"[WA-ERROR] WhatsApp Bot: Bad response {resp.status_code} for {phone}", flush=True)
             return None
     except Exception as e:
-        print(f"❌ WhatsApp Bot: FAILED for {phone}: {e}", flush=True)
+        print(f"[WA-ERROR] WhatsApp Bot: FAILED for {phone}: {e}", flush=True)
         return None
 
 def notify_admins(message_body):
@@ -351,13 +351,13 @@ def taxi():
         # --- Notification: OWNER (Immediate Alert on New Booking) ---
         print(f"DEBUG: [BOOKING] Building alert for {name} ({phone})...")
         owner_alert = (
-            f"🔔 *New Booking Requested!*\n\n"
-            f"👤 Customer: {name}\n"
-            f"📱 Phone: {phone}\n"
-            f"📍 Pickup: {from_city}\n"
-            f"📍 Drop: {to_city}\n"
-            f"📅 Date: {date}\n"
-            f"🚕 Vehicle: {car_type}\n\n"
+            f"New Booking Requested!\n\n"
+            f"Customer: {name}\n"
+            f"Phone: {phone}\n"
+            f"Pickup: {from_city}\n"
+            f"Drop: {to_city}\n"
+            f"Date: {date}\n"
+            f"Vehicle: {car_type}\n\n"
             f"Please check the admin panel to confirm."
         )
         print(f"DEBUG: [BOOKING] Handing over to notify_admins()...")
@@ -611,12 +611,12 @@ def admin_confirm_trip():
     if trip:
         # --- Notification: OWNER Only ---
         owner_msg = (
-            f"✅ *Trip Confirmed & Assigned!*\n\n"
+            f"Trip Confirmed & Assigned!\n\n"
             f"Trip ID: #{trip['id']}\n"
             f"Customer: {trip['customer_name']} ({trip['customer_phone']})\n"
-            f"📍 Pickup: {trip['from_city']}\n"
-            f"📍 Drop: {trip['to_city']}\n"
-            f"📅 Date: {trip['date']}\n"
+            f"Pickup: {trip['from_city']}\n"
+            f"Drop: {trip['to_city']}\n"
+            f"Date: {trip['date']}\n"
             f"Driver Assigned: {trip['driver_name']} ({trip['driver_phone']})\n"
         )
         notify_admins(owner_msg)
@@ -724,13 +724,13 @@ def book_taxi():
 
     # --- Notification: OWNER (Immediate Alert on New Booking) ---
     owner_alert = (
-        f"🔔 *New Booking Requested!*\n\n"
-        f"👤 Customer: {customer_name}\n"
-        f"📱 Phone: {customer_phone}\n"
-        f"📍 Pickup: {from_city}\n"
-        f"📍 Drop: {to_city}\n"
-        f"📅 Date: {date}\n"
-        f"🚕 Vehicle: {vehicle_type}\n\n"
+        f"New Booking Requested!\n\n"
+        f"Customer: {customer_name}\n"
+        f"Phone: {customer_phone}\n"
+        f"Pickup: {from_city}\n"
+        f"Drop: {to_city}\n"
+        f"Date: {date}\n"
+        f"Vehicle: {vehicle_type}\n\n"
         f"Please check the admin panel."
     )
     notify_admins(owner_alert)

@@ -617,7 +617,9 @@ async function connectToWhatsApp() {
         printQRInTerminal: false,
         logger: pino({ level: "error" }),
         // Using a more stable browser identity
-        browser: ["Samyuktha Travels", "Chrome", "20.0.04"]
+        browser: ["Samyuktha Travels", "Chrome", "20.0.04"],
+        syncFullHistory: false,
+        fireInitQueries: false
     });
 
     sock.ev.on("connection.update", async (update) => {
