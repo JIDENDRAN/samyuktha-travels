@@ -773,6 +773,7 @@ def test_notify():
             "error": str(e),
             "bot_url": WHATSAPP_API_URL
         }), 500
+        
 
 
 if __name__ == "__main__":
