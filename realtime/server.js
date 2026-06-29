@@ -61,7 +61,7 @@ console.error = (...args) => { originalLog("❌", ...args); captureLog("error", 
 // ================= CUSTOM SQLITE AUTH STATE =================
 async function useSQLiteAuthState() {
     const credsId = 'creds';
-    
+
     const readData = (id) => {
         try {
             const row = db.prepare('SELECT data FROM whatsapp_auth WHERE id = ?').get(id);
@@ -664,7 +664,7 @@ async function connectToWhatsApp() {
 // ================= SEND WHATSAPP API =================
 app.post("/api/send-whatsapp", async (req, res) => {
     const { phone, message } = req.body;
-    
+
     if (!sock || !sock.user) {
         return res.status(503).json({ success: false, error: "Bot not logged in. Visit /logs to scan QR." });
     }
@@ -690,7 +690,7 @@ app.post("/api/reconnect", async (req, res) => {
         db.prepare('DELETE FROM whatsapp_auth').run();
         if (sock) {
             // Logout closes connection and triggers clearState inside connection.update
-            await sock.logout().catch(() => {});
+            await sock.logout().catch(() => { });
         }
         res.json({ success: true });
     } catch (e) {
@@ -708,7 +708,7 @@ server.listen(PORT, () => {
     setInterval(() => {
         const httpModule = SELF_URL.startsWith("https") ? require("https") : require("http");
         httpModule.get(`${SELF_URL}/logs`, (res) => {
-            if(res.statusCode === 200) console.log("[KEEP-ALIVE] Ping OK");
-        }).on("error", () => {});
+            if (res.statusCode === 200) console.log("[KEEP-ALIVE] Ping OK");
+        }).on("error", () => { });
     }, 5 * 60 * 1000);
 });

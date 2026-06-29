@@ -106,15 +106,11 @@ def send_whatsapp_message(phone, message_body):
         return None
 
 def notify_admins(message_body):
-    """Sends notification to all admins in a BACKGROUND THREAD.
-    This ensures the booking page loads instantly, even if the bot is waking up."""
-    def _send():
-        for phone in ADMIN_PHONES:
-            send_whatsapp_message(phone, message_body)
-    
-    t = threading.Thread(target=_send, daemon=True)
-    t.start()
-    print(f"DEBUG: Background WhatsApp thread started for {len(ADMIN_PHONES)} admin(s).")
+    """Sends notification to all admins synchronously. 
+    Vercel serverless environment kills background threads instantly, so we must run this inline."""
+    print(f"[WA] notify_admins triggered for {len(ADMIN_PHONES)} admin(s)...", flush=True)
+    for phone in ADMIN_PHONES:
+        send_whatsapp_message(phone, message_body)
 
 
 def init_db():
