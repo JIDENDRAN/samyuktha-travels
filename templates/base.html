@@ -461,6 +461,26 @@
     </div>
   </header>
 
+  <div style="position: fixed; top: 100px; right: 20px; z-index: 9999; max-width: 400px; width: 90%;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show shadow-lg" role="alert" style="border-radius: 12px; font-weight: 500; border-left: 5px solid #ef4444;">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% else %}
+            <div class="alert alert-success alert-dismissible fade show shadow-lg" role="alert" style="border-radius: 12px; font-weight: 500; border-left: 5px solid #10b981;">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
   {% block content %}{% endblock %}
 
   <!-- FOOTER -->

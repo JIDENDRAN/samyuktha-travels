@@ -288,8 +288,31 @@ def packages():
     return render_template("packages.html")
 
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        subject = request.form.get("subject")
+        message = request.form.get("message")
+        
+        if not all([name, email, phone, subject, message]):
+            flash("All fields are required", "error")
+            return redirect(url_for("contact"))
+            
+        owner_alert = (
+            f"New Contact Form Submission!\n\n"
+            f"Name: {name}\n"
+            f"Email: {email}\n"
+            f"Phone: {phone}\n"
+            f"Subject: {subject}\n"
+            f"Message:\n{message}"
+        )
+        notify_admins(owner_alert)
+        flash("Your message has been sent successfully! We will get back to you soon.", "success")
+        return redirect(url_for("contact"))
+
     return render_template("contact.html")
 
 
