@@ -18,7 +18,7 @@ except ImportError:
 
 # ================= WHATSAPP API CONFIGURATION (STABLE) =================
 # This system uses the new Lightweight Baileys Engine on Render.
-ADMIN_PHONES = ['919360676815']
+ADMIN_PHONES = ['918300302815']
 _BASE_BOT_URL = os.environ.get("WHATSAPP_API_URL", "http://localhost:10000").rstrip("/")
 # Guard: if someone accidentally set the env var to the full endpoint URL, strip it
 if _BASE_BOT_URL.endswith("/api/send-whatsapp"):
